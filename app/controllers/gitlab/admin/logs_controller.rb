@@ -1,2 +1,4 @@
-class Admin::LogsController < Admin::ApplicationController
+module Gitlab
+  class Admin::LogsController < Admin::ApplicationController
+  end
 end

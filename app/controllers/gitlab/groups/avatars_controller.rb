@@ -1,12 +1,14 @@
-class Groups::AvatarsController < ApplicationController
-  layout "profile"
+module Gitlab
+  class Groups::AvatarsController < ApplicationController
+    layout "profile"
 
-  def destroy
-    @group = Group.find_by(path: params[:group_id])
-    @group.remove_avatar!
+    def destroy
+      @group = Group.find_by(path: params[:group_id])
+      @group.remove_avatar!
 
-    @group.save
+      @group.save
 
-    redirect_to edit_group_path(@group)
+      redirect_to edit_group_path(@group)
+    end
   end
 end

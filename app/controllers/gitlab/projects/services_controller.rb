@@ -1,39 +1,41 @@
-class Projects::ServicesController < Projects::ApplicationController
-  # Authorize
-  before_filter :authorize_admin_project!
-  before_filter :service, only: [:edit, :update, :test]
+module Gitlab
+  class Projects::ServicesController < Projects::ApplicationController
+    # Authorize
+    before_filter :authorize_admin_project!
+    before_filter :service, only: [:edit, :update, :test]
 
-  respond_to :html
+    respond_to :html
 
-  layout "project_settings"
+    layout "project_settings"
 
-  def index
-    @project.build_missing_services
-    @services = @project.services.reload
-  end
-
-  def edit
-  end
-
-  def update
-    if @service.update_attributes(params[:service])
-      redirect_to edit_project_service_path(@project, @service.to_param)
-    else
-      render 'edit'
+    def index
+      @project.build_missing_services
+      @services = @project.services.reload
     end
-  end
 
-  def test
-    data = GitPushService.new.sample_data(project, current_user)
+    def edit
+    end
 
-    @service.execute(data)
+    def update
+      if @service.update_attributes(params[:service])
+        redirect_to edit_project_service_path(@project, @service.to_param)
+      else
+        render 'edit'
+      end
+    end
 
-    redirect_to :back
-  end
+    def test
+      data = GitPushService.new.sample_data(project, current_user)
 
-  private
+      @service.execute(data)
 
-  def service
-    @service ||= @project.services.find { |service| service.to_param == params[:id] }
+      redirect_to :back
+    end
+
+    private
+
+    def service
+      @service ||= @project.services.find { |service| service.to_param == params[:id] }
+    end
   end
 end

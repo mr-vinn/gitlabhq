@@ -1,77 +1,79 @@
-class Profiles::PasswordsController < ApplicationController
-  layout :determine_layout
+module Gitlab
+  class Profiles::PasswordsController < ApplicationController
+    layout :determine_layout
 
-  skip_before_filter :check_password_expiration, only: [:new, :create]
+    skip_before_filter :check_password_expiration, only: [:new, :create]
 
-  before_filter :set_user
-  before_filter :set_title
-  before_filter :authorize_change_password!
+    before_filter :set_user
+    before_filter :set_title
+    before_filter :authorize_change_password!
 
-  def new
-  end
-
-  def create
-    new_password = params[:user][:password]
-    new_password_confirmation = params[:user][:password_confirmation]
-
-    result = @user.update_attributes(
-      password: new_password,
-      password_confirmation: new_password_confirmation
-    )
-
-    if result
-      @user.update_attributes(password_expires_at: nil)
-      redirect_to root_path, notice: 'Password successfully changed'
-    else
-      render :new
-    end
-  end
-
-  def edit
-  end
-
-  def update
-    password_attributes = params[:user].select do |key, value|
-      %w(password password_confirmation).include?(key.to_s)
+    def new
     end
 
-    unless @user.valid_password?(params[:user][:current_password])
-      redirect_to edit_profile_password_path, alert: 'You must provide a valid current password'
-      return
+    def create
+      new_password = params[:user][:password]
+      new_password_confirmation = params[:user][:password_confirmation]
+
+      result = @user.update_attributes(
+        password: new_password,
+        password_confirmation: new_password_confirmation
+      )
+
+      if result
+        @user.update_attributes(password_expires_at: nil)
+        redirect_to root_path, notice: 'Password successfully changed'
+      else
+        render :new
+      end
     end
 
-    if @user.update_attributes(password_attributes)
-      flash[:notice] = "Password was successfully updated. Please login with it"
-      redirect_to new_user_session_path
-    else
-      render 'edit'
+    def edit
     end
-  end
 
-  def reset
-    current_user.send_reset_password_instructions
-    redirect_to edit_profile_password_path, notice: 'We sent you an email with reset password instructions'
-  end
+    def update
+      password_attributes = params[:user].select do |key, value|
+        %w(password password_confirmation).include?(key.to_s)
+      end
 
-  private
+      unless @user.valid_password?(params[:user][:current_password])
+        redirect_to edit_profile_password_path, alert: 'You must provide a valid current password'
+        return
+      end
 
-  def set_user
-    @user = current_user
-  end
-
-  def set_title
-    @title = "New password"
-  end
-
-  def determine_layout
-    if [:new, :create].include?(action_name.to_sym)
-      'navless'
-    else
-      'profile'
+      if @user.update_attributes(password_attributes)
+        flash[:notice] = "Password was successfully updated. Please login with it"
+        redirect_to new_user_session_path
+      else
+        render 'edit'
+      end
     end
-  end
 
-  def authorize_change_password!
-    return render_404 if @user.ldap_user?
+    def reset
+      current_user.send_reset_password_instructions
+      redirect_to edit_profile_password_path, notice: 'We sent you an email with reset password instructions'
+    end
+
+    private
+
+    def set_user
+      @user = current_user
+    end
+
+    def set_title
+      @title = "New password"
+    end
+
+    def determine_layout
+      if [:new, :create].include?(action_name.to_sym)
+        'navless'
+      else
+        'profile'
+      end
+    end
+
+    def authorize_change_password!
+      return render_404 if @user.ldap_user?
+    end
   end
 end

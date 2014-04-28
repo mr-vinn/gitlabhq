@@ -1,24 +1,26 @@
-class RegistrationsController < Devise::RegistrationsController
-  before_filter :signup_enabled?
+module Gitlab
+  class RegistrationsController < Devise::RegistrationsController
+    before_filter :signup_enabled?
 
-  def destroy
-    current_user.destroy
+    def destroy
+      current_user.destroy
 
-    respond_to do |format|
-      format.html { redirect_to new_user_session_path, notice: "Account successfully removed." }
+      respond_to do |format|
+        format.html { redirect_to new_user_session_path, notice: "Account successfully removed." }
+      end
     end
-  end
 
-  protected
+    protected
 
-  def build_resource(hash=nil)
-    super
-    self.resource.with_defaults
-  end
+    def build_resource(hash=nil)
+      super
+      self.resource.with_defaults
+    end
 
-  private
+    private
 
-  def signup_enabled?
-    redirect_to new_user_session_path unless Gitlab.config.gitlab.signup_enabled
+    def signup_enabled?
+      redirect_to new_user_session_path unless Gitlab.config.gitlab.signup_enabled
+    end
   end
 end
