@@ -12,21 +12,21 @@ module Gitlab
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths += %W(#{config.root}/lib #{config.root}/app/finders #{config.root}/app/models/concerns #{config.root}/app/models/project_services)
+    config.autoload_paths += %W(#{config.root}/lib/gitlab #{config.root}/app/finders/gitlab #{config.root}/app/models/gitlab/concerns #{config.root}/app/models/gitlab/project_services)
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
     # Activate observers that should always be running.
-    config.active_record.observers = :milestone_observer,
-                                     :project_activity_cache_observer,
-                                     :note_observer,
-                                     :project_observer,
-                                     :system_hook_observer,
-                                     :user_observer,
-                                     :users_group_observer,
-                                     :users_project_observer
+    config.active_record.observers = 'Gitlab::MilestoneObserver',
+                                     'Gitlab::ProjectActivityCacheObserver',
+                                     'Gitlab::NoteObserver',
+                                     'Gitlab::ProjectObserver',
+                                     'Gitlab::SystemHookObserver',
+                                     'Gitlab::UserObserver',
+                                     'Gitlab::UsersGroupObserver',
+                                     'Gitlab::UsersProjectObserver'
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
