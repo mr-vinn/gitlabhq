@@ -4,6 +4,9 @@
 #
 # Used by Issue, MergeRequest
 #
+
+require 'gitlab/concerns/mentionable'
+
 module Gitlab
   module Issuable
     extend ActiveSupport::Concern

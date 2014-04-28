@@ -1,4 +1,5 @@
 require 'mime/types'
+require 'gitlab/regex'
 
 module Gitlab
   module API

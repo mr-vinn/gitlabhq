@@ -1,3 +1,5 @@
+require 'gitlab/logger'
+
 module Gitlab
   class AppLogger < Gitlab::Logger
     def self.file_name

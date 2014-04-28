@@ -1,3 +1,6 @@
+require 'gitlab/theme'
+require 'gitlab/visibility_level'
+
 class Settings < Settingslogic
   source "#{Rails.root}/config/gitlab.yml"
   namespace Rails.env

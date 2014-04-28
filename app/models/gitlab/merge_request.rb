@@ -19,9 +19,6 @@
 #  description       :text
 #
 
-require Rails.root.join("app/models/commit")
-require Rails.root.join("lib/static_model")
-
 module Gitlab
   class MergeRequest < ActiveRecord::Base
     include Issuable

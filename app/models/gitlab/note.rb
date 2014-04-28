@@ -18,7 +18,7 @@
 #
 
 require 'carrierwave/orm/activerecord'
-require 'file_size_validator'
+require 'gitlab/file_size_validator'
 
 module Gitlab
   class Note < ActiveRecord::Base

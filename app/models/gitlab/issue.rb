@@ -17,6 +17,9 @@
 #  iid          :integer
 #
 
+require 'gitlab/concerns/issuable'
+require 'gitlab/concerns/internal_id'
+
 module Gitlab
   class Issue < ActiveRecord::Base
     include Issuable
