@@ -18,6 +18,7 @@
 #
 
 require 'spec_helper'
+require 'gitlab/project_services/gitlab_ci_service'
 
 module Gitlab
   describe GitlabCiService do

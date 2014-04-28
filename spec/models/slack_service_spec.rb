@@ -18,6 +18,7 @@
 #
 
 require 'spec_helper'
+require 'gitlab/project_services/slack_service'
 
 module Gitlab
   describe SlackService do

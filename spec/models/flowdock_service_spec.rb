@@ -18,6 +18,7 @@
 #
 
 require 'spec_helper'
+require 'gitlab/project_services/flowdock_service'
 
 module Gitlab
   describe FlowdockService do

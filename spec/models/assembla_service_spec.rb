@@ -18,6 +18,7 @@
 #
 
 require 'spec_helper'
+require 'gitlab/project_services/assembla_service'
 
 module Gitlab
   describe AssemblaService, models: true do

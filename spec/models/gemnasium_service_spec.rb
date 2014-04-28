@@ -18,6 +18,7 @@
 #
 
 require 'spec_helper'
+require 'gitlab/project_services/gemnasium_service'
 
 module Gitlab
   describe GemnasiumService do

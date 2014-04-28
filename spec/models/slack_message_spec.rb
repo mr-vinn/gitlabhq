@@ -1,4 +1,4 @@
-require_relative '../../app/models/project_services/slack_message'
+require 'gitlab/project_services/slack_message'
 
 module Gitlab
   describe SlackMessage do
