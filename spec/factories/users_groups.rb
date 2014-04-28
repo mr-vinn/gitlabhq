@@ -11,10 +11,12 @@
 #  notification_level :integer          default(3), not null
 #
 
-FactoryGirl.define do
-  factory :users_group do
-    group_access { UsersGroup::OWNER }
-    group
-    user
+module Gitlab
+  FactoryGirl.define do
+    factory :users_group do
+      group_access { UsersGroup::OWNER }
+      group
+      user
+    end
   end
 end

@@ -17,16 +17,18 @@
 
 require 'spec_helper'
 
-describe ProjectSnippet do
-  describe "Associations" do
-    it { should belong_to(:project) }
-  end
+module Gitlab
+  describe ProjectSnippet do
+    describe "Associations" do
+      it { should belong_to(:project) }
+    end
 
-  describe "Mass assignment" do
-    it { should_not allow_mass_assignment_of(:project_id) }
-  end
+    describe "Mass assignment" do
+      it { should_not allow_mass_assignment_of(:project_id) }
+    end
 
-  describe "Validation" do
-    it { should validate_presence_of(:project) }
+    describe "Validation" do
+      it { should validate_presence_of(:project) }
+    end
   end
 end

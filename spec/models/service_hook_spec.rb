@@ -17,8 +17,10 @@
 
 require "spec_helper"
 
-describe ServiceHook do
-  describe "Associations" do
-    it { should belong_to :service }
+module Gitlab
+  describe ServiceHook do
+    describe "Associations" do
+      it { should belong_to :service }
+    end
   end
 end

@@ -11,17 +11,19 @@
 
 require 'spec_helper'
 
-describe ProtectedBranch do
-  describe 'Associations' do
-    it { should belong_to(:project) }
-  end
+module Gitlab
+  describe ProtectedBranch do
+    describe 'Associations' do
+      it { should belong_to(:project) }
+    end
 
-  describe "Mass assignment" do
-    it { should_not allow_mass_assignment_of(:project_id) }
-  end
+    describe "Mass assignment" do
+      it { should_not allow_mass_assignment_of(:project_id) }
+    end
 
-  describe 'Validation' do
-    it { should validate_presence_of(:project) }
-    it { should validate_presence_of(:name) }
+    describe 'Validation' do
+      it { should validate_presence_of(:project) }
+      it { should validate_presence_of(:name) }
+    end
   end
 end

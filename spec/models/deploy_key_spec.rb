@@ -14,12 +14,14 @@
 
 require 'spec_helper'
 
-describe DeployKey do
-  let(:project) { create(:project) }
-  let(:deploy_key) { create(:deploy_key, projects: [project]) }
+module Gitlab
+  describe DeployKey do
+    let(:project) { create(:project) }
+    let(:deploy_key) { create(:deploy_key, projects: [project]) }
 
-  describe "Associations" do
-    it { should have_many(:deploy_keys_projects) }
-    it { should have_many(:projects) }
+    describe "Associations" do
+      it { should have_many(:deploy_keys_projects) }
+      it { should have_many(:projects) }
+    end
   end
 end

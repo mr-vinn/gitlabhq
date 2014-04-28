@@ -19,49 +19,51 @@
 
 require 'spec_helper'
 
-describe Service do
+module Gitlab
+  describe Service do
 
-  describe "Associations" do
-    it { should belong_to :project }
-    it { should have_one :service_hook }
-  end
-
-  describe "Mass assignment" do
-    it { should_not allow_mass_assignment_of(:project_id) }
-  end
-
-  describe "Test Button" do
-    before do
-      @service = Service.new
+    describe "Associations" do
+      it { should belong_to :project }
+      it { should have_one :service_hook }
     end
 
-    describe "Testable" do
-      let (:project) { create :project }
-
-      before do
-        @service.stub(
-          project: project
-        )
-        @testable = @service.can_test?
-      end
-
-      describe :can_test do
-        it { @testable.should == true }
-      end
+    describe "Mass assignment" do
+      it { should_not allow_mass_assignment_of(:project_id) }
     end
 
-    describe "With commits" do
-      let (:project) { create :project }
-
+    describe "Test Button" do
       before do
-        @service.stub(
-          project: project
-        )
-        @testable = @service.can_test?
+        @service = Service.new
       end
 
-      describe :can_test do
-        it { @testable.should == true }
+      describe "Testable" do
+        let (:project) { create :project }
+
+        before do
+          @service.stub(
+            project: project
+          )
+          @testable = @service.can_test?
+        end
+
+        describe :can_test do
+          it { @testable.should == true }
+        end
+      end
+
+      describe "With commits" do
+        let (:project) { create :project }
+
+        before do
+          @service.stub(
+            project: project
+          )
+          @testable = @service.can_test?
+        end
+
+        describe :can_test do
+          it { @testable.should == true }
+        end
       end
     end
   end
