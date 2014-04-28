@@ -1,5 +1,3 @@
-require 'project_wiki'
-
 module Gitlab
   class Projects::WikisController < Projects::ApplicationController
     before_filter :authorize_read_wiki!
