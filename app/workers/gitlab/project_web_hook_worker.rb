@@ -1,9 +1,11 @@
-class ProjectWebHookWorker
-  include Sidekiq::Worker
+module Gitlab
+  class ProjectWebHookWorker
+    include Sidekiq::Worker
 
-  sidekiq_options queue: :project_web_hook
+    sidekiq_options queue: :project_web_hook
 
-  def perform(hook_id, data)
-    WebHook.find(hook_id).execute data
+    def perform(hook_id, data)
+      WebHook.find(hook_id).execute data
+    end
   end
 end

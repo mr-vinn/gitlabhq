@@ -1,9 +1,11 @@
-class SystemHookWorker
-  include Sidekiq::Worker
+module Gitlab
+  class SystemHookWorker
+    include Sidekiq::Worker
 
-  sidekiq_options queue: :system_hook
+    sidekiq_options queue: :system_hook
 
-  def perform(hook_id, data)
-    SystemHook.find(hook_id).execute data
+    def perform(hook_id, data)
+      SystemHook.find(hook_id).execute data
+    end
   end
 end
