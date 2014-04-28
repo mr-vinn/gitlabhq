@@ -17,57 +17,59 @@
 #  iid          :integer
 #
 
-class Issue < ActiveRecord::Base
-  include Issuable
-  include InternalId
+module Gitlab
+  class Issue < ActiveRecord::Base
+    include Issuable
+    include InternalId
 
-  ActsAsTaggableOn.strict_case_match = true
+    ActsAsTaggableOn.strict_case_match = true
 
-  belongs_to :project
-  validates :project, presence: true
+    belongs_to :project
+    validates :project, presence: true
 
-  scope :of_group, ->(group) { where(project_id: group.project_ids) }
-  scope :of_user_team, ->(team) { where(project_id: team.project_ids, assignee_id: team.member_ids) }
+    scope :of_group, ->(group) { where(project_id: group.project_ids) }
+    scope :of_user_team, ->(team) { where(project_id: team.project_ids, assignee_id: team.member_ids) }
 
-  attr_accessible :title, :assignee_id, :position, :description,
-                  :milestone_id, :label_list, :state_event
+    attr_accessible :title, :assignee_id, :position, :description,
+                    :milestone_id, :label_list, :state_event
 
-  acts_as_taggable_on :labels
+    acts_as_taggable_on :labels
 
-  scope :cared, ->(user) { where(assignee_id: user) }
-  scope :open_for, ->(user) { opened.assigned_to(user) }
+    scope :cared, ->(user) { where(assignee_id: user) }
+    scope :open_for, ->(user) { opened.assigned_to(user) }
 
-  state_machine :state, initial: :opened do
-    event :close do
-      transition [:reopened, :opened] => :closed
+    state_machine :state, initial: :opened do
+      event :close do
+        transition [:reopened, :opened] => :closed
+      end
+
+      event :reopen do
+        transition closed: :reopened
+      end
+
+      state :opened
+      state :reopened
+      state :closed
     end
 
-    event :reopen do
-      transition closed: :reopened
+    # Mentionable overrides.
+
+    def gfm_reference
+      "issue ##{iid}"
     end
 
-    state :opened
-    state :reopened
-    state :closed
-  end
-
-  # Mentionable overrides.
-
-  def gfm_reference
-    "issue ##{iid}"
-  end
-
-  # Reset issue events cache
-  #
-  # Since we do cache @event we need to reset cache in special cases:
-  # * when an issue is updated
-  # Events cache stored like  events/23-20130109142513.
-  # The cache key includes updated_at timestamp.
-  # Thus it will automatically generate a new fragment
-  # when the event is updated because the key changes.
-  def reset_events_cache
-    Event.where(target_id: self.id, target_type: 'Issue').
-      order('id DESC').limit(100).
-      update_all(updated_at: Time.now)
+    # Reset issue events cache
+    #
+    # Since we do cache @event we need to reset cache in special cases:
+    # * when an issue is updated
+    # Events cache stored like  events/23-20130109142513.
+    # The cache key includes updated_at timestamp.
+    # Thus it will automatically generate a new fragment
+    # when the event is updated because the key changes.
+    def reset_events_cache
+      Event.where(target_id: self.id, target_type: 'Issue').
+        order('id DESC').limit(100).
+        update_all(updated_at: Time.now)
+    end
   end
 end

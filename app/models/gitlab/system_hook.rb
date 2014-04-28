@@ -15,5 +15,7 @@
 #  tag_push_events       :boolean          default(FALSE)
 #
 
-class SystemHook < WebHook
+module Gitlab
+  class SystemHook < WebHook
+  end
 end

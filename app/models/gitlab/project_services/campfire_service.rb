@@ -17,64 +17,66 @@
 #  api_key     :string(255)
 #
 
-class CampfireService < Service
-  attr_accessible :subdomain, :room
+module Gitlab
+  class CampfireService < Service
+    attr_accessible :subdomain, :room
 
-  validates :token, presence: true, if: :activated?
+    validates :token, presence: true, if: :activated?
 
-  def title
-    'Campfire'
-  end
-
-  def description
-    'Simple web-based real-time group chat'
-  end
-
-  def to_param
-    'campfire'
-  end
-
-  def fields
-    [
-      { type: 'text', name: 'token',     placeholder: '' },
-      { type: 'text', name: 'subdomain', placeholder: '' },
-      { type: 'text', name: 'room',      placeholder: '' }
-    ]
-  end
-
-  def execute(push_data)
-    room = gate.find_room_by_name(self.room)
-    return true unless room
-
-    message = build_message(push_data)
-
-    room.speak(message)
-  end
-
-  private
-
-  def gate
-    @gate ||= Tinder::Campfire.new(subdomain, token: token)
-  end
-
-  def build_message(push)
-    ref = push[:ref].gsub("refs/heads/", "")
-    before = push[:before]
-    after = push[:after]
-
-    message = ""
-    message << "[#{project.name_with_namespace}] "
-    message << "#{push[:user_name]} "
-
-    if before =~ /000000/
-      message << "pushed new branch #{ref} \n"
-    elsif after =~ /000000/
-      message << "removed branch #{ref} \n"
-    else
-      message << "pushed #{push[:total_commits_count]} commits to #{ref}. "
-      message << "#{project.web_url}/compare/#{before}...#{after}"
+    def title
+      'Campfire'
     end
 
-    message
+    def description
+      'Simple web-based real-time group chat'
+    end
+
+    def to_param
+      'campfire'
+    end
+
+    def fields
+      [
+        { type: 'text', name: 'token',     placeholder: '' },
+        { type: 'text', name: 'subdomain', placeholder: '' },
+        { type: 'text', name: 'room',      placeholder: '' }
+      ]
+    end
+
+    def execute(push_data)
+      room = gate.find_room_by_name(self.room)
+      return true unless room
+
+      message = build_message(push_data)
+
+      room.speak(message)
+    end
+
+    private
+
+    def gate
+      @gate ||= Tinder::Campfire.new(subdomain, token: token)
+    end
+
+    def build_message(push)
+      ref = push[:ref].gsub("refs/heads/", "")
+      before = push[:before]
+      after = push[:after]
+
+      message = ""
+      message << "[#{project.name_with_namespace}] "
+      message << "#{push[:user_name]} "
+
+      if before =~ /000000/
+        message << "pushed new branch #{ref} \n"
+      elsif after =~ /000000/
+        message << "removed branch #{ref} \n"
+      else
+        message << "pushed #{push[:total_commits_count]} commits to #{ref}. "
+        message << "#{project.web_url}/compare/#{before}...#{after}"
+      end
+
+      message
+    end
   end
 end

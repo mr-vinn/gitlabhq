@@ -9,16 +9,18 @@
 #  updated_at :datetime
 #
 
-class ProtectedBranch < ActiveRecord::Base
-  include Gitlab::ShellAdapter
+module Gitlab
+  class ProtectedBranch < ActiveRecord::Base
+    include Gitlab::ShellAdapter
 
-  attr_accessible :name
+    attr_accessible :name
 
-  belongs_to :project
-  validates :name, presence: true
-  validates :project, presence: true
+    belongs_to :project
+    validates :name, presence: true
+    validates :project, presence: true
 
-  def commit
-    project.repository.commit(self.name)
+    def commit
+      project.repository.commit(self.name)
+    end
   end
 end

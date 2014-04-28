@@ -19,42 +19,44 @@
 
 # To add new service you should build a class inherited from Service
 # and implement a set of methods
-class Service < ActiveRecord::Base
-  default_value_for :active, false
+module Gitlab
+  class Service < ActiveRecord::Base
+    default_value_for :active, false
 
-  attr_accessible :title, :token, :type, :active, :api_key
+    attr_accessible :title, :token, :type, :active, :api_key
 
-  belongs_to :project
-  has_one :service_hook
+    belongs_to :project
+    has_one :service_hook
 
-  validates :project_id, presence: true
+    validates :project_id, presence: true
 
-  def activated?
-    active
-  end
+    def activated?
+      active
+    end
 
-  def title
-    # implement inside child
-  end
+    def title
+      # implement inside child
+    end
 
-  def description
-    # implement inside child
-  end
+    def description
+      # implement inside child
+    end
 
-  def to_param
-    # implement inside child
-  end
+    def to_param
+      # implement inside child
+    end
 
-  def fields
-    # implement inside child
-    []
-  end
+    def fields
+      # implement inside child
+      []
+    end
 
-  def execute
-    # implement inside child
-  end
+    def execute
+      # implement inside child
+    end
 
-  def can_test?
-    !project.empty_repo?
+    def can_test?
+      !project.empty_repo?
+    end
   end
 end

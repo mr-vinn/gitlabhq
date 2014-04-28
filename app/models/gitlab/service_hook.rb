@@ -15,6 +15,8 @@
 #  tag_push_events       :boolean          default(FALSE)
 #
 
-class ServiceHook < WebHook
-  belongs_to :service
+module Gitlab
+  class ServiceHook < WebHook
+    belongs_to :service
+  end
 end

@@ -15,5 +15,7 @@
 #  type       :string(255)
 #
 
-class PersonalSnippet < Snippet
+module Gitlab
+  class PersonalSnippet < Snippet
+  end
 end
