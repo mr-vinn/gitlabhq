@@ -125,7 +125,7 @@ module Gitlab
     validate :namespace_uniq, if: ->(user) { user.username_changed? }
     validate :avatar_type, if: ->(user) { user.avatar_changed? }
     validate :unique_email, if: ->(user) { user.email_changed? }
-    validates :avatar, file_size: { maximum: 100.kilobytes.to_i }
+    validates :avatar, :'gitlab/file_size' => { maximum: 100.kilobytes.to_i }
 
     before_validation :generate_password, on: :create
     before_validation :sanitize_attrs

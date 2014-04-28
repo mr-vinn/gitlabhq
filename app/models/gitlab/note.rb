@@ -39,7 +39,7 @@ module Gitlab
 
     validates :note, :project, presence: true
     validates :line_code, format: { with: /\A[a-z0-9]+_\d+_\d+\Z/ }, allow_blank: true
-    validates :attachment, file_size: { maximum: 10.megabytes.to_i }
+    validates :attachment, :'gitlab/file_size' => { maximum: 10.megabytes.to_i }
 
     validates :noteable_id, presence: true, if: ->(n) { n.noteable_type.present? && n.noteable_type != 'Commit' }
     validates :commit_id, presence: true, if: ->(n) { n.noteable_type == 'Commit' }
