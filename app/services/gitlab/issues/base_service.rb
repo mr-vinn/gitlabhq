@@ -1,6 +1,6 @@
 module Gitlab
   module Issues
-    class BaseService < ::BaseService
+    class BaseService < Gitlab::BaseService
 
       private
 

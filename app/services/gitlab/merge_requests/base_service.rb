@@ -1,6 +1,6 @@
 module Gitlab
   module MergeRequests
-    class BaseService < ::BaseService
+    class BaseService < Gitlab::BaseService
 
       private
 
