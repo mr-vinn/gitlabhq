@@ -15,8 +15,10 @@
 #     label_name: string
 #     sort: string
 #
-class MergeRequestsFinder < BaseFinder
-  def klass
-    MergeRequest
+module Gitlab
+  class MergeRequestsFinder < BaseFinder
+    def klass
+      MergeRequest
+    end
   end
 end

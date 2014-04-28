@@ -15,8 +15,10 @@
 #     label_name: string
 #     sort: string
 #
-class IssuesFinder < BaseFinder
-  def klass
-    Issue
+module Gitlab
+  class IssuesFinder < BaseFinder
+    def klass
+      Issue
+    end
   end
 end

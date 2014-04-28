@@ -16,122 +16,124 @@
 #     label_name: string
 #     sort: string
 #
-class BaseFinder
-  attr_accessor :current_user, :params
+module Gitlab
+  class BaseFinder
+    attr_accessor :current_user, :params
 
-  def execute(current_user, params)
-    @current_user = current_user
-    @params = params
+    def execute(current_user, params)
+      @current_user = current_user
+      @params = params
 
-    items = init_collection
-    items = by_scope(items)
-    items = by_state(items)
-    items = by_group(items)
-    items = by_project(items)
-    items = by_search(items)
-    items = by_milestone(items)
-    items = by_assignee(items)
-    items = by_label(items)
-    items = sort(items)
-  end
+      items = init_collection
+      items = by_scope(items)
+      items = by_state(items)
+      items = by_group(items)
+      items = by_project(items)
+      items = by_search(items)
+      items = by_milestone(items)
+      items = by_assignee(items)
+      items = by_label(items)
+      items = sort(items)
+    end
 
-  private
+    private
 
-  def init_collection
-    table_name = klass.table_name
+    def init_collection
+      table_name = klass.table_name
 
-    if project
-      if project.public? || (current_user && current_user.can?(:read_project, project))
-        project.send(table_name)
+      if project
+        if project.public? || (current_user && current_user.can?(:read_project, project))
+          project.send(table_name)
+        else
+          []
+        end
+      elsif current_user && params[:authorized_only].presence
+        klass.of_projects(current_user.authorized_projects).references(:project)
       else
-        []
+        klass.of_projects(Project.accessible_to(current_user)).references(:project)
       end
-    elsif current_user && params[:authorized_only].presence
-      klass.of_projects(current_user.authorized_projects).references(:project)
-    else
-      klass.of_projects(Project.accessible_to(current_user)).references(:project)
     end
-  end
 
-  def by_scope(items)
-    case params[:scope]
-    when 'created-by-me', 'authored' then
-      items.where(author_id: current_user.id)
-    when 'all' then
+    def by_scope(items)
+      case params[:scope]
+      when 'created-by-me', 'authored' then
+        items.where(author_id: current_user.id)
+      when 'all' then
+        items
+      when 'assigned-to-me' then
+        items.where(assignee_id: current_user.id)
+      else
+        raise 'You must specify default scope'
+      end
+    end
+
+    def by_state(items)
+      case params[:state]
+      when 'closed'
+        items.closed
+      when 'all'
+        items
+      when 'opened'
+        items.opened
+      else
+        raise 'You must specify default state'
+      end
+    end
+
+    def by_group(items)
+      if params[:group_id].present?
+        items = items.of_group(Group.find(params[:group_id]))
+      end
+
       items
-    when 'assigned-to-me' then
-      items.where(assignee_id: current_user.id)
-    else
-      raise 'You must specify default scope'
     end
-  end
 
-  def by_state(items)
-    case params[:state]
-    when 'closed'
-      items.closed
-    when 'all'
+    def by_project(items)
+      if params[:project_id].present?
+        items = items.of_projects(params[:project_id])
+      end
+
       items
-    when 'opened'
-      items.opened
-    else
-      raise 'You must specify default state'
-    end
-  end
-
-  def by_group(items)
-    if params[:group_id].present?
-      items = items.of_group(Group.find(params[:group_id]))
     end
 
-    items
-  end
+    def by_search(items)
+      if params[:search].present?
+        items = items.search(params[:search])
+      end
 
-  def by_project(items)
-    if params[:project_id].present?
-      items = items.of_projects(params[:project_id])
+      items
     end
 
-    items
-  end
-
-  def by_search(items)
-    if params[:search].present?
-      items = items.search(params[:search])
+    def sort(items)
+      items.sort(params[:sort])
     end
 
-    items
-  end
+    def by_milestone(items)
+      if params[:milestone_id].present?
+        items = items.where(milestone_id: (params[:milestone_id] == '0' ? nil : params[:milestone_id]))
+      end
 
-  def sort(items)
-    items.sort(params[:sort])
-  end
-
-  def by_milestone(items)
-    if params[:milestone_id].present?
-      items = items.where(milestone_id: (params[:milestone_id] == '0' ? nil : params[:milestone_id]))
+      items
     end
 
-    items
-  end
+    def by_assignee(items)
+      if params[:assignee_id].present?
+        items = items.where(assignee_id: (params[:assignee_id] == '0' ? nil : params[:assignee_id]))
+      end
 
-  def by_assignee(items)
-    if params[:assignee_id].present?
-      items = items.where(assignee_id: (params[:assignee_id] == '0' ? nil : params[:assignee_id]))
+      items
     end
 
-    items
-  end
+    def by_label(items)
+      if params[:label_name].present?
+        items = items.tagged_with(params[:label_name])
+      end
 
-  def by_label(items)
-    if params[:label_name].present?
-      items = items.tagged_with(params[:label_name])
+      items
     end
 
-    items
-  end
-
-  def project
-    Project.where(id: params[:project_id]).first if params[:project_id].present?
+    def project
+      Project.where(id: params[:project_id]).first if params[:project_id].present?
+    end
   end
 end
