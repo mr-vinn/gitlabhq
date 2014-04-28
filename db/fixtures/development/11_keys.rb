@@ -1,6 +1,6 @@
 Gitlab::Seeder.quiet do
-  User.first(30).each_with_index do |user, i|
-    Key.seed(:id, [
+  Gitlab::User.first(30).each_with_index do |user, i|
+    Gitlab::Key.seed(:id, [
       {
         id: i + 1,
         title: "Sample key #{i}",

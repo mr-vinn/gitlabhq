@@ -1,4 +1,4 @@
-User.seed(:id, [
+Gitlab::User.seed(:id, [
   {
     id: 1,
     name: "Administrator",

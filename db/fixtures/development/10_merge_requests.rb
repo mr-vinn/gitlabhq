@@ -1,7 +1,7 @@
 Gitlab::Seeder.quiet do
   (1..100).each  do |i|
     # Random Project
-    project = Project.all.sample
+    project = Gitlab::Project.all.sample
 
     # Random user
     user = project.team.users.sample
@@ -17,7 +17,7 @@ Gitlab::Seeder.quiet do
     user_id = user.id
 
     Gitlab::Seeder.by_user(user) do
-      MergeRequest.seed(:id, [{
+      Gitlab::MergeRequest.seed(:id, [{
         id: i,
         source_branch: branches.first,
         target_branch: branches.last,
@@ -33,13 +33,13 @@ Gitlab::Seeder.quiet do
   end
 end
 
-MergeRequest.all.map do |mr|
+Gitlab::MergeRequest.all.map do |mr|
   mr.set_iid
   mr.save
 end
 
 puts 'Load diffs for Merge Requests (it will take some time)...'
-MergeRequest.all.each do |mr|
+Gitlab::MergeRequest.all.each do |mr|
   mr.reload_code
   print '.'
 end

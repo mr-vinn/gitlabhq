@@ -1,7 +1,7 @@
 Gitlab::Seeder.quiet do
-  Group.all.each do |group|
-    User.all.sample(4).each do |user|
-      if group.add_users([user.id], UsersGroup.group_access_roles.values.sample)
+  Gitlab::Group.all.each do |group|
+    Gitlab::User.all.sample(4).each do |user|
+      if group.add_users([user.id], Gitlab::UsersGroup.group_access_roles.values.sample)
         print '.'
       else
         print 'F'
@@ -9,9 +9,9 @@ Gitlab::Seeder.quiet do
     end
   end
 
-  Project.all.each do |project|
-    User.all.sample(4).each do |user|
-      if project.team << [user, UsersProject.access_roles.values.sample]
+  Gitlab::Project.all.each do |project|
+    Gitlab::User.all.sample(4).each do |user|
+      if project.team << [user, Gitlab::UsersProject.access_roles.values.sample]
         print '.'
       else
         print 'F'

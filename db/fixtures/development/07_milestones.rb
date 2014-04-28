@@ -1,6 +1,6 @@
 ActiveRecord::Base.observers.disable(:milestone_observer)
 
-Milestone.seed(:id, [
+Gitlab::Milestone.seed(:id, [
   { id: 1,  project_id: 1, title: 'v' + Faker::Address.zip_code },
   { id: 2,  project_id: 1, title: 'v' + Faker::Address.zip_code },
   { id: 3,  project_id: 1, title: 'v' + Faker::Address.zip_code },
@@ -14,9 +14,9 @@ Milestone.seed(:id, [
   { id: 11, project_id: 3, title: 'v' + Faker::Address.zip_code },
 ])
 
-Milestone.all.map do |ml|
+Gitlab::Milestone.all.map do |ml|
   ml.set_iid
   ml.save
 end
 
-ActiveRecord::Base.observers.enable(:milestone_observer)
+ActiveRecord::Base.observers.enable(:'gitlab/milestone_observer')

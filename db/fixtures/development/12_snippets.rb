@@ -6,9 +6,9 @@ Gitlab::Seeder.quiet do
   ]
 
   (1..50).each  do |i|
-    user = User.all.sample
+    user = Gitlab::User.all.sample
 
-    PersonalSnippet.seed(:id, [{
+    Gitlab::PersonalSnippet.seed(:id, [{
       id: i,
       author_id: user.id,
       title: Faker::Lorem.sentence(3),

@@ -1,7 +1,7 @@
 Gitlab::Seeder.quiet do
   (2..10).each  do |i|
     begin
-      User.seed(:id, [{
+      Gitlab::User.seed(:id, [{
         id: i,
         username: Faker::Internet.user_name,
         name: Faker::Name.name,

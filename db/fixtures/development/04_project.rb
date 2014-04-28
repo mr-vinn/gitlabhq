@@ -21,17 +21,17 @@ Gitlab::Seeder.quiet do
   project_urls.each_with_index do |url, i|
     group_path, project_path = url.split('/')[-2..-1]
 
-    group = Group.find_by(path: group_path)
+    group = Gitlab::Group.find_by(path: group_path)
 
     unless group
-      group = Group.new(
+      group = Gitlab::Group.new(
         name: group_path.titleize,
         path: group_path
       )
       group.description = Faker::Lorem.sentence
       group.save
 
-      group.add_owner(User.first)
+      group.add_owner(Gitlab::User.first)
     end
 
     project_path.gsub!(".git", "")
@@ -43,7 +43,7 @@ Gitlab::Seeder.quiet do
       description: Faker::Lorem.sentence
     }
 
-    project = Projects::CreateService.new(User.first, params).execute
+    project = Gitlab::Projects::CreateService.new(Gitlab::User.first, params).execute
 
     if project.valid?
       print '.'

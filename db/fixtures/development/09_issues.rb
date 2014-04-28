@@ -1,7 +1,7 @@
 Gitlab::Seeder.quiet do
   (1..300).each  do |i|
     # Random Project
-    project = Project.all.sample
+    project = Gitlab::Project.all.sample
 
     # Random user
     user = project.team.users.sample
@@ -11,7 +11,7 @@ Gitlab::Seeder.quiet do
     user_id = user.id
 
     Gitlab::Seeder.by_user(user) do
-      Issue.seed(:id, [{
+      Gitlab::Issue.seed(:id, [{
         id: i,
         project_id: project.id,
         author_id: user_id,
@@ -25,7 +25,7 @@ Gitlab::Seeder.quiet do
     print('.')
   end
 
-  Issue.all.map do |issue|
+  Gitlab::Issue.all.map do |issue|
     issue.set_iid
     issue.save
   end
