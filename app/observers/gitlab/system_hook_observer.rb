@@ -1,6 +1,6 @@
 module Gitlab
   class SystemHookObserver < BaseObserver
-    observe :user, :project, :users_project
+    observe :'gitlab/user', :'gitlab/project', :'gitlab/users_project'
 
     def after_create(model)
       system_hook_service.execute_hooks_for(model, :create)
