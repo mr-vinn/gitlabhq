@@ -13,7 +13,7 @@
 
 module Gitlab
   FactoryGirl.define do
-    factory :users_group do
+    factory :users_group, class: Gitlab::UsersGroup do
       group_access { UsersGroup::OWNER }
       group
       user

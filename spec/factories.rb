@@ -12,7 +12,7 @@ module Gitlab
 
     sequence(:url) { Faker::Internet.uri('http') }
 
-    factory :user, aliases: [:author, :assignee, :owner, :creator] do
+    factory :user, class: Gitlab::User, aliases: [:author, :assignee, :owner, :creator] do
       email { Faker::Internet.email }
       name
       sequence(:username) { |n| "#{Faker::Internet.user_name}#{n}" }
@@ -28,7 +28,7 @@ module Gitlab
       factory :admin, traits: [:admin]
     end
 
-    factory :empty_project, class: 'Project' do
+    factory :empty_project, class: 'Gitlab::Project' do
       sequence(:name) { |n| "project#{n}" }
       path { name.downcase.gsub(/\s/, '_') }
       namespace
@@ -57,7 +57,7 @@ module Gitlab
     # consider using a feature branch to reduce the chances of collision with other tests.
     # Create a new commit, and use the same commit message that you will use for the change in the main repo.
     # Changing the commig message and SHA of branch `master` may break tests.
-    factory :project, parent: :empty_project do
+    factory :project, class: Gitlab::Project, parent: :empty_project do
       path { 'gitlabhq' }
 
       after :create do |project|
@@ -72,25 +72,25 @@ module Gitlab
       issues_tracker_id { "project_name_in_redmine" }
     end
 
-    factory :group do
+    factory :group, class: Gitlab::Group do
       sequence(:name) { |n| "group#{n}" }
       path { name.downcase.gsub(/\s/, '_') }
       type 'Group'
     end
 
-    factory :namespace do
+    factory :namespace, class: Gitlab::Namespace do
       sequence(:name) { |n| "namespace#{n}" }
       path { name.downcase.gsub(/\s/, '_') }
       owner
     end
 
-    factory :users_project do
+    factory :users_project, class: Gitlab::UsersProject do
       user
       project
       project_access { UsersProject::MASTER }
     end
 
-    factory :issue do
+    factory :issue, class: Gitlab::Issue do
       title
       author
       project
@@ -107,7 +107,7 @@ module Gitlab
       factory :reopened_issue, traits: [:reopened]
     end
 
-    factory :merge_request do
+    factory :merge_request, class: Gitlab::MergeRequest do
       title
       author
       source_project factory: :project
@@ -169,7 +169,7 @@ module Gitlab
       factory :merge_request_with_diffs, traits: [:with_diffs]
     end
 
-    factory :note do
+    factory :note, class: Gitlab::Note do
       project
       note "Note"
       author
@@ -183,7 +183,7 @@ module Gitlab
       trait :on_commit do
         project factory: :project
         commit_id "bcf03b5de6c33f3869ef70d68cf06e679d1d7f9a"
-        noteable_type "Commit"
+        noteable_type "Gitlab::Commit"
       end
 
       trait :on_diff do
@@ -193,12 +193,12 @@ module Gitlab
       trait :on_merge_request do
         project factory: :project
         noteable_id 1
-        noteable_type "MergeRequest"
+        noteable_type "Gitlab::MergeRequest"
       end
 
       trait :on_issue do
         noteable_id 1
-        noteable_type "Issue"
+        noteable_type "Gitlab::Issue"
       end
 
       trait :with_attachment do
@@ -206,7 +206,7 @@ module Gitlab
       end
     end
 
-    factory :event do
+    factory :event, class: Gitlab::Event do
       factory :closed_issue_event do
         project
         action { Event::CLOSED }
@@ -215,7 +215,7 @@ module Gitlab
       end
     end
 
-    factory :key do
+    factory :key, class: Gitlab::Key do
       title
       key do
         "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAiPWx6WM4lhHNedGfBpPJNPpZ7yKu+dnn1SJejgt4596k6YjzGGphH2TUxwKzxcKDKKezwkpfnxPkSMkuEspGRt/aZZ9wa++Oi7Qkr8prgHc4soW6NUlfDzpvZK2H5E7eQaSeP3SAwGmQKUFHCddNaP0L+hM7zhFNzjFvpaMgJw0="
@@ -247,7 +247,7 @@ module Gitlab
       end
     end
     
-    factory :email do
+    factory :email, class: Gitlab::Email do
       user
       email do
         Faker::Internet.email('alias')
@@ -260,7 +260,7 @@ module Gitlab
       end
     end
 
-    factory :milestone do
+    factory :milestone, class: Gitlab::Milestone do
       title
       project
 
@@ -271,15 +271,15 @@ module Gitlab
       factory :closed_milestone, traits: [:closed]
     end
 
-    factory :system_hook do
+    factory :system_hook, class: Gitlab::SystemHook do
       url
     end
 
-    factory :project_hook do
+    factory :project_hook, class: Gitlab::ProjectHook do
       url
     end
 
-    factory :project_snippet do
+    factory :project_snippet, class: Gitlab::ProjectSnippet do
       project
       author
       title
@@ -287,38 +287,38 @@ module Gitlab
       file_name
     end
 
-    factory :personal_snippet do
+    factory :personal_snippet, class: Gitlab::PersonalSnippet do
       author
       title
       content
       file_name
     end
 
-    factory :snippet do
+    factory :snippet, class: Gitlab::Snippet do
       author
       title
       content
       file_name
     end
 
-    factory :protected_branch do
+    factory :protected_branch, class: Gitlab::ProtectedBranch do
       name
       project
     end
 
-    factory :service do
+    factory :service, class: Gitlab::Service do
       type ""
       title "GitLab CI"
       token "x56olispAND34ng"
       project
     end
 
-    factory :service_hook do
+    factory :service_hook, class: Gitlab::ServiceHook do
       url
       service
     end
 
-    factory :deploy_keys_project do
+    factory :deploy_keys_project, class: Gitlab::DeployKeysProject do
       deploy_key
       project
     end
