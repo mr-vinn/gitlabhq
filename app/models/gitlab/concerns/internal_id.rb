@@ -8,7 +8,7 @@ module Gitlab
     end
 
     def set_iid
-      max_iid = project.send(self.class.name.tableize).maximum(:iid)
+      max_iid = project.send(self.class.name.tableize.gsub(/^gitlab\//, '')).maximum(:iid)
       self.iid = max_iid.to_i + 1
     end
 
