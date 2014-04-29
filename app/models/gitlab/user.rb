@@ -81,31 +81,31 @@ module Gitlab
     #
 
     # Namespace for personal projects
-    has_one :namespace, -> { where type: nil }, dependent: :destroy, foreign_key: :owner_id, class_name: "Namespace"
+    has_one :namespace, -> { where type: nil }, dependent: :destroy, foreign_key: :owner_id, class_name: "Gitlab::Namespace"
 
     # Profile
-    has_many :keys, dependent: :destroy
-    has_many :emails, dependent: :destroy
+    has_many :keys, dependent: :destroy, class_name: Gitlab::Key
+    has_many :emails, dependent: :destroy, class_name: Gitlab::Email
 
     # Groups
-    has_many :users_groups, dependent: :destroy
-    has_many :groups, through: :users_groups
-    has_many :owned_groups, -> { where users_groups: { group_access: UsersGroup::OWNER } }, through: :users_groups, source: :group
+    has_many :users_groups, dependent: :destroy, class_name: Gitlab::UsersGroup
+    has_many :groups, through: :users_groups, class_name: Gitlab::Group
+    has_many :owned_groups, -> { where :users_groups => { group_access: UsersGroup::OWNER } }, through: :users_groups, source: :group, class_name: Gitlab::Group
     # Projects
-    has_many :groups_projects,          through: :groups, source: :projects
-    has_many :personal_projects,        through: :namespace, source: :projects
-    has_many :projects,                 through: :users_projects
-    has_many :created_projects,         foreign_key: :creator_id, class_name: 'Project'
+    has_many :groups_projects,          through: :groups, source: :projects, class_name: Gitlab::Project
+    has_many :personal_projects,        through: :namespace, source: :projects, class_name: Gitlab::Project
+    has_many :projects,                 through: :users_projects, class_name: Gitlab::Project
+    has_many :created_projects,         foreign_key: :creator_id, class_name: 'Gitlab::Project'
 
-    has_many :snippets,                 dependent: :destroy, foreign_key: :author_id, class_name: "Snippet"
-    has_many :users_projects,           dependent: :destroy
-    has_many :issues,                   dependent: :destroy, foreign_key: :author_id
-    has_many :notes,                    dependent: :destroy, foreign_key: :author_id
-    has_many :merge_requests,           dependent: :destroy, foreign_key: :author_id
-    has_many :events,                   dependent: :destroy, foreign_key: :author_id,   class_name: "Event"
-    has_many :recent_events, -> { order "id DESC" }, foreign_key: :author_id,   class_name: "Event"
-    has_many :assigned_issues,          dependent: :destroy, foreign_key: :assignee_id, class_name: "Issue"
-    has_many :assigned_merge_requests,  dependent: :destroy, foreign_key: :assignee_id, class_name: "MergeRequest"
+    has_many :snippets,                 dependent: :destroy, foreign_key: :author_id, class_name: "Gitlab::Snippet"
+    has_many :users_projects,           dependent: :destroy, class_name: Gitlab::UsersProject
+    has_many :issues,                   dependent: :destroy, foreign_key: :author_id, class_name: Gitlab::Issue
+    has_many :notes,                    dependent: :destroy, foreign_key: :author_id, class_name: Gitlab::Note
+    has_many :merge_requests,           dependent: :destroy, foreign_key: :author_id, class_name: Gitlab::MergeRequest
+    has_many :events,                   dependent: :destroy, foreign_key: :author_id,   class_name: "Gitlab::Event"
+    has_many :recent_events, -> { order "id DESC" }, foreign_key: :author_id,   class_name: "Gitlab::Event"
+    has_many :assigned_issues,          dependent: :destroy, foreign_key: :assignee_id, class_name: "Gitlab::Issue"
+    has_many :assigned_merge_requests,  dependent: :destroy, foreign_key: :assignee_id, class_name: "Gitlab::MergeRequest"
 
 
     #

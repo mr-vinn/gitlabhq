@@ -19,10 +19,10 @@ module Gitlab
 
     attr_accessible :name, :description, :path
 
-    has_many :projects, dependent: :destroy
-    belongs_to :owner, class_name: "User"
+    has_many :projects, dependent: :destroy, class_name: Gitlab::Project
+    belongs_to :owner, class_name: "Gitlab::User"
 
-    validates :owner, presence: true, unless: ->(n) { n.type == "Group" }
+    validates :owner, presence: true, unless: ->(n) { n.type == "Gitlab::Group" }
     validates :name, presence: true, uniqueness: true,
               length: { within: 0..255 },
               format: { with: Gitlab::Regex.name_regex,

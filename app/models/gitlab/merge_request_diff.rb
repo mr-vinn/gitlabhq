@@ -21,7 +21,7 @@ module Gitlab
 
     attr_reader :commits, :diffs
 
-    belongs_to :merge_request
+    belongs_to :merge_request, class_name: Gitlab::MergeRequest
 
     attr_accessible :state, :st_commits, :st_diffs
 

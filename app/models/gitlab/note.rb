@@ -30,9 +30,9 @@ module Gitlab
                     :attachment, :line_code, :commit_id
     attr_mentionable :note
 
-    belongs_to :project
+    belongs_to :project, class_name: Gitlab::Project
     belongs_to :noteable, polymorphic: true
-    belongs_to :author, class_name: "User"
+    belongs_to :author, class_name: "Gitlab::User"
 
     delegate :name, to: :project, prefix: true
     delegate :name, :email, to: :author, prefix: true
@@ -41,13 +41,13 @@ module Gitlab
     validates :line_code, format: { with: /\A[a-z0-9]+_\d+_\d+\Z/ }, allow_blank: true
     validates :attachment, :'gitlab/file_size' => { maximum: 10.megabytes.to_i }
 
-    validates :noteable_id, presence: true, if: ->(n) { n.noteable_type.present? && n.noteable_type != 'Commit' }
-    validates :commit_id, presence: true, if: ->(n) { n.noteable_type == 'Commit' }
+    validates :noteable_id, presence: true, if: ->(n) { n.noteable_type.present? && n.noteable_type != 'Gitlab::Commit' }
+    validates :commit_id, presence: true, if: ->(n) { n.noteable_type == 'Gitlab::Commit' }
 
     mount_uploader :attachment, AttachmentUploader
 
     # Scopes
-    scope :for_commit_id, ->(commit_id) { where(noteable_type: "Commit", commit_id: commit_id) }
+    scope :for_commit_id, ->(commit_id) { where(noteable_type: "Gitlab::Commit", commit_id: commit_id) }
     scope :inline, ->{ where("line_code IS NOT NULL") }
     scope :not_inline, ->{ where(line_code: [nil, '']) }
 
@@ -83,7 +83,7 @@ module Gitlab
         }
 
         if noteable.kind_of?(Commit)
-          note_options.merge!(noteable_type: 'Commit', commit_id: noteable.id)
+          note_options.merge!(noteable_type: 'Gitlab::Commit', commit_id: noteable.id)
         else
           note_options.merge!(noteable: noteable)
         end
@@ -111,7 +111,7 @@ module Gitlab
           next if discussion_ids.include?(note.discussion_id)
 
           # don't group notes for the main target
-          if !note.for_diff_line? && note.noteable_type == "MergeRequest"
+          if !note.for_diff_line? && note.noteable_type == "Gitlab::MergeRequest"
             discussions << [note]
           else
             discussions << notes.select do |other_note|
@@ -208,7 +208,7 @@ module Gitlab
     end
 
     def for_commit?
-      noteable_type == "Commit"
+      noteable_type == "Gitlab::Commit"
     end
 
     def for_commit_diff_line?
@@ -220,11 +220,11 @@ module Gitlab
     end
 
     def for_issue?
-      noteable_type == "Issue"
+      noteable_type == "Gitlab::Issue"
     end
 
     def for_merge_request?
-      noteable_type == "MergeRequest"
+      noteable_type == "Gitlab::MergeRequest"
     end
 
     def for_merge_request_diff_line?

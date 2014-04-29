@@ -18,8 +18,8 @@ require 'gitlab/file_size_validator'
 
 module Gitlab
   class Group < Namespace
-    has_many :users_groups, dependent: :destroy
-    has_many :users, through: :users_groups
+    has_many :users_groups, dependent: :destroy, class_name: Gitlab::UsersGroup
+    has_many :users, through: :users_groups, class_name: Gitlab::User
 
     attr_accessible :avatar
 

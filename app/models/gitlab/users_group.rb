@@ -22,8 +22,8 @@ module Gitlab
 
     attr_accessible :group_access, :user_id
 
-    belongs_to :user
-    belongs_to :group
+    belongs_to :user, class_name: Gitlab::User
+    belongs_to :group, class_name: Gitlab::Group
 
     scope :guests, -> { where(group_access: GUEST) }
     scope :reporters, -> { where(group_access: REPORTER) }

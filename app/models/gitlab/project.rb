@@ -54,34 +54,34 @@ module Gitlab
     belongs_to :group, -> { where(type: Group) }, foreign_key: "namespace_id"
     belongs_to :namespace
 
-    has_one :last_event, -> {order 'events.created_at DESC'}, class_name: 'Event', foreign_key: 'project_id'
-    has_one :gitlab_ci_service, dependent: :destroy
-    has_one :campfire_service, dependent: :destroy
-    has_one :emails_on_push_service, dependent: :destroy
-    has_one :pivotaltracker_service, dependent: :destroy
-    has_one :hipchat_service, dependent: :destroy
-    has_one :flowdock_service, dependent: :destroy
-    has_one :assembla_service, dependent: :destroy
-    has_one :gemnasium_service, dependent: :destroy
-    has_one :slack_service, dependent: :destroy
-    has_one :forked_project_link, dependent: :destroy, foreign_key: "forked_to_project_id"
-    has_one :forked_from_project, through: :forked_project_link
+    has_one :last_event, -> {order 'events.created_at DESC'}, class_name: 'Gitlab::Event', foreign_key: 'project_id'
+    has_one :gitlab_ci_service, dependent: :destroy, class_name: Gitlab::GitlabCiService
+    has_one :campfire_service, dependent: :destroy, class_name: Gitlab::CampfireService
+    has_one :emails_on_push_service, dependent: :destroy, class_name: Gitlab::EmailsOnPushService
+    has_one :pivotaltracker_service, dependent: :destroy, class_name: Gitlab::PivotaltrackerService
+    has_one :hipchat_service, dependent: :destroy, class_name: Gitlab::HipchatService
+    has_one :flowdock_service, dependent: :destroy, class_name: Gitlab::FlowdockService
+    has_one :assembla_service, dependent: :destroy, class_name: Gitlab::AssemblaService
+    has_one :gemnasium_service, dependent: :destroy, class_name: Gitlab::GemnasiumService
+    has_one :slack_service, dependent: :destroy, class_name: Gitlab::SlackService
+    has_one :forked_project_link, dependent: :destroy, foreign_key: "forked_to_project_id", class_name: Gitlab::ForkedProjectLink
+    has_one :forked_from_project, through: :forked_project_link, class_name: Gitlab::Project
     # Merge Requests for target project should be removed with it
-    has_many :merge_requests,     dependent: :destroy, foreign_key: "target_project_id"
+    has_many :merge_requests,     dependent: :destroy, foreign_key: "target_project_id", class_name: Gitlab::MergeRequest
     # Merge requests from source project should be kept when source project was removed
-    has_many :fork_merge_requests, foreign_key: "source_project_id", class_name: MergeRequest
-    has_many :issues, -> { order "state DESC, created_at DESC" }, dependent: :destroy
-    has_many :services,           dependent: :destroy
-    has_many :events,             dependent: :destroy
-    has_many :milestones,         dependent: :destroy
-    has_many :notes,              dependent: :destroy
-    has_many :snippets,           dependent: :destroy, class_name: "ProjectSnippet"
-    has_many :hooks,              dependent: :destroy, class_name: "ProjectHook"
-    has_many :protected_branches, dependent: :destroy
-    has_many :users_projects, dependent: :destroy
-    has_many :users, through: :users_projects
-    has_many :deploy_keys_projects, dependent: :destroy
-    has_many :deploy_keys, through: :deploy_keys_projects
+    has_many :fork_merge_requests, foreign_key: "source_project_id", class_name: Gitlab::MergeRequest
+    has_many :issues, -> { order "state DESC, created_at DESC" }, dependent: :destroy, class_name: Gitlab::Issue
+    has_many :services,           dependent: :destroy, class_name: Gitlab::Service
+    has_many :events,             dependent: :destroy, class_name: Gitlab::Event
+    has_many :milestones,         dependent: :destroy, class_name: Gitlab::Milestone
+    has_many :notes,              dependent: :destroy, class_name: Gitlab::Note
+    has_many :snippets,           dependent: :destroy, class_name: "Gitlab::ProjectSnippet"
+    has_many :hooks,              dependent: :destroy, class_name: "Gitlab::ProjectHook"
+    has_many :protected_branches, dependent: :destroy, class_name: Gitlab::ProtectedBranch
+    has_many :users_projects, dependent: :destroy, class_name: Gitlab::UsersProject
+    has_many :users, through: :users_projects, class_name: Gitlab::User
+    has_many :deploy_keys_projects, dependent: :destroy, class_name: Gitlab::DeployKeysProject
+    has_many :deploy_keys, through: :deploy_keys_projects, class_name: Gitlab::DeployKey
 
     delegate :name, to: :owner, allow_nil: true, prefix: true
     delegate :members, to: :team, prefix: true

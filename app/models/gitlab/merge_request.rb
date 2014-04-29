@@ -24,10 +24,10 @@ module Gitlab
     include Issuable
     include InternalId
 
-    belongs_to :target_project, foreign_key: :target_project_id, class_name: "Project"
-    belongs_to :source_project, foreign_key: :source_project_id, class_name: "Project"
+    belongs_to :target_project, foreign_key: :target_project_id, class_name: "Gitlab::Project"
+    belongs_to :source_project, foreign_key: :source_project_id, class_name: "Gitlab::Project"
 
-    has_one :merge_request_diff, dependent: :destroy
+    has_one :merge_request_diff, dependent: :destroy, class_name: "Gitlab::MergeRequestDiff"
 
     after_create :create_merge_request_diff
     after_update :update_merge_request_diff
@@ -181,7 +181,7 @@ module Gitlab
       commit_ids = commits.last(commits_for_notes_limit).map(&:id)
 
       project.notes.where(
-        "(noteable_type = 'MergeRequest' AND noteable_id = :mr_id) OR (noteable_type = 'Commit' AND commit_id IN (:commit_ids))",
+        "(noteable_type = 'Gitlab::MergeRequest' AND noteable_id = :mr_id) OR (noteable_type = 'Gitlab::Commit' AND commit_id IN (:commit_ids))",
         mr_id: id,
         commit_ids: commit_ids
       )
