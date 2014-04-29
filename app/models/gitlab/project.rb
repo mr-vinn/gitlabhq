@@ -24,6 +24,16 @@
 #  import_status          :string(255)
 #
 
+require 'gitlab/project_services/gitlab_ci_service'
+require 'gitlab/project_services/campfire_service'
+require 'gitlab/project_services/emails_on_push_service'
+require 'gitlab/project_services/pivotaltracker_service'
+require 'gitlab/project_services/hipchat_service'
+require 'gitlab/project_services/flowdock_service'
+require 'gitlab/project_services/assembla_service'
+require 'gitlab/project_services/gemnasium_service'
+require 'gitlab/project_services/slack_service'
+
 module Gitlab
   class Project < ActiveRecord::Base
     include Gitlab::ShellAdapter

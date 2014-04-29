@@ -11,6 +11,8 @@
 #  notification_level :integer          default(3), not null
 #
 
+require 'gitlab/concerns/notifiable'
+
 module Gitlab
   class UsersGroup < ActiveRecord::Base
     include Notifiable

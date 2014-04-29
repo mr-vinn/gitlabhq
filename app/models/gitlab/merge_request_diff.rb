@@ -11,8 +11,6 @@
 #  updated_at       :datetime
 #
 
-require Rails.root.join("app/models/commit")
-
 module Gitlab
   class MergeRequestDiff < ActiveRecord::Base
     # Prevent store of diff
