@@ -6,7 +6,7 @@ module Gitlab
         return [] unless user.kind_of?(User)
         return [] if user.blocked?
 
-        case subject.class.name
+        case subject.class.name.gsub(/^Gitlab::/, '')
         when "Project" then project_abilities(user, subject)
         when "Issue" then issue_abilities(user, subject)
         when "Note" then note_abilities(user, subject)
