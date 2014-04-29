@@ -75,7 +75,7 @@ module Gitlab
     factory :group, class: Gitlab::Group do
       sequence(:name) { |n| "group#{n}" }
       path { name.downcase.gsub(/\s/, '_') }
-      type 'Group'
+      type 'Gitlab::Group'
     end
 
     factory :namespace, class: Gitlab::Namespace do
