@@ -39,7 +39,7 @@ module Gitlab
     end
 
     def ==(other)
-      if other.is_a? ::StaticModel
+      if other.is_a? Gitlab::StaticModel
         id == other.id
       else
         super
