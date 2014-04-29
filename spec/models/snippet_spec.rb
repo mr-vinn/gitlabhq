@@ -20,7 +20,7 @@ require 'spec_helper'
 module Gitlab
   describe Snippet do
     describe "Associations" do
-      it { should belong_to(:author).class_name('User') }
+      it { should belong_to(:author).class_name('Gitlab::User') }
       it { should have_many(:notes).dependent(:destroy) }
     end
 

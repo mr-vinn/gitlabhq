@@ -24,7 +24,7 @@ module Gitlab
     describe "Associations" do
       it { should belong_to(:project) }
       it { should belong_to(:noteable) }
-      it { should belong_to(:author).class_name('User') }
+      it { should belong_to(:author).class_name('Gitlab::User') }
     end
 
     describe "Mass assignment" do
@@ -256,7 +256,7 @@ module Gitlab
         subject { Note.create_cross_reference_note(commit, issue, author, project) }
 
         it { should be_valid }
-        its(:noteable_type) { should == "Commit" }
+        its(:noteable_type) { should == "Gitlab::Commit" }
         its(:noteable_id) { should be_nil }
         its(:commit_id) { should == commit.id }
         its(:note) { should == "_mentioned in issue ##{issue.iid}_" }

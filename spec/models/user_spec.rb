@@ -52,12 +52,12 @@ module Gitlab
   describe User do
     describe "Associations" do
       it { should have_one(:namespace) }
-      it { should have_many(:snippets).class_name('Snippet').dependent(:destroy) }
+      it { should have_many(:snippets).class_name('Gitlab::Snippet').dependent(:destroy) }
       it { should have_many(:users_projects).dependent(:destroy) }
       it { should have_many(:groups) }
       it { should have_many(:keys).dependent(:destroy) }
-      it { should have_many(:events).class_name('Event').dependent(:destroy) }
-      it { should have_many(:recent_events).class_name('Event') }
+      it { should have_many(:events).class_name('Gitlab::Event').dependent(:destroy) }
+      it { should have_many(:recent_events).class_name('Gitlab::Event') }
       it { should have_many(:issues).dependent(:destroy) }
       it { should have_many(:notes).dependent(:destroy) }
       it { should have_many(:assigned_issues).dependent(:destroy) }
@@ -135,7 +135,7 @@ module Gitlab
 
     describe 'projects' do
       before do
-        ActiveRecord::Base.observers.enable(:user_observer)
+        ActiveRecord::Base.observers.enable(:'gitlab/user_observer')
         @user = create :user
         @project = create :project, namespace: @user.namespace
         @project_2 = create :project, group: create(:group) # Grant MASTER access to the user
@@ -158,7 +158,7 @@ module Gitlab
 
     describe 'groups' do
       before do
-        ActiveRecord::Base.observers.enable(:user_observer)
+        ActiveRecord::Base.observers.enable(:'gitlab/user_observer')
         @user = create :user
         @group = create :group
         @group.add_owner(@user)
@@ -171,7 +171,7 @@ module Gitlab
 
     describe 'group multiple owners' do
       before do
-        ActiveRecord::Base.observers.enable(:user_observer)
+        ActiveRecord::Base.observers.enable(:'gitlab/user_observer')
         @user = create :user
         @user2 = create :user
         @group = create :group
@@ -185,7 +185,7 @@ module Gitlab
 
     describe 'namespaced' do
       before do
-        ActiveRecord::Base.observers.enable(:user_observer)
+        ActiveRecord::Base.observers.enable(:'gitlab/user_observer')
         @user = create :user
         @project = create :project, namespace: @user.namespace
       end

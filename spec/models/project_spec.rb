@@ -34,7 +34,7 @@ module Gitlab
     describe "Associations" do
       it { should belong_to(:group) }
       it { should belong_to(:namespace) }
-      it { should belong_to(:creator).class_name('User') }
+      it { should belong_to(:creator).class_name('Gitlab::User') }
       it { should have_many(:users) }
       it { should have_many(:events).dependent(:destroy) }
       it { should have_many(:merge_requests).dependent(:destroy) }
@@ -42,7 +42,7 @@ module Gitlab
       it { should have_many(:milestones).dependent(:destroy) }
       it { should have_many(:users_projects).dependent(:destroy) }
       it { should have_many(:notes).dependent(:destroy) }
-      it { should have_many(:snippets).class_name('ProjectSnippet').dependent(:destroy) }
+      it { should have_many(:snippets).class_name('Gitlab::ProjectSnippet').dependent(:destroy) }
       it { should have_many(:deploy_keys_projects).dependent(:destroy) }
       it { should have_many(:deploy_keys) }
       it { should have_many(:hooks).dependent(:destroy) }

@@ -57,14 +57,14 @@ shared_examples 'a mentionable' do
 
   it 'creates cross-reference notes' do
     [mentioned_issue, mentioned_mr, mentioned_commit].each do |referenced|
-      Note.should_receive(:create_cross_reference_note).with(referenced, subject.local_reference, mauthor, mproject)
+      Gitlab::Note.should_receive(:create_cross_reference_note).with(referenced, subject.local_reference, mauthor, mproject)
     end
 
     subject.create_cross_references!(mproject, mauthor)
   end
 
   it 'detects existing cross-references' do
-    Note.create_cross_reference_note(mentioned_issue, subject.local_reference, mauthor, mproject)
+    Gitlab::Note.create_cross_reference_note(mentioned_issue, subject.local_reference, mauthor, mproject)
 
     subject.has_mentioned?(mentioned_issue).should be_true
     subject.has_mentioned?(mentioned_mr).should be_false
@@ -81,11 +81,11 @@ shared_examples 'an editable mentionable' do
       "but now it mentions ##{other_issue.iid}, too."
 
     [mentioned_issue, mentioned_commit].each do |oldref|
-      Note.should_not_receive(:create_cross_reference_note).with(oldref, subject.local_reference,
+      Gitlab::Note.should_not_receive(:create_cross_reference_note).with(oldref, subject.local_reference,
         mauthor, mproject)
     end
 
-    Note.should_receive(:create_cross_reference_note).with(other_issue, subject.local_reference, mauthor, mproject)
+    Gitlab::Note.should_receive(:create_cross_reference_note).with(other_issue, subject.local_reference, mauthor, mproject)
 
     subject.save
     set_mentionable_text.call(new_text)

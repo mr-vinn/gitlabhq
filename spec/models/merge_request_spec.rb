@@ -48,7 +48,7 @@ module Gitlab
 
       before do
         merge_request.stub(:commits) { [merge_request.source_project.repository.commit] }
-        create(:note, commit_id: merge_request.commits.first.id, noteable_type: 'Commit', project: merge_request.project)
+        create(:note, commit_id: merge_request.commits.first.id, noteable_type: 'Gitlab::Commit', project: merge_request.project)
         create(:note, noteable: merge_request, project: merge_request.project)
       end
 
