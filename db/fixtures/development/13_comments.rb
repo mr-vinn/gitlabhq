@@ -9,7 +9,7 @@ Gitlab::Seeder.quiet do
           author_id: user.id,
           note: Faker::Lorem.sentence,
           noteable_id: issue.id,
-          noteable_type: 'Issue'
+          noteable_type: 'Gitlab::Issue'
         }])
 
         print '.'

@@ -1,4 +1,4 @@
-ActiveRecord::Base.observers.disable(:milestone_observer)
+ActiveRecord::Base.observers.disable(:'gitlab/milestone_observer')
 
 Gitlab::Milestone.seed(:id, [
   { id: 1,  project_id: 1, title: 'v' + Faker::Address.zip_code },
