@@ -8,7 +8,7 @@
 %hr
 .row
   .col-md-3
-    = render 'shared/project_filter', project_entities_path: project_merge_requests_path(@project)
+    = render 'gitlab/shared/project_filter', project_entities_path: project_merge_requests_path(@project)
   .col-md-9
     .mr-filters.append-bottom-10
       .dropdown.inline
@@ -58,7 +58,7 @@
                 %small.light= milestone.expires_at
 
       .pull-right
-        = render 'shared/sort_dropdown'
+        = render 'gitlab/shared/sort_dropdown'
 
     .ui-box
       %ul.well-list.mr-list

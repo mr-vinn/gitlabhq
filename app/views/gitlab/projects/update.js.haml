@@ -3,7 +3,7 @@
     location.href = "#{edit_project_path(@project)}";
 - else
   :plain
-    $(".project-edit-errors").html("#{escape_javascript(render('errors'))}");
+    $(".project-edit-errors").html("#{escape_javascript(render('gitlab/errors'))}");
     $('.save-project-loader').hide();
     $('.project-edit-container').show();
     $('.project-edit-content .btn-save').enableButton();

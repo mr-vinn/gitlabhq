@@ -1,5 +1,5 @@
-= render "events/event_last_push", event: @last_push
-= render 'shared/event_filter'
+= render "gitlab/events/event_last_push", event: @last_push
+= render 'gitlab/shared/event_filter'
 
 - if @events.any?
   .content_list

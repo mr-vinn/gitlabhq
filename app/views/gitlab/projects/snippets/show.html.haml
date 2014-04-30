@@ -7,5 +7,5 @@
       by
       = image_tag avatar_icon(@snippet.author_email), class: "avatar avatar-inline s16"
       = @snippet.author_name
-%div= render 'projects/snippets/blob'
-%div#notes= render "projects/notes/notes_with_form"
+%div= render 'gitlab/projects/snippets/blob'
+%div#notes= render "gitlab/projects/notes/notes_with_form"

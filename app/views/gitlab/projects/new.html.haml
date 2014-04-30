@@ -1,6 +1,6 @@
 .project-edit-container
   .project-edit-errors
-    = render 'projects/errors'
+    = render 'gitlab/projects/errors'
   .project-edit-content
 
     = form_for @project, remote: true, html: { class: 'new_project form-horizontal' } do |f|

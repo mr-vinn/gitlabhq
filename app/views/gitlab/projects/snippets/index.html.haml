@@ -9,7 +9,7 @@
 
 %hr
 %ul.bordered-list
-  = render partial: "projects/snippets/snippet", collection: @snippets
+  = render partial: "snippet", collection: @snippets
   - if @snippets.empty?
     %li
       .nothing-here-block Nothing here.

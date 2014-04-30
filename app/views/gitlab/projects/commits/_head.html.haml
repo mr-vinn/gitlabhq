@@ -1,5 +1,5 @@
 %ul.nav.nav-tabs
-  %li= render partial: 'shared/ref_switcher', locals: {destination: 'commits'}
+  %li= render partial: 'gitlab/shared/ref_switcher', locals: {destination: 'commits'}
 
   = nav_link(controller: [:commit, :commits]) do
     = link_to 'Commits', project_commits_path(@project, @repository.root_ref)

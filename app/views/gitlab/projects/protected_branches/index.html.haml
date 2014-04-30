@@ -1,7 +1,7 @@
-= render "projects/commits/head"
+= render "gitlab/projects/commits/head"
 .row
   .col-md-3
-    = render "projects/branches/filter"
+    = render "gitlab/projects/branches/filter"
   .col-md-9
     .bs-callout.bs-callout-info
       %p Protected branches designed to prevent push for all except #{link_to "masters", help_permissions_path, class: "vlink"}.

@@ -101,7 +101,7 @@
               %i.icon-edit
         %ul.well-list
           - @group.users_groups.order('group_access DESC').each do |member|
-            = render 'users_groups/users_group', member: member, show_controls: false
+            = render 'gitlab/users_groups/users_group', member: member, show_controls: false
 
     .ui-box
       .title

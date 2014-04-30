@@ -17,7 +17,7 @@
     - else
       unassigned
     - if issue.votes_count > 0
-      = render 'votes/votes_inline', votable: issue
+      = render 'gitlab/votes/votes_inline', votable: issue
     - if issue.notes.any?
       %span
         %i.icon-comments

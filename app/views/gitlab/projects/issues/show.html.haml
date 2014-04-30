@@ -17,7 +17,7 @@
         Edit
 
 .votes-holder
-  #votes= render 'votes/votes_block', votable: @issue
+  #votes= render 'gitlab/votes/votes_block', votable: @issue
 
 .back-link
   = link_to project_issues_path(@project) do
@@ -72,4 +72,4 @@
         = label.name
       &nbsp;
 
-.voting_notes#notes= render "projects/notes/notes_with_form"
+.voting_notes#notes= render "gitlab/projects/notes/notes_with_form"

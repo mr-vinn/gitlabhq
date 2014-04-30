@@ -1,4 +1,4 @@
-= render "projects/commits/head"
+= render "gitlab/projects/commits/head"
 
 %h3.page-title
   Compare View
@@ -12,7 +12,7 @@
     - if @commits.size > MergeRequestDiff::COMMITS_SAFE_SIZE
       %ul.well-list
         - Commit.decorate(@commits.first(MergeRequestDiff::COMMITS_SAFE_SIZE)).each do |commit|
-          = render "projects/commits/inline_commit", commit: commit, project: @project
+          = render "gitlab/projects/commits/inline_commit", commit: commit, project: @project
         %li.warning-row.unstyled
           other #{@commits.size - MergeRequestDiff::COMMITS_SAFE_SIZE} commits hidden to prevent performance issues.
     - else
@@ -20,7 +20,7 @@
 
   %h4 Changes
   - if @diffs.present?
-    = render "projects/commits/diffs", diffs: @diffs, project: @project
+    = render "gitlab/projects/commits/diffs", diffs: @diffs, project: @project
   - elsif @commits.size > MergeRequestDiff::COMMITS_SAFE_SIZE
     .bs-callout.bs-callout-danger
       %h4 This comparison includes more than #{MergeRequestDiff::COMMITS_SAFE_SIZE} commits.

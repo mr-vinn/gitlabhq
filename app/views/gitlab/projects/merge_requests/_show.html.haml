@@ -1,9 +1,9 @@
 .merge-request
-  = render "projects/merge_requests/show/mr_title"
-  = render "projects/merge_requests/show/how_to_merge"
-  = render "projects/merge_requests/show/mr_box"
-  = render "projects/merge_requests/show/state_widget"
-  = render "projects/merge_requests/show/commits"
+  = render "gitlab/projects/merge_requests/show/mr_title"
+  = render "gitlab/projects/merge_requests/show/how_to_merge"
+  = render "gitlab/projects/merge_requests/show/mr_box"
+  = render "gitlab/projects/merge_requests/show/state_widget"
+  = render "gitlab/projects/merge_requests/show/commits"
 
   - if @commits.present?
     %ul.nav.nav-tabs
@@ -24,10 +24,10 @@
         = link_to 'Reopen', project_merge_request_path(@project, @merge_request, merge_request: {state_event: :reopen }), method: :put, class: "btn btn-grouped btn-reopen reopen-mr-link", title: "Close merge request"
 
   .notes.tab-content.voting_notes#notes{ class: (controller.action_name == 'show') ? "" : "hide" }
-    = render "projects/notes/notes_with_form"
+    = render "gitlab/projects/notes/notes_with_form"
   .diffs.tab-content
     - if current_page?(action: 'diffs')
-      = render "projects/merge_requests/show/diffs"
+      = render "gitlab/projects/merge_requests/show/diffs"
   .status
 
 :javascript

@@ -1,4 +1,4 @@
-= render "projects/commits/head"
+= render "gitlab/projects/commits/head"
 .row
   .col-md-3
     = render "filter"
@@ -6,5 +6,5 @@
     - unless @branches.empty?
       %ul.bordered-list.top-list.all-branches
         - @branches.each do |branch|
-          = render "projects/branches/branch", branch: branch
+          = render "branch", branch: branch
       = paginate @branches, theme: 'gitlab'

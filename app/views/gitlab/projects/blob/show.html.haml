@@ -1,8 +1,8 @@
 %div.tree-ref-holder
-  = render 'shared/ref_switcher', destination: 'blob', path: @path
+  = render 'gitlab/shared/ref_switcher', destination: 'blob', path: @path
 
 %div#tree-holder.tree-holder
   = render 'blob', blob: @blob
 
 - if allowed_tree_edit?
-  = render 'projects/blob/remove'
+  = render 'gitlab/projects/blob/remove'

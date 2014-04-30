@@ -7,9 +7,9 @@
       = image_tag avatar_icon(event.author_email, 24), class: "avatar s24", alt:''
 
       - if event.push?
-        = render "events/event/push", event: event
+        = render "gitlab/events/event/push", event: event
       - elsif event.note?
-        = render "events/event/note", event: event
+        = render "gitlab/events/event/note", event: event
       - else
-        = render "events/event/common", event: event
+        = render "gitlab/events/event/common", event: event
 
