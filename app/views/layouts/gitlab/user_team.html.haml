@@ -1,12 +1,12 @@
 !!! 5
 %html{ lang: "en"}
-  = render "layouts/head", title: "#{@team.name}"
+  = render "layouts/gitlab/head", title: "#{@team.name}"
   %body{class: "#{app_theme} application", :'data-page' => body_data_page}
-    = render "layouts/broadcast"
-    = render "layouts/head_panel", title: "team: #{@team.name}"
-    = render "layouts/flash"
+    = render "layouts/gitlab/broadcast"
+    = render "layouts/gitlab/head_panel", title: "team: #{@team.name}"
+    = render "layouts/gitlab/flash"
     %nav.main-nav.navbar-collapse.collapse
-      .container= render 'layouts/nav/team'
+      .container= render 'layouts/gitlab/nav/team'
 
     .container
       .content= yield
