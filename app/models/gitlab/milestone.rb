@@ -15,7 +15,7 @@
 
 module Gitlab
   class Milestone < ActiveRecord::Base
-    include InternalId
+    include Concerns::InternalId
 
     attr_accessible :title, :description, :due_date, :state_event
 

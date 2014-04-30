@@ -3,7 +3,7 @@ module Gitlab
     include ActiveModel::Conversion
     include StaticModel
     extend ActiveModel::Naming
-    include Mentionable
+    include Concerns::Mentionable
 
     attr_mentionable :safe_message
 

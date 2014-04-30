@@ -17,13 +17,10 @@
 #  iid          :integer
 #
 
-require 'gitlab/concerns/issuable'
-require 'gitlab/concerns/internal_id'
-
 module Gitlab
   class Issue < ActiveRecord::Base
-    include Issuable
-    include InternalId
+    include Concerns::Issuable
+    include Concerns::InternalId
 
     ActsAsTaggableOn.strict_case_match = true
 

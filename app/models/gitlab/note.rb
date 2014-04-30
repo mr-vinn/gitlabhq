@@ -22,7 +22,7 @@ require 'gitlab/file_size_validator'
 
 module Gitlab
   class Note < ActiveRecord::Base
-    include Mentionable
+    include Concerns::Mentionable
 
     default_value_for :system, false
 

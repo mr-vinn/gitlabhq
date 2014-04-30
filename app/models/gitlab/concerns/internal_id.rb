@@ -1,19 +1,21 @@
 module Gitlab
-  module InternalId
-    extend ActiveSupport::Concern
+  module Concerns
+    module InternalId
+      extend ActiveSupport::Concern
 
-    included do
-      validate :set_iid, on: :create
-      validates :iid, presence: true, numericality: true
-    end
+      included do
+        validate :set_iid, on: :create
+        validates :iid, presence: true, numericality: true
+      end
 
-    def set_iid
-      max_iid = project.send(self.class.name.tableize.gsub(/^gitlab\//, '')).maximum(:iid)
-      self.iid = max_iid.to_i + 1
-    end
+      def set_iid
+        max_iid = project.send(self.class.name.tableize.gsub(/^gitlab\//, '')).maximum(:iid)
+        self.iid = max_iid.to_i + 1
+      end
 
-    def to_param
-      iid.to_s
+      def to_param
+        iid.to_s
+      end
     end
   end
 end

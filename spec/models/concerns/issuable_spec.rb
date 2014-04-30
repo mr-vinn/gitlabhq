@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Gitlab
-  describe Issue, "Issuable" do
+  describe Issue, "Gitlab::Concerns::Issuable" do
     let(:issue) { create(:issue) }
 
     describe "Associations" do

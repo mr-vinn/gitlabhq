@@ -21,8 +21,8 @@
 
 module Gitlab
   class MergeRequest < ActiveRecord::Base
-    include Issuable
-    include InternalId
+    include Concerns::Issuable
+    include Concerns::InternalId
 
     belongs_to :target_project, foreign_key: :target_project_id, class_name: "Gitlab::Project"
     belongs_to :source_project, foreign_key: :source_project_id, class_name: "Gitlab::Project"

@@ -11,12 +11,10 @@
 #  notification_level :integer          default(3), not null
 #
 
-require 'gitlab/concerns/notifiable'
-
 module Gitlab
   class UsersProject < ActiveRecord::Base
     include Gitlab::ShellAdapter
-    include Notifiable
+    include Concerns::Notifiable
     include Gitlab::Access
 
     attr_accessible :user, :user_id, :project_access

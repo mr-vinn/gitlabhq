@@ -40,7 +40,7 @@ module Gitlab
     end
 
     describe 'modules' do
-      it { should include_module(Issuable) }
+      it { should include_module(Gitlab::Concerns::Issuable) }
     end
 
     describe "#mr_and_commit_notes" do
