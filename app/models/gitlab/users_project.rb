@@ -21,8 +21,8 @@ module Gitlab
 
     attr_accessible :user, :user_id, :project_access
 
-    belongs_to :user
-    belongs_to :project
+    belongs_to :user, class_name: Gitlab::User
+    belongs_to :project, class_name: Gitlab::Project
 
     validates :user, presence: true
     validates :user_id, uniqueness: { scope: [:project_id], message: "already exists in project" }

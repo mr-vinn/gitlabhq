@@ -23,9 +23,9 @@ module Gitlab
 
     default_value_for :private, true
 
-    belongs_to :author, class_name: "User"
+    belongs_to :author, class_name: "Gitlab::User"
 
-    has_many :notes, as: :noteable, dependent: :destroy
+    has_many :notes, as: :noteable, dependent: :destroy, class_name: Gitlab::Note
 
     delegate :name, :email, to: :author, prefix: true, allow_nil: true
 

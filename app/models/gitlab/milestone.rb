@@ -19,10 +19,10 @@ module Gitlab
 
     attr_accessible :title, :description, :due_date, :state_event
 
-    belongs_to :project
-    has_many :issues
-    has_many :merge_requests
-    has_many :participants, through: :issues, source: :assignee
+    belongs_to :project, class_name: Gitlab::Project
+    has_many :issues, class_name: Gitlab::Issue
+    has_many :merge_requests, class_name: Gitlab::MergeRequest
+    has_many :participants, through: :issues, source: :assignee, class_name: Gitlab::User
 
     scope :active, -> { with_state(:active) }
     scope :closed, -> { with_state(:closed) }

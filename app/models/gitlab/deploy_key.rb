@@ -14,8 +14,8 @@
 
 module Gitlab
   class DeployKey < Key
-    has_many :deploy_keys_projects, dependent: :destroy
-    has_many :projects, through: :deploy_keys_projects
+    has_many :deploy_keys_projects, dependent: :destroy, class_name: Gitlab::DeployKeysProject
+    has_many :projects, through: :deploy_keys_projects, class_name: Gitlab::Project
 
     scope :in_projects, ->(projects) { joins(:deploy_keys_projects).where('deploy_keys_projects.project_id in (?)', projects) }
   end

@@ -13,9 +13,9 @@ module Gitlab
     include Mentionable
 
     included do
-      belongs_to :author, class_name: "User"
-      belongs_to :assignee, class_name: "User"
-      belongs_to :milestone
+      belongs_to :author, class_name: "Gitlab::User"
+      belongs_to :assignee, class_name: "Gitlab::User"
+      belongs_to :milestone, class_name: Gitlab::Milestone
       has_many :notes, as: :noteable, dependent: :destroy
 
       validates :author, presence: true

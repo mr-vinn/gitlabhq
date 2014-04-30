@@ -18,7 +18,7 @@ module Gitlab
   class Key < ActiveRecord::Base
     include Gitlab::Popen
 
-    belongs_to :user
+    belongs_to :user, class_name: Gitlab::User
 
     attr_accessible :key, :title
 

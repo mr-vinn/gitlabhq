@@ -16,7 +16,7 @@ module Gitlab
     #
     # Relations
     #
-    belongs_to :user
+    belongs_to :user, class_name: Gitlab::User
 
     #
     # Validations

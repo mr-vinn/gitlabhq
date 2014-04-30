@@ -25,8 +25,8 @@ module Gitlab
 
     attr_accessible :title, :token, :type, :active, :api_key
 
-    belongs_to :project
-    has_one :service_hook
+    belongs_to :project, class_name: Gitlab::Project
+    has_one :service_hook, class_name: Gitlab::ServiceHook
 
     validates :project_id, presence: true
 

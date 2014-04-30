@@ -35,8 +35,8 @@ module Gitlab
     delegate :title, to: :issue, prefix: true, allow_nil: true
     delegate :title, to: :merge_request, prefix: true, allow_nil: true
 
-    belongs_to :author, class_name: "User"
-    belongs_to :project
+    belongs_to :author, class_name: "Gitlab::User"
+    belongs_to :project, class_name: Gitlab::Project
     belongs_to :target, polymorphic: true
 
     # For Hash only

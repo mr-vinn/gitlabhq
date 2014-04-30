@@ -17,8 +17,8 @@
 
 module Gitlab
   class ProjectSnippet < Snippet
-    belongs_to :project
-    belongs_to :author, class_name: "User"
+    belongs_to :project, class_name: Gitlab::Project
+    belongs_to :author, class_name: "Gitlab::User"
 
     validates :project, presence: true
 
