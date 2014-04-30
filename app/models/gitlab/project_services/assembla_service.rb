@@ -18,35 +18,37 @@
 #
 
 module Gitlab
-  class AssemblaService < Service
-    attr_accessible :subdomain
+  module ProjectServices
+    class AssemblaService < Service
+      attr_accessible :subdomain
 
-    include HTTParty
+      include HTTParty
 
-    validates :token, presence: true, if: :activated?
+      validates :token, presence: true, if: :activated?
 
-    def title
-      'Assembla'
-    end
+      def title
+        'Assembla'
+      end
 
-    def description
-      'Project Management Software (Source Commits Endpoint)'
-    end
+      def description
+        'Project Management Software (Source Commits Endpoint)'
+      end
 
-    def to_param
-      'assembla'
-    end
+      def to_param
+        'assembla'
+      end
 
-    def fields
-      [
-        { type: 'text', name: 'token', placeholder: '' },
-        { type: 'text', name: 'subdomain', placeholder: '' }
-      ]
-    end
+      def fields
+        [
+          { type: 'text', name: 'token', placeholder: '' },
+          { type: 'text', name: 'subdomain', placeholder: '' }
+        ]
+      end
 
-    def execute(push)
-      url = "https://atlas.assembla.com/spaces/#{subdomain}/github_tool?secret_key=#{token}"
-      AssemblaService.post(url, body: { payload: push }.to_json, headers: { 'Content-Type' => 'application/json' })
+      def execute(push)
+        url = "https://atlas.assembla.com/spaces/#{subdomain}/github_tool?secret_key=#{token}"
+        AssemblaService.post(url, body: { payload: push }.to_json, headers: { 'Content-Type' => 'application/json' })
+      end
     end
   end
 end

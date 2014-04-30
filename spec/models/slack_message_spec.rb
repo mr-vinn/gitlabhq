@@ -1,8 +1,6 @@
-require 'gitlab/project_services/slack_message'
-
 module Gitlab
-  describe SlackMessage do
-    subject { SlackMessage.new(args) }
+  describe ProjectServices::SlackMessage do
+    subject { ProjectServices::SlackMessage.new(args) }
 
     let(:args) {
       {

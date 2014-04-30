@@ -18,10 +18,9 @@
 #
 
 require 'spec_helper'
-require 'gitlab/project_services/assembla_service'
 
 module Gitlab
-  describe AssemblaService, models: true do
+  describe ProjectServices::AssemblaService, models: true do
     describe "Associations" do
       it { should belong_to :project }
       it { should have_one :service_hook }
@@ -32,7 +31,7 @@ module Gitlab
       let(:project) { create(:project) }
 
       before do
-        @assembla_service = AssemblaService.new
+        @assembla_service = ProjectServices::AssemblaService.new
         @assembla_service.stub(
           project_id: project.id,
           project: project,

@@ -18,10 +18,9 @@
 #
 
 require 'spec_helper'
-require 'gitlab/project_services/flowdock_service'
 
 module Gitlab
-  describe FlowdockService do
+  describe ProjectServices::FlowdockService do
     describe "Associations" do
       it { should belong_to :project }
       it { should have_one :service_hook }
@@ -32,7 +31,7 @@ module Gitlab
       let(:project) { create(:project) }
 
       before do
-        @flowdock_service = FlowdockService.new
+        @flowdock_service = ProjectServices::FlowdockService.new
         @flowdock_service.stub(
           project_id: project.id,
           project: project,

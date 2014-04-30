@@ -18,10 +18,9 @@
 #
 
 require 'spec_helper'
-require 'gitlab/project_services/slack_service'
 
 module Gitlab
-  describe SlackService do
+  describe ProjectServices::SlackService do
     describe "Associations" do
       it { should belong_to :project }
       it { should have_one :service_hook }
@@ -40,7 +39,7 @@ module Gitlab
     end
 
     describe "Execute" do
-      let(:slack) { SlackService.new }
+      let(:slack) { ProjectServices::SlackService.new }
       let(:user) { create(:user) }
       let(:project) { create(:project) }
       let(:sample_data) { GitPushService.new.sample_data(project, user) }

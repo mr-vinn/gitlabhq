@@ -24,15 +24,7 @@
 #  import_status          :string(255)
 #
 
-require 'gitlab/project_services/gitlab_ci_service'
-require 'gitlab/project_services/campfire_service'
-require 'gitlab/project_services/emails_on_push_service'
-require 'gitlab/project_services/pivotaltracker_service'
-require 'gitlab/project_services/hipchat_service'
-require 'gitlab/project_services/flowdock_service'
-require 'gitlab/project_services/assembla_service'
-require 'gitlab/project_services/gemnasium_service'
-require 'gitlab/project_services/slack_service'
+require 'gitlab/backend/shell_adapter'
 
 module Gitlab
   class Project < ActiveRecord::Base
@@ -65,15 +57,15 @@ module Gitlab
     belongs_to :namespace
 
     has_one :last_event, -> {order 'events.created_at DESC'}, class_name: 'Gitlab::Event', foreign_key: 'project_id'
-    has_one :gitlab_ci_service, dependent: :destroy, class_name: Gitlab::GitlabCiService
-    has_one :campfire_service, dependent: :destroy, class_name: Gitlab::CampfireService
-    has_one :emails_on_push_service, dependent: :destroy, class_name: Gitlab::EmailsOnPushService
-    has_one :pivotaltracker_service, dependent: :destroy, class_name: Gitlab::PivotaltrackerService
-    has_one :hipchat_service, dependent: :destroy, class_name: Gitlab::HipchatService
-    has_one :flowdock_service, dependent: :destroy, class_name: Gitlab::FlowdockService
-    has_one :assembla_service, dependent: :destroy, class_name: Gitlab::AssemblaService
-    has_one :gemnasium_service, dependent: :destroy, class_name: Gitlab::GemnasiumService
-    has_one :slack_service, dependent: :destroy, class_name: Gitlab::SlackService
+    has_one :gitlab_ci_service, dependent: :destroy, class_name: Gitlab::ProjectServices::GitlabCiService
+    has_one :campfire_service, dependent: :destroy, class_name: Gitlab::ProjectServices::CampfireService
+    has_one :emails_on_push_service, dependent: :destroy, class_name: Gitlab::ProjectServices::EmailsOnPushService
+    has_one :pivotaltracker_service, dependent: :destroy, class_name: Gitlab::ProjectServices::PivotaltrackerService
+    has_one :hipchat_service, dependent: :destroy, class_name: Gitlab::ProjectServices::HipchatService
+    has_one :flowdock_service, dependent: :destroy, class_name: Gitlab::ProjectServices::FlowdockService
+    has_one :assembla_service, dependent: :destroy, class_name: Gitlab::ProjectServices::AssemblaService
+    has_one :gemnasium_service, dependent: :destroy, class_name: Gitlab::ProjectServices::GemnasiumService
+    has_one :slack_service, dependent: :destroy, class_name: Gitlab::ProjectServices::SlackService
     has_one :forked_project_link, dependent: :destroy, foreign_key: "forked_to_project_id", class_name: Gitlab::ForkedProjectLink
     has_one :forked_from_project, through: :forked_project_link, class_name: Gitlab::Project
     # Merge Requests for target project should be removed with it

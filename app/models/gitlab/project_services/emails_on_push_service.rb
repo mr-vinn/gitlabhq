@@ -18,31 +18,33 @@
 #
 
 module Gitlab
-  class EmailsOnPushService < Service
-    attr_accessible :recipients
+  module ProjectServices
+    class ProjectServices::EmailsOnPushService < Service
+      attr_accessible :recipients
 
-    validates :recipients, presence: true, if: :activated?
+      validates :recipients, presence: true, if: :activated?
 
-    def title
-      'Emails on push'
-    end
+      def title
+        'Emails on push'
+      end
 
-    def description
-      'Email the commits and diff of each push to a list of recipients.'
-    end
+      def description
+        'Email the commits and diff of each push to a list of recipients.'
+      end
 
-    def to_param
-      'emails_on_push'
-    end
+      def to_param
+        'emails_on_push'
+      end
 
-    def execute(push_data)
-      EmailsOnPushWorker.perform_async(project_id, recipients, push_data)
-    end
+      def execute(push_data)
+        EmailsOnPushWorker.perform_async(project_id, recipients, push_data)
+      end
 
-    def fields
-      [
-        { type: 'textarea', name: 'recipients', placeholder: 'Emails separated by whitespace' },
-      ]
+      def fields
+        [
+          { type: 'textarea', name: 'recipients', placeholder: 'Emails separated by whitespace' },
+        ]
+      end
     end
   end
 end

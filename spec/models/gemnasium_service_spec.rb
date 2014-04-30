@@ -18,10 +18,9 @@
 #
 
 require 'spec_helper'
-require 'gitlab/project_services/gemnasium_service'
 
 module Gitlab
-  describe GemnasiumService do
+  describe ProjectServices::GemnasiumService do
     describe "Associations" do
       it { should belong_to :project }
       it { should have_one :service_hook }
@@ -32,7 +31,7 @@ module Gitlab
       let(:project) { create(:project) }
 
       before do
-        @gemnasium_service = GemnasiumService.new
+        @gemnasium_service = ProjectServices::GemnasiumService.new
         @gemnasium_service.stub(
           project_id: project.id,
           project: project,
