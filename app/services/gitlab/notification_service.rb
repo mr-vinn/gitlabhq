@@ -143,7 +143,7 @@ module Gitlab
       recipients.delete(note.author)
 
       # build notify method like 'note_commit_email'
-      notify_method = "note_#{note.noteable_type.underscore}_email".to_sym
+      notify_method = "note_#{note.noteable_type.underscore.gsub(/^gitlab\//, '')}_email".to_sym
 
       recipients.each do |recipient|
         mailer.send(notify_method, recipient.id, note.id)
