@@ -22,7 +22,7 @@
 #= require raphael
 #= require g.raphael-min
 #= require g.bar-min
-#= require branch-graph
+#= require gitlab/branch-graph
 #= require highlightjs.min
 #= require ace/ace
 #= require d3

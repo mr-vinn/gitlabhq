@@ -3,10 +3,10 @@
   %title
     = "#{title} | " if defined?(title)
     GitLab
-  = favicon_link_tag 'favicon.ico'
-  = stylesheet_link_tag    "application", :media => "all"
-  = stylesheet_link_tag    "print", :media => "print"
-  = javascript_include_tag "application"
+  = favicon_link_tag 'gitlab/favicon.ico'
+  = stylesheet_link_tag    "gitlab/application", :media => "all"
+  = stylesheet_link_tag    "gitlab/print", :media => "print"
+  = javascript_include_tag "gitlab/application"
   = csrf_meta_tags
   = include_gon
   :erb
