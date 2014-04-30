@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Gitlab
-  describe "Admin::Projects", feature: true  do
+  describe "Gitlab::Admin::Projects", feature: true  do
     describe "GET /admin/projects" do
       subject { admin_projects_path }
 

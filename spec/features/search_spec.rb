@@ -3,7 +3,7 @@ require 'spec_helper'
 module Gitlab
   describe "Search", feature: true  do
     before do
-      ActiveRecord::Base.observers.enable(:user_observer)
+      ActiveRecord::Base.observers.enable(:'gitlab/user_observer')
       login_as :user
       @project = create(:project, namespace: @user.namespace)
       @project.team << [@user, :reporter]

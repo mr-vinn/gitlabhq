@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'gitlab/oauth/user'
 
 module Gitlab
   describe Gitlab::OAuth::User do
