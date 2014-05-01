@@ -1,5 +1,5 @@
 .event_filter
-  = event_filter_link EventFilter.push, 'Push events'
-  = event_filter_link EventFilter.merged, 'Merge events'
-  = event_filter_link EventFilter.comments, 'Comments'
-  = event_filter_link EventFilter.team, 'Team'
+  = event_filter_link Gitlab::EventFilter.push, 'Push events'
+  = event_filter_link Gitlab::EventFilter.merged, 'Merge events'
+  = event_filter_link Gitlab::EventFilter.comments, 'Comments'
+  = event_filter_link Gitlab::EventFilter.team, 'Team'
