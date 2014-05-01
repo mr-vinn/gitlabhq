@@ -20,12 +20,12 @@ module Gitlab
 
     rescue_from Encoding::CompatibilityError do |exception|
       log_exception(exception)
-      render "errors/encoding", layout: "errors", status: 500
+      render "errors/encoding", layout: "gitlab/errors", status: 500
     end
 
     rescue_from ActiveRecord::RecordNotFound do |exception|
       log_exception(exception)
-      render "errors/not_found", layout: "errors", status: 404
+      render "errors/not_found", layout: "gitlab/errors", status: 404
     end
 
     protected
@@ -119,15 +119,15 @@ module Gitlab
     end
 
     def access_denied!
-      render "errors/access_denied", layout: "errors", status: 404
+      render "gitlab/errors/access_denied", layout: "gitlab/errors", status: 404
     end
 
     def not_found!
-      render "errors/not_found", layout: "errors", status: 404
+      render "gitlab/errors/not_found", layout: "gitlab/errors", status: 404
     end
 
     def git_not_found!
-      render "errors/git_not_found", layout: "errors", status: 404
+      render "gitlab/errors/git_not_found", layout: "gitlab/errors", status: 404
     end
 
     def method_missing(method_sym, *arguments, &block)

@@ -19,9 +19,9 @@ module Gitlab
 
     def determine_layout
       if current_user
-        'projects'
+        'gitlab/projects'
       else
-        'public_projects'
+        'gitlab/public_projects'
       end
     end
 
