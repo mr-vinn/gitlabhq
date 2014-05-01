@@ -268,7 +268,7 @@ module Gitlab
     end
 
     def build_commit_note(commit)
-      notes.new(commit_id: commit.id, noteable_type: "Commit")
+      notes.new(commit_id: commit.id, noteable_type: "Gitlab::Commit")
     end
 
     def last_activity
