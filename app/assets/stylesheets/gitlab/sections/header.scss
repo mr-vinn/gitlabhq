@@ -108,7 +108,7 @@ header {
 
       h1 {
         margin: 0;
-        background: image-url('logo-black.png') no-repeat center center;
+        background: image-url('gitlab/logo-black.png') no-repeat center center;
         background-size: 32px;
         float: left;
         height: 46px;
@@ -161,7 +161,7 @@ header {
     }
 
     .search-input {
-      background-image: image-url("icon-search.png");
+      background-image: image-url("gitlab/icon-search.png");
       background-repeat: no-repeat;
       background-position: 10px;
       height: inherit;
@@ -221,7 +221,7 @@ header {
     .app_logo {
       a {
         h1 {
-          background: image-url('logo-white.png') no-repeat center center;
+          background: image-url('gitlab/logo-white.png') no-repeat center center;
           background-size: 32px;
           color: #fff;
           text-shadow: 0 1px 1px #444;

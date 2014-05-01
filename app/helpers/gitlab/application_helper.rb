@@ -55,7 +55,7 @@ module Gitlab
       if group && group.avatar.present?
         group.avatar.url
       else
-        image_path('no_group_avatar.png')
+        image_path('gitlab/no_group_avatar.png')
       end
     end
 
@@ -147,7 +147,7 @@ module Gitlab
 
     def authbutton(provider, size = 64)
       file_name = "#{provider.to_s.split('_').first}_#{size}.png"
-      image_tag(image_path("authbuttons/#{file_name}"), alt: "Sign in with #{provider.to_s.titleize}")
+      image_tag(image_path("gitlab/authbuttons/#{file_name}"), alt: "Sign in with #{provider.to_s.titleize}")
     end
 
     def simple_sanitize(str)
