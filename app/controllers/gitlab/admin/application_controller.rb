@@ -3,7 +3,7 @@
 # Automatically sets the layout and ensures an administrator is logged in
 module Gitlab
   class Admin::ApplicationController < ApplicationController
-    layout 'admin'
+    layout 'gitlab/admin'
     before_filter :authenticate_admin!
 
     def authenticate_admin!

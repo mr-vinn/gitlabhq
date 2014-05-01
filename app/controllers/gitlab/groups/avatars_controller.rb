@@ -1,6 +1,6 @@
 module Gitlab
   class Groups::AvatarsController < ApplicationController
-    layout "profile"
+    layout "gitlab/profile"
 
     def destroy
       @group = Group.find_by(path: params[:group_id])
