@@ -7,7 +7,8 @@
       %p.light Some settings, such as "Transfer Project", are hidden inside the danger area below
       %hr
       .form-holder
-        = form_for @project, remote: true, html: { class: "edit_project form-horizontal" } do |f|
+        - path_helper = @project.id == nil ? projects_path : project_path(@project)
+        = form_for @project, as: :project, url: path_helper, remote: true, html: { class: "edit_project form-horizontal" } do |f|
           %fieldset
             .form-group.project_name_holder
               = f.label :name, class: 'control-label' do

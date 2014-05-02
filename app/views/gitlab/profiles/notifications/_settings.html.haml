@@ -6,8 +6,8 @@
       = notification_icon(notification)
 
   %span.str-truncated
-    - if membership.kind_of? UsersGroup
-      = link_to membership.group.name, membership.group
+    - if membership.kind_of? Gitlab::UsersGroup
+      = link_to membership.group.name, group_path(membership.group)
     - else
       = link_to_project(membership.project)
   .pull-right

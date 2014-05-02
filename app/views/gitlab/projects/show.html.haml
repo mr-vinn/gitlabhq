@@ -53,7 +53,7 @@
         - if @project.group
           #{link_to @project.group.name, @project.group} group
         - else
-          #{link_to @project.owner_name, @project.owner}
+          #{link_to @project.owner_name, user_path(@project.owner)}
 
 
       - if @project.gitlab_ci?

@@ -72,7 +72,7 @@
           %li
             %span.light Created by:
             %strong
-              = link_to @user.created_by.name, [:admin, @user.created_by]
+              = link_to @user.created_by.name, admin_user_path(@user.created_by)
 
     - unless @user == current_user
       - if @user.blocked?
@@ -114,7 +114,7 @@
               Next groups with all content will be removed:
               %strong #{@user.solo_owned_groups.map(&:name).join(', ')}
         %br
-        = link_to 'Remove user', [:admin, @user], data: { confirm: "USER #{@user.name} WILL BE REMOVED! Are you sure?" }, method: :delete, class: "btn btn-remove"
+        = link_to 'Remove user', admin_user_path(@user), data: { confirm: "USER #{@user.name} WILL BE REMOVED! Are you sure?" }, method: :delete, class: "btn btn-remove"
 
   .col-md-6
     - if @user.users_groups.present?

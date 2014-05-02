@@ -18,14 +18,17 @@
           %span.light Namespace:
           %strong
             - if @project.namespace
-              = link_to @project.namespace.human_name, [:admin, @project.group || @project.owner]
+              - if @project.group
+                = link_to @project.namespace.human_name, admin_group_path(@project.group)
+              - else
+                = link_to @project.namespace.human_name, admin_user_path(@project.owner)
             - else
               Global
         %li
           %span.light Owned by:
           %strong
             - if @project.owner
-              = link_to @project.owner_name, [:admin, @project.owner]
+              = link_to @project.owner_name, admin_user_path(@project.owner)
             - else
               (deleted)
 

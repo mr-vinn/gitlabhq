@@ -22,7 +22,8 @@
             %strong= @group.name
             group settings:
           %div.form-holder
-            = form_for @group, html: { multipart: true, class: "form-horizontal" }, authenticity_token: true do |f|
+            - path_helper = @group.id == nil ? groups_path : group_path(@group)
+            = form_for @group, as: :group, url: path_helper, html: { multipart: true, class: "form-horizontal" }, authenticity_token: true do |f|
               - if @group.errors.any?
                 .alert.alert-danger
                   %span= @group.errors.full_messages.first
@@ -75,11 +76,11 @@
               %li
                 .list-item-name
                   = visibility_level_icon(project.visibility_level)
-                  = link_to project.name_with_namespace, project
+                  = link_to project.name_with_namespace, project_path(project)
                 .pull-right
                   = link_to 'Members', project_team_index_path(project), id: "edit_#{dom_id(project)}", class: "btn btn-small"
                   = link_to 'Edit', edit_project_path(project), id: "edit_#{dom_id(project)}", class: "btn btn-small"
-                  = link_to 'Remove', project, data: { confirm: remove_project_message(project)}, method: :delete, class: "btn btn-small btn-remove"
+                  = link_to 'Remove', project_path(project), data: { confirm: remove_project_message(project)}, method: :delete, class: "btn btn-small btn-remove"
             - if @group.projects.blank?
               .nothing-here-block This group has no projects yet
 
@@ -92,4 +93,4 @@
             %p
               %strong Removed group can not be restored!
 
-            = link_to 'Remove Group', @group, data: {confirm: 'Removed group can not be restored! Are you sure?'}, method: :delete, class: "btn btn-remove"
+            = link_to 'Remove Group', group_path(@group), data: {confirm: 'Removed group can not be restored! Are you sure?'}, method: :delete, class: "btn btn-remove"

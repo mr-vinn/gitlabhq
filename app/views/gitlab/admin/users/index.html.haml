@@ -51,7 +51,7 @@
                 %i.icon-envelope
                 = mail_to user.email, user.email, class: 'light'
               &nbsp;
-              = link_to 'Edit', edit_admin_user_path(user), id: "edit_#{dom_id(user)}", class: "btn btn-small"
+              = link_to 'Edit', edit_admin_user_path(user), id: "edit_#{dom_id(user).gsub(/^gitlab_/, '')}", class: "btn btn-small"
               - unless user == current_user
                 - if user.blocked?
                   = link_to 'Unblock', unblock_admin_user_path(user), method: :put, class: "btn btn-small success"

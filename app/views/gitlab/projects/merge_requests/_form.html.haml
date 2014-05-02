@@ -1,4 +1,5 @@
-= form_for [@project, @merge_request], html: { class: "merge-request-form form-horizontal" } do |f|
+- path_helper = @merge_request.id == nil ? project_merge_requests_path : project_merge_request_path(@project, @merge_request)
+= form_for [@project, @merge_request], as: :project_merge_request, url: path_helper, html: { class: "merge-request-form form-horizontal" } do |f|
   .row
     .col-sm-2
     .col-sm-10

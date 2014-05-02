@@ -3,7 +3,8 @@
     = render 'gitlab/projects/errors'
   .project-edit-content
 
-    = form_for @project, remote: true, html: { class: 'new_project form-horizontal' } do |f|
+    - path_helper = @project.id == nil ? projects_path : project_path(@project)
+    = form_for @project, as: :project, url: path_helper, remote: true, html: { class: 'new_project form-horizontal' } do |f|
       .form-group.project-name-holder
         = f.label :name, class: 'control-label' do
           %strong Project name
