@@ -1,6 +1,6 @@
 module Gitlab
   class Profiles::AccountsController < ApplicationController
-    layout "profile"
+    layout "gitlab/profile"
 
     def show
       @user = current_user

@@ -1,6 +1,6 @@
 module Gitlab
   class Profiles::KeysController < ApplicationController
-    layout "profile"
+    layout "gitlab/profile"
     skip_before_filter :authenticate_user!, only: [:get_keys]
 
     def index

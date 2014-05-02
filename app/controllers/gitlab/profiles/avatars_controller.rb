@@ -1,6 +1,6 @@
 module Gitlab
   class Profiles::AvatarsController < ApplicationController
-    layout "profile"
+    layout "gitlab/profile"
 
     def destroy
       @user = current_user

@@ -5,7 +5,7 @@ module Gitlab
 
     respond_to :html
 
-    layout "project_settings"
+    layout "gitlab/project_settings"
 
     def index
       @hooks = @project.hooks

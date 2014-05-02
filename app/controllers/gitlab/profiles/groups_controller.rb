@@ -1,6 +1,6 @@
 module Gitlab
   class Profiles::GroupsController < ApplicationController
-    layout "profile"
+    layout "gitlab/profile"
 
     def index
       @user_groups = current_user.users_groups.page(params[:page]).per(20)

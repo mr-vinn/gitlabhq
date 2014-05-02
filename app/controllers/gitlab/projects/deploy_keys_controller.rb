@@ -5,7 +5,7 @@ module Gitlab
     # Authorize
     before_filter :authorize_admin_project!
 
-    layout "project_settings"
+    layout "gitlab/project_settings"
 
     def index
       @enabled_keys = @project.deploy_keys

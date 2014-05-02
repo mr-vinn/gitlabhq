@@ -1,6 +1,6 @@
 module Gitlab
   class Profiles::EmailsController < ApplicationController
-    layout "profile"
+    layout "gitlab/profile"
 
     def index
       @primary = current_user.email

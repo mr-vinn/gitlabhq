@@ -1,6 +1,6 @@
 module Gitlab
   class Profiles::NotificationsController < ApplicationController
-    layout 'profile'
+    layout 'gitlab/profile'
 
     def show
       @notification = current_user.notification

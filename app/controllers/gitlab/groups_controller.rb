@@ -137,11 +137,11 @@ module Gitlab
 
     def determine_layout
       if [:new, :create].include?(action_name.to_sym)
-        'navless'
+        'gitlab/navless'
       elsif current_user
-        'group'
+        'gitlab/group'
       else
-        'public_group'
+        'gitlab/public_group'
       end
     end
 

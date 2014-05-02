@@ -20,12 +20,12 @@ module Gitlab
 
     rescue_from Encoding::CompatibilityError do |exception|
       log_exception(exception)
-      render "errors/encoding", layout: "gitlab/errors", status: 500
+      render "gitlab/errors/encoding", layout: "gitlab/errors", status: 500
     end
 
     rescue_from ActiveRecord::RecordNotFound do |exception|
       log_exception(exception)
-      render "errors/not_found", layout: "gitlab/errors", status: 404
+      render "gitlab/errors/not_found", layout: "gitlab/errors", status: 404
     end
 
     protected

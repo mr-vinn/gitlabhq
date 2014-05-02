@@ -66,9 +66,9 @@ module Gitlab
 
     def determine_layout
       if [:new, :create].include?(action_name.to_sym)
-        'navless'
+        'gitlab/navless'
       else
-        'profile'
+        'gitlab/profile'
       end
     end
 

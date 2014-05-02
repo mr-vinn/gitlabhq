@@ -6,7 +6,7 @@ module Gitlab
     before_filter :authorize_change_username!, only: :update_username
     skip_before_filter :require_email, only: [:show, :update]
 
-    layout 'profile'
+    layout 'gitlab/profile'
 
     def show
     end

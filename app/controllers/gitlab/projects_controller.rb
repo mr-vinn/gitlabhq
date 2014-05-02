@@ -9,7 +9,7 @@ module Gitlab
     before_filter :authorize_admin_project!, only: [:edit, :update, :destroy, :transfer, :archive, :unarchive, :retry_import]
     before_filter :require_non_empty_project, only: [:blob, :tree, :graph]
 
-    layout 'navless', only: [:new, :create, :fork]
+    layout 'gitlab/navless', only: [:new, :create, :fork]
     before_filter :set_title, only: [:new, :create]
 
     def new
@@ -17,7 +17,7 @@ module Gitlab
     end
 
     def edit
-      render 'edit', layout: "project_settings"
+      render 'edit', layout: "gitlab/project_settings"
     end
 
     def create
@@ -38,7 +38,7 @@ module Gitlab
           format.html { redirect_to edit_project_path(@project), notice: 'Project was successfully updated.' }
           format.js
         else
-          format.html { render "edit", layout: "project_settings" }
+          format.html { render "edit", layout: "gitlab/project_settings" }
           format.js
         end
       end
@@ -170,7 +170,7 @@ module Gitlab
     end
 
     def user_layout
-      current_user ? "projects" : "public_projects"
+      current_user ? "gitlab/projects" : "gitlab/public_projects"
     end
 
     def participants_in(type, id)

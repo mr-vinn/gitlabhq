@@ -3,7 +3,7 @@ module Gitlab
     # Authorize
     before_filter :authorize_admin_project!, except: :leave
 
-    layout "project_settings"
+    layout "gitlab/project_settings"
 
     def index
       @group = @project.group
