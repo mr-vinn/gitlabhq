@@ -160,11 +160,11 @@ module Gitlab
     end
 
     def merge_event
-      self.target_project.events.where(target_id: self.id, target_type: "MergeRequest", action: Event::MERGED).last
+      self.target_project.events.where(target_id: self.id, target_type: "Gitlab::MergeRequest", action: Event::MERGED).last
     end
 
     def closed_event
-      self.target_project.events.where(target_id: self.id, target_type: "MergeRequest", action: Event::CLOSED).last
+      self.target_project.events.where(target_id: self.id, target_type: "Gitlab::MergeRequest", action: Event::CLOSED).last
     end
 
     def automerge!(current_user, commit_message = nil)

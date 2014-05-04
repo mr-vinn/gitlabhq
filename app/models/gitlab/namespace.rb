@@ -99,7 +99,7 @@ module Gitlab
     end
 
     def kind
-      type == 'Group' ? 'group' : 'user'
+      type == 'Gitlab::Group' ? 'group' : 'user'
     end
   end
     end

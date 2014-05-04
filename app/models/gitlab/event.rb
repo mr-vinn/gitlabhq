@@ -113,19 +113,19 @@ module Gitlab
     end
 
     def milestone?
-      target_type == "Milestone"
+      target_type == "Gitlab::Milestone"
     end
 
     def note?
-      target_type == "Note"
+      target_type == "Gitlab::Note"
     end
 
     def issue?
-      target_type == "Issue"
+      target_type == "Gitlab::Issue"
     end
 
     def merge_request?
-      target_type == "MergeRequest"
+      target_type == "Gitlab::MergeRequest"
     end
 
     def joined?
@@ -141,11 +141,11 @@ module Gitlab
     end
 
     def issue
-      target if target_type == "Issue"
+      target if target_type == "Gitlab::Issue"
     end
 
     def merge_request
-      target if target_type == "MergeRequest"
+      target if target_type == "Gitlab::MergeRequest"
     end
 
     def action_name
@@ -260,11 +260,11 @@ module Gitlab
     end
 
     def note_commit?
-      target.noteable_type == "Commit"
+      target.noteable_type == "Gitlab::Commit"
     end
 
     def note_project_snippet?
-      target.noteable_type == "Snippet"
+      target.noteable_type == "Gitlab::Snippet"
     end
 
     def note_target
