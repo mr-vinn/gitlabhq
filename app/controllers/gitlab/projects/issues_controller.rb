@@ -81,7 +81,7 @@ module Gitlab
         format.js
         format.html do
           if @issue.valid?
-            redirect_to [@project, @issue]
+            redirect_to project_issue_path(@project, @issue)
           else
             render :edit
           end

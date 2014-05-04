@@ -33,7 +33,7 @@ module Gitlab
       return render('empty') unless can?(current_user, :write_wiki, @project)
 
       if @page.update(content, format, message)
-        redirect_to [@project, @page], notice: 'Wiki was successfully updated.'
+        redirect_to project_wiki_path(@project, @page), notice: 'Wiki was successfully updated.'
       else
         render 'edit'
       end

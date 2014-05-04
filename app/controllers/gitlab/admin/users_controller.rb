@@ -52,7 +52,7 @@ module Gitlab
 
       respond_to do |format|
         if @user.save
-          format.html { redirect_to [:admin, @user], notice: 'User was successfully created.' }
+          format.html { redirect_to admin_user_path(@user), notice: 'User was successfully created.' }
           format.json { render json: @user, status: :created, location: @user }
         else
           format.html { render "new" }
@@ -76,7 +76,7 @@ module Gitlab
       respond_to do |format|
         if user.update_attributes(params[:user], as: :admin)
           user.confirm!
-          format.html { redirect_to [:admin, user], notice: 'User was successfully updated.' }
+          format.html { redirect_to admin_user_path(user), notice: 'User was successfully updated.' }
           format.json { head :ok }
         else
           # restore username to keep form action url.

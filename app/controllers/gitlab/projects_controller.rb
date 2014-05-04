@@ -76,7 +76,7 @@ module Gitlab
 
     def import
       if project.import_finished?
-        redirect_to @project
+        redirect_to project_path(@project)
         return
       end
     end
