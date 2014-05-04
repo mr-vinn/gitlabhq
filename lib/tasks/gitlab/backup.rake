@@ -22,7 +22,7 @@ namespace :gitlab do
     task restore: :environment do
       warn_user_is_not_gitlab
 
-      backup = Backup::Manager.new
+      backup = Gitlab::Backup::Manager.new
       backup.unpack
 
       Rake::Task["gitlab:backup:db:restore"].invoke
@@ -36,13 +36,13 @@ namespace :gitlab do
     namespace :repo do
       task create: :environment do
         puts "Dumping repositories ...".blue
-        Backup::Repository.new.dump
+        Gitlab::Backup::Repository.new.dump
         puts "done".green
       end
 
       task restore: :environment do
         puts "Restoring repositories ...".blue
-        Backup::Repository.new.restore
+        Gitlab::Backup::Repository.new.restore
         puts "done".green
       end
     end
@@ -50,13 +50,13 @@ namespace :gitlab do
     namespace :db do
       task create: :environment do
         puts "Dumping database ... ".blue
-        Backup::Database.new.dump
+        Gitlab::Backup::Database.new.dump
         puts "done".green
       end
 
       task restore: :environment do
         puts "Restoring database ... ".blue
-        Backup::Database.new.restore
+        Gitlab::Backup::Database.new.restore
         puts "done".green
       end
     end
@@ -64,13 +64,13 @@ namespace :gitlab do
     namespace :uploads do
       task create: :environment do
         puts "Dumping uploads ... ".blue
-        Backup::Uploads.new.dump
+        Gitlab::Backup::Uploads.new.dump
         puts "done".green
       end
 
       task restore: :environment do
         puts "Restoring uploads ... ".blue
-        Backup::Uploads.new.restore
+        Gitlab::Backup::Uploads.new.restore
         puts "done".green
       end
     end

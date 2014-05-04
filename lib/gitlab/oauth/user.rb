@@ -81,7 +81,7 @@ module Gitlab
         end
 
         def model
-          ::User
+          Gitlab::User
         end
 
         def raise_error(message)
