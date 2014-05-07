@@ -14,6 +14,10 @@ module Gitlab
     let(:snippet)       { create(:project_snippet, project: project) }
     let(:member)        { project.users_projects.where(user_id: user).first }
 
+    def unqualified_class(object)
+      object.class.to_s.sub(/^Gitlab::/, '')
+    end
+
     before do
       # Helper expects a @project instance variable
       @project = project
@@ -165,12 +169,12 @@ module Gitlab
         end
 
         it "should include a title attribute" do
-          title = "#{object.class.to_s.titlecase}: #{object.title}"
+          title = "#{unqualified_class(object).titlecase}: #{object.title}"
           gfm(actual).should match(/title="#{title}"/)
         end
 
         it "should include standard gfm classes" do
-          css = object.class.to_s.underscore
+          css = unqualified_class(object).underscore
           gfm(actual).should match(/class="\s?gfm gfm-#{css}\s?"/)
         end
       end
@@ -225,7 +229,7 @@ module Gitlab
         end
 
         it "should include standard gfm classes" do
-          css = object.class.to_s.underscore
+          css = unqualified_class(object).underscore
           gfm(actual).should match(/class="\s?gfm gfm-snippet\s?"/)
         end
 
