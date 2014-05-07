@@ -1,6 +1,8 @@
-class CommentsOnCommitDiffs < Spinach::FeatureSteps
-  include SharedAuthentication
-  include SharedDiffNote
-  include SharedPaths
-  include SharedProject
+module Gitlab
+  class Spinach::Features::CommentsOnCommitDiffs < Spinach::FeatureSteps
+    include SharedAuthentication
+    include SharedDiffNote
+    include SharedPaths
+    include SharedProject
+  end
 end
