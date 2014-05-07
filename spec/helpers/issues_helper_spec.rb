@@ -30,7 +30,7 @@ module Gitlab
         project_url.gsub(':project_id', ext_project.id.to_s)
                    .gsub(':issues_tracker_id', ext_project.issues_tracker_id.to_s)
       end
-      let(:int_expected) { polymorphic_path([project]) }
+      let(:int_expected) { project_path([project]) }
 
       it "should return internal path if used internal tracker" do
         @project = project
@@ -56,7 +56,7 @@ module Gitlab
         end
 
         it "should return path to internal tracker" do
-          url_for_project_issues.should match(polymorphic_path([@project]))
+          url_for_project_issues.should match(project_path([@project]))
         end
       end
     end
@@ -69,7 +69,7 @@ module Gitlab
           .gsub(':project_id', ext_project.id.to_s)
           .gsub(':issues_tracker_id', ext_project.issues_tracker_id.to_s)
       end
-      let(:int_expected) { polymorphic_path([project, issue]) }
+      let(:int_expected) { project_issue_path(project, issue) }
 
       it "should return internal path if used internal tracker" do
         @project = project
@@ -95,7 +95,7 @@ module Gitlab
         end
 
         it "should return internal path" do
-          url_for_issue(issue.iid).should match(polymorphic_path([@project, issue]))
+          url_for_issue(issue.iid).should match(project_issue_path(@project, issue))
         end
       end
     end
