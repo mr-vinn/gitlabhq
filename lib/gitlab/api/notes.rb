@@ -59,8 +59,8 @@ module Gitlab
         end
 
         NOTEABLE_TYPES.each do |noteable_type|
-          noteables_str = noteable_type.to_s.underscore.pluralize
-          noteable_id_str = "#{noteable_type.to_s.underscore}_id"
+          noteables_str = noteable_type.to_s.underscore.gsub(/gitlab\//, '').pluralize
+          noteable_id_str = "#{noteable_type.to_s.underscore.gsub(/gitlab\//, '')}_id"
 
           # Get a list of project +noteable+ notes
           #
