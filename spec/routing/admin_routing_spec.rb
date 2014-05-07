@@ -13,47 +13,47 @@ require 'spec_helper'
 module Gitlab
   describe Admin::UsersController, "routing" do
     it "to #team_update" do
-      put("/admin/users/1/team_update").should route_to('admin/users#team_update', id: '1')
+      put("/admin/users/1/team_update").should route_to('gitlab/admin/users#team_update', id: '1')
     end
 
     it "to #block" do
-      put("/admin/users/1/block").should route_to('admin/users#block', id: '1')
+      put("/admin/users/1/block").should route_to('gitlab/admin/users#block', id: '1')
     end
 
     it "to #unblock" do
-      put("/admin/users/1/unblock").should route_to('admin/users#unblock', id: '1')
+      put("/admin/users/1/unblock").should route_to('gitlab/admin/users#unblock', id: '1')
     end
 
     it "to #index" do
-      get("/admin/users").should route_to('admin/users#index')
+      get("/admin/users").should route_to('gitlab/admin/users#index')
     end
 
     it "to #show" do
-      get("/admin/users/1").should route_to('admin/users#show', id: '1')
+      get("/admin/users/1").should route_to('gitlab/admin/users#show', id: '1')
     end
 
     it "to #create" do
-      post("/admin/users").should route_to('admin/users#create')
+      post("/admin/users").should route_to('gitlab/admin/users#create')
     end
 
     it "to #new" do
-      get("/admin/users/new").should route_to('admin/users#new')
+      get("/admin/users/new").should route_to('gitlab/admin/users#new')
     end
 
     it "to #edit" do
-      get("/admin/users/1/edit").should route_to('admin/users#edit', id: '1')
+      get("/admin/users/1/edit").should route_to('gitlab/admin/users#edit', id: '1')
     end
 
     it "to #show" do
-      get("/admin/users/1").should route_to('admin/users#show', id: '1')
+      get("/admin/users/1").should route_to('gitlab/admin/users#show', id: '1')
     end
 
     it "to #update" do
-      put("/admin/users/1").should route_to('admin/users#update', id: '1')
+      put("/admin/users/1").should route_to('gitlab/admin/users#update', id: '1')
     end
 
     it "to #destroy" do
-      delete("/admin/users/1").should route_to('admin/users#destroy', id: '1')
+      delete("/admin/users/1").should route_to('gitlab/admin/users#destroy', id: '1')
     end
   end
 
@@ -68,11 +68,11 @@ module Gitlab
   #                           DELETE /admin/projects/:id(.:format)             admin/projects#destroy {id: /[^\/]+/}
   describe Admin::ProjectsController, "routing" do
     it "to #index" do
-      get("/admin/projects").should route_to('admin/projects#index')
+      get("/admin/projects").should route_to('gitlab/admin/projects#index')
     end
 
     it "to #show" do
-      get("/admin/projects/gitlab").should route_to('admin/projects#show', id: 'gitlab')
+      get("/admin/projects/gitlab").should route_to('gitlab/admin/projects#show', id: 'gitlab')
     end
   end
 
@@ -82,19 +82,19 @@ module Gitlab
   #      admin_hook DELETE /admin/hooks/:id(.:format)           admin/hooks#destroy
   describe Admin::HooksController, "routing" do
     it "to #test" do
-      get("/admin/hooks/1/test").should route_to('admin/hooks#test', hook_id: '1')
+      get("/admin/hooks/1/test").should route_to('gitlab/admin/hooks#test', hook_id: '1')
     end
 
     it "to #index" do
-      get("/admin/hooks").should route_to('admin/hooks#index')
+      get("/admin/hooks").should route_to('gitlab/admin/hooks#index')
     end
 
     it "to #create" do
-      post("/admin/hooks").should route_to('admin/hooks#create')
+      post("/admin/hooks").should route_to('gitlab/admin/hooks#create')
     end
 
     it "to #destroy" do
-      delete("/admin/hooks/1").should route_to('admin/hooks#destroy', id: '1')
+      delete("/admin/hooks/1").should route_to('gitlab/admin/hooks#destroy', id: '1')
     end
 
   end
@@ -102,21 +102,21 @@ module Gitlab
   # admin_logs GET    /admin/logs(.:format) admin/logs#show
   describe Admin::LogsController, "routing" do
     it "to #show" do
-      get("/admin/logs").should route_to('admin/logs#show')
+      get("/admin/logs").should route_to('gitlab/admin/logs#show')
     end
   end
 
   # admin_background_jobs GET    /admin/background_jobs(.:format) admin/background_jobs#show
   describe Admin::BackgroundJobsController, "routing" do
     it "to #show" do
-      get("/admin/background_jobs").should route_to('admin/background_jobs#show')
+      get("/admin/background_jobs").should route_to('gitlab/admin/background_jobs#show')
     end
   end
 
   # admin_root        /admin(.:format) admin/dashboard#index
   describe Admin::DashboardController, "routing" do
     it "to #index" do
-      get("/admin").should route_to('admin/dashboard#index')
+      get("/admin").should route_to('gitlab/admin/dashboard#index')
     end
   end
 

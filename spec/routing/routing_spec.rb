@@ -4,7 +4,7 @@ require 'spec_helper'
 module Gitlab
   describe SearchController, "routing" do
     it "to #show" do
-      get("/search").should route_to('search#show')
+      get("/search").should route_to('gitlab/search#show')
     end
   end
 
@@ -29,39 +29,39 @@ module Gitlab
   #          DELETE /snippets/:id(.:format)      snippets#destroy
   describe SnippetsController, "routing" do
     it "to #user_index" do
-      get("/s/User").should route_to('snippets#user_index', username: 'User')
+      get("/s/User").should route_to('gitlab/snippets#user_index', username: 'User')
     end
 
     it "to #raw" do
-      get("/snippets/1/raw").should route_to('snippets#raw', id: '1')
+      get("/snippets/1/raw").should route_to('gitlab/snippets#raw', id: '1')
     end
 
     it "to #index" do
-      get("/snippets").should route_to('snippets#index')
+      get("/snippets").should route_to('gitlab/snippets#index')
     end
 
     it "to #create" do
-      post("/snippets").should route_to('snippets#create')
+      post("/snippets").should route_to('gitlab/snippets#create')
     end
 
     it "to #new" do
-      get("/snippets/new").should route_to('snippets#new')
+      get("/snippets/new").should route_to('gitlab/snippets#new')
     end
 
     it "to #edit" do
-      get("/snippets/1/edit").should route_to('snippets#edit', id: '1')
+      get("/snippets/1/edit").should route_to('gitlab/snippets#edit', id: '1')
     end
 
     it "to #show" do
-      get("/snippets/1").should route_to('snippets#show', id: '1')
+      get("/snippets/1").should route_to('gitlab/snippets#show', id: '1')
     end
 
     it "to #update" do
-      put("/snippets/1").should route_to('snippets#update', id: '1')
+      put("/snippets/1").should route_to('gitlab/snippets#update', id: '1')
     end
 
     it "to #destroy" do
-      delete("/snippets/1").should route_to('snippets#destroy', id: '1')
+      delete("/snippets/1").should route_to('gitlab/snippets#destroy', id: '1')
     end
   end
 
@@ -76,39 +76,39 @@ module Gitlab
   #    help_raketasks GET    /help/raketasks(.:format)    help#raketasks
   describe HelpController, "routing" do
     it "to #index" do
-      get("/help").should route_to('help#index')
+      get("/help").should route_to('gitlab/help#index')
     end
 
     it "to #permissions" do
-      get("/help/permissions").should route_to('help#permissions')
+      get("/help/permissions").should route_to('gitlab/help#permissions')
     end
 
     it "to #workflow" do
-      get("/help/workflow").should route_to('help#workflow')
+      get("/help/workflow").should route_to('gitlab/help#workflow')
     end
 
     it "to #api" do
-      get("/help/api").should route_to('help#api')
+      get("/help/api").should route_to('gitlab/help#api')
     end
 
     it "to #web_hooks" do
-      get("/help/web_hooks").should route_to('help#web_hooks')
+      get("/help/web_hooks").should route_to('gitlab/help#web_hooks')
     end
 
     it "to #system_hooks" do
-      get("/help/system_hooks").should route_to('help#system_hooks')
+      get("/help/system_hooks").should route_to('gitlab/help#system_hooks')
     end
 
     it "to #markdown" do
-      get("/help/markdown").should route_to('help#markdown')
+      get("/help/markdown").should route_to('gitlab/help#markdown')
     end
 
     it "to #ssh" do
-      get("/help/ssh").should route_to('help#ssh')
+      get("/help/ssh").should route_to('gitlab/help#ssh')
     end
 
     it "to #raketasks" do
-      get("/help/raketasks").should route_to('help#raketasks')
+      get("/help/raketasks").should route_to('gitlab/help#raketasks')
     end
   end
 
@@ -122,23 +122,23 @@ module Gitlab
   #              profile_update PUT    /profile/update(.:format)              profile#update
   describe ProfilesController, "routing" do
     it "to #account" do
-      get("/profile/account").should route_to('profiles/accounts#show')
+      get("/profile/account").should route_to('gitlab/profiles/accounts#show')
     end
 
     it "to #history" do
-      get("/profile/history").should route_to('profiles#history')
+      get("/profile/history").should route_to('gitlab/profiles#history')
     end
 
     it "to #reset_private_token" do
-      put("/profile/reset_private_token").should route_to('profiles#reset_private_token')
+      put("/profile/reset_private_token").should route_to('gitlab/profiles#reset_private_token')
     end
 
     it "to #show" do
-      get("/profile").should route_to('profiles#show')
+      get("/profile").should route_to('gitlab/profiles#show')
     end
 
     it "to #design" do
-      get("/profile/design").should route_to('profiles#design')
+      get("/profile/design").should route_to('gitlab/profiles#design')
     end
   end
 
@@ -151,36 +151,36 @@ module Gitlab
   #          DELETE /keys/:id(.:format)      keys#destroy
   describe Profiles::KeysController, "routing" do
     it "to #index" do
-      get("/profile/keys").should route_to('profiles/keys#index')
+      get("/profile/keys").should route_to('gitlab/profiles/keys#index')
     end
 
     it "to #create" do
-      post("/profile/keys").should route_to('profiles/keys#create')
+      post("/profile/keys").should route_to('gitlab/profiles/keys#create')
     end
 
     it "to #new" do
-      get("/profile/keys/new").should route_to('profiles/keys#new')
+      get("/profile/keys/new").should route_to('gitlab/profiles/keys#new')
     end
 
     it "to #edit" do
-      get("/profile/keys/1/edit").should route_to('profiles/keys#edit', id: '1')
+      get("/profile/keys/1/edit").should route_to('gitlab/profiles/keys#edit', id: '1')
     end
 
     it "to #show" do
-      get("/profile/keys/1").should route_to('profiles/keys#show', id: '1')
+      get("/profile/keys/1").should route_to('gitlab/profiles/keys#show', id: '1')
     end
 
     it "to #update" do
-      put("/profile/keys/1").should route_to('profiles/keys#update', id: '1')
+      put("/profile/keys/1").should route_to('gitlab/profiles/keys#update', id: '1')
     end
 
     it "to #destroy" do
-      delete("/profile/keys/1").should route_to('profiles/keys#destroy', id: '1')
+      delete("/profile/keys/1").should route_to('gitlab/profiles/keys#destroy', id: '1')
     end
 
     # get all the ssh-keys of a user
     it "to #get_keys" do
-      get("/foo.keys").should route_to('profiles/keys#get_keys', username: 'foo')
+      get("/foo.keys").should route_to('gitlab/profiles/keys#get_keys', username: 'foo')
     end
   end
 
@@ -189,22 +189,22 @@ module Gitlab
   #          DELETE /keys/:id(.:format)      keys#destroy
   describe Profiles::EmailsController, "routing" do
     it "to #index" do
-      get("/profile/emails").should route_to('profiles/emails#index')
+      get("/profile/emails").should route_to('gitlab/profiles/emails#index')
     end
 
     it "to #create" do
-      post("/profile/emails").should route_to('profiles/emails#create')
+      post("/profile/emails").should route_to('gitlab/profiles/emails#create')
     end
 
     it "to #destroy" do
-      delete("/profile/emails/1").should route_to('profiles/emails#destroy', id: '1')
+      delete("/profile/emails/1").should route_to('gitlab/profiles/emails#destroy', id: '1')
     end
   end
 
   # profile_avatar DELETE /profile/avatar(.:format) profiles/avatars#destroy
   describe Profiles::AvatarsController, "routing" do
     it "to #destroy" do
-      delete("/profile/avatar").should route_to('profiles/avatars#destroy')
+      delete("/profile/avatar").should route_to('gitlab/profiles/avatars#destroy')
     end
   end
 
@@ -214,16 +214,16 @@ module Gitlab
   #                     root        /                                   dashboard#show
   describe DashboardController, "routing" do
     it "to #index" do
-      get("/dashboard").should route_to('dashboard#show')
-      get("/").should route_to('dashboard#show')
+      get("/dashboard").should route_to('gitlab/dashboard#show')
+      get("/").should route_to('gitlab/dashboard#show')
     end
 
     it "to #issues" do
-      get("/dashboard/issues").should route_to('dashboard#issues')
+      get("/dashboard/issues").should route_to('gitlab/dashboard#issues')
     end
 
     it "to #merge_requests" do
-      get("/dashboard/merge_requests").should route_to('dashboard#merge_requests')
+      get("/dashboard/merge_requests").should route_to('gitlab/dashboard#merge_requests')
     end
   end
 
@@ -242,11 +242,11 @@ module Gitlab
 
   describe "Groups", "routing" do
     it "to #show" do
-      get("/groups/1").should route_to('groups#show', id: '1')
+      get("/groups/1").should route_to('gitlab/groups#show', id: '1')
     end
 
     it "also display group#show on the short path" do
-      get("/1").should route_to('groups#show', id: '1')
+      get("/1").should route_to('gitlab/groups#show', id: '1')
     end
   end
 
