@@ -18,6 +18,11 @@ module Gitlab
       object.class.to_s.sub(/^Gitlab::/, '')
     end
 
+    def polymorphic_path(project, object)
+      object_type = unqualified_class(object).underscore
+      self.send("project_#{object_type}_path", project, object)
+    end
+
     before do
       # Helper expects a @project instance variable
       @project = project
@@ -142,7 +147,7 @@ module Gitlab
       # Currently limited to Snippets, Issues and MergeRequests
       shared_examples 'referenced object' do
         let(:actual)   { "Reference to #{reference}" }
-        let(:expected) { polymorphic_path([project, object]) }
+        let(:expected) { polymorphic_path(project, object) }
 
         it "should link using a valid id" do
           gfm(actual).should match(expected)
