@@ -76,7 +76,7 @@ module Gitlab
           authorize! :write_merge_request, user_project
           required_attributes! [:source_branch, :target_branch, :title]
           attrs = attributes_for_keys [:source_branch, :target_branch, :assignee_id, :title, :target_project_id, :description]
-          merge_request = ::MergeRequests::CreateService.new(user_project, current_user, attrs).execute
+          merge_request = Gitlab::MergeRequests::CreateService.new(user_project, current_user, attrs).execute
 
           if merge_request.valid?
             present merge_request, with: Entities::MergeRequest
@@ -103,7 +103,7 @@ module Gitlab
           attrs = attributes_for_keys [:source_branch, :target_branch, :assignee_id, :title, :state_event, :description]
           merge_request = user_project.merge_requests.find(params[:merge_request_id])
           authorize! :modify_merge_request, merge_request
-          merge_request = ::MergeRequests::UpdateService.new(user_project, current_user, attrs).execute(merge_request)
+          merge_request = Gitlab::MergeRequests::UpdateService.new(user_project, current_user, attrs).execute(merge_request)
 
           if merge_request.valid?
             present merge_request, with: Entities::MergeRequest
