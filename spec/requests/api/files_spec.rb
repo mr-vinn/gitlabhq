@@ -1,4 +1,7 @@
 require 'spec_helper'
+require 'gitlab/satellite/files/delete_file_action'
+require 'gitlab/satellite/files/edit_file_action'
+require 'gitlab/satellite/files/new_file_action'
 
 module Gitlab
   describe API::API, api: true  do
