@@ -13,7 +13,7 @@ module Gitlab
       it 'is called after a note is created' do
         subject.should_receive :after_create
 
-        Note.observers.enable :note_observer do
+        Note.observers.enable :'gitlab/note_observer' do
           create(:note)
         end
       end
@@ -32,7 +32,7 @@ module Gitlab
 
         Note.should_receive(:create_cross_reference_note).with(@referenced, @referencer, @author, @p)
 
-        Note.observers.enable :note_observer do
+        Note.observers.enable :'gitlab/note_observer' do
           create(:note, project: @p, author: @author, noteable: @referencer,
             note: "Duplicate of ##{@referenced.iid}")
         end
@@ -41,7 +41,7 @@ module Gitlab
       it "doesn't cross-reference system notes" do
         Note.should_receive(:create_cross_reference_note).once
 
-        Note.observers.enable :note_observer do
+        Note.observers.enable :'gitlab/note_observer' do
           Note.create_cross_reference_note(create(:issue), create(:issue))
         end
       end

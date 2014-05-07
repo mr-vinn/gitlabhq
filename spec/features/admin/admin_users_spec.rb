@@ -48,13 +48,13 @@ module Gitlab
       it "should call send mail" do
         Notify.should_receive(:new_user_email)
 
-        User.observers.enable :user_observer do
+        User.observers.enable :'gitlab/user_observer' do
           click_button "Create user"
         end
       end
 
       it "should send valid email to user with email & password" do
-        User.observers.enable :user_observer do
+        User.observers.enable :'gitlab/user_observer' do
           click_button "Create user"
           user = User.last
           email = ActionMailer::Base.deliveries.last
