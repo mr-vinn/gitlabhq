@@ -87,6 +87,10 @@ module Gitlab
       end
     end
 
+    def event_target_path(project, target)
+      self.send("project_#{target.class.to_s.underscore.gsub(/gitlab\//, '')}_path", project, target)
+    end
+
     def event_note_target_path(event)
       if event.note? && event.note_commit?
         project_commit_path(event.project, event.note_target)
