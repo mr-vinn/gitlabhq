@@ -1,6 +1,6 @@
 %li
   issue:
-  = link_to [issue.project, issue] do
+  = link_to project_issue_path(issue.project, issue) do
     %span ##{issue.iid}
     %strong.term
       = truncate issue.title, length: 50

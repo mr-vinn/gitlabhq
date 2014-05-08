@@ -51,7 +51,7 @@
       %p
         %span.light Owned by
         - if @project.group
-          #{link_to @project.group.name, @project.group} group
+          #{link_to @project.group.name, group_path(@project.group)} group
         - else
           #{link_to @project.owner_name, user_path(@project.owner)}
 

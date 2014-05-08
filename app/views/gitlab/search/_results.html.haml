@@ -1,9 +1,9 @@
 %h4
   #{@search_results[:total_results]} results found
   - if @project
-    for #{link_to @project.name_with_namespace, @project}
+    for #{link_to @project.name_with_namespace, project_path(@project)}
   - elsif @group
-    for #{link_to @group.name, @group}
+    for #{link_to @group.name, group_path(@group)}
 
 %hr
 

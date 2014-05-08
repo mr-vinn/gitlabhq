@@ -1,6 +1,6 @@
 %li
   project:
-  = link_to project do
+  = link_to project_path(project) do
     %strong.term= project.name_with_namespace
   - if project.description.present?
     &ndash;
