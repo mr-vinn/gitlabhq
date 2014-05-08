@@ -168,7 +168,7 @@ module Gitlab
 
     resources :projects, controller: 'gitlab/projects', constraints: { id: /[^\/]+/ }, only: [:new, :create]
 
-    devise_for :users, class_name: 'Gitlab::User', controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :registrations , passwords: :passwords}
+    devise_for :users, module: :devise, class_name: 'Gitlab::User', controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :'gitlab/registrations' , passwords: :passwords}
 
     #
     # Project Area
