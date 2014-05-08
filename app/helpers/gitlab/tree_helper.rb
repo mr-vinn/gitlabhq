@@ -26,7 +26,7 @@ module Gitlab
     #
     # type - String type of the tree item; either 'folder' or 'file'
     def tree_icon(type)
-      image = type == 'folder' ? 'file_dir.png' : 'file_txt.png'
+      image = type == 'folder' ? 'gitlab/file_dir.png' : 'gitlab/file_txt.png'
       image_tag(image, size: '16x16')
     end
 
