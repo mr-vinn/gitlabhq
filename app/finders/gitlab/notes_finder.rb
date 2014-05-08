@@ -4,7 +4,7 @@ module Gitlab
       target_type = params[:target_type]
       target_id   = params[:target_id]
 
-      case target_type
+      case target_type.sub(/^gitlab\//, '')
       when "commit"
         project.notes.for_commit_id(target_id).not_inline.fresh
       when "issue"

@@ -58,7 +58,7 @@ module Gitlab
         return "user_add_to_team"      if event == :create
         return "user_remove_from_team" if event == :destroy
       else
-        "#{model.class.name.downcase}_#{event.to_s}"
+        "#{model.class.name.downcase}_#{event.to_s}".gsub(/^gitlab::/, '')
       end
     end
   end

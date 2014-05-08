@@ -7,7 +7,7 @@ module Gitlab
     after :store, :reset_events_cache
 
     def store_dir
-      "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+      "uploads/#{unqualified_class_name(model)}/#{mounted_as}/#{model.id}"
     end
 
     def image?
@@ -24,7 +24,7 @@ module Gitlab
     end
 
     def secure_url
-      Gitlab.config.gitlab.relative_url_root + "/files/#{model.class.to_s.underscore}/#{model.id}/#{file.filename}"
+      Gitlab.config.gitlab.relative_url_root + "/files/#{unqualified_class_name(model)}/#{model.id}/#{file.filename}"
     end
 
     def file_storage?
@@ -34,5 +34,11 @@ module Gitlab
     def reset_events_cache(file)
       model.reset_events_cache if model.is_a?(User)
     end
+
+    private
+
+      def unqualified_class_name(model)
+        model.class.to_s.underscore.sub(/^gitlab\//, '')
+      end
   end
 end

@@ -12,7 +12,7 @@ module Gitlab
 
     def event_action_name(event)
       target = if event.target_type
-                 event.target_type.titleize.downcase
+                 event.target_type.titleize.downcase.sub(/^gitlab\//, '')
                else
                  'project'
                end

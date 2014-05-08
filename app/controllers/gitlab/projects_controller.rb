@@ -174,7 +174,7 @@ module Gitlab
     end
 
     def participants_in(type, id)
-      users = case type
+      users = case type.sub(/^Gitlab::/, '')
               when "Issue"
                 issue = @project.issues.find_by_iid(id)
                 issue ? issue.participants : []
