@@ -69,7 +69,7 @@ module Gitlab
 
     def note_to_html(note)
       render_to_string(
-        "projects/notes/_note",
+        "gitlab/projects/notes/_note",
         layout: false,
         formats: [:html],
         locals: { note: note }
@@ -78,7 +78,7 @@ module Gitlab
 
     def note_to_discussion_html(note)
       render_to_string(
-        "projects/notes/_diff_notes_with_reply",
+        "gitlab/projects/notes/_diff_notes_with_reply",
         layout: false,
         formats: [:html],
         locals: { notes: [note] }

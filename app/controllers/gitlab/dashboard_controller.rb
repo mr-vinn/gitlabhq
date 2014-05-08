@@ -27,7 +27,7 @@ module Gitlab
 
       respond_to do |format|
         format.html
-        format.json { pager_json("events/_events", @events.count) }
+        format.json { pager_json("gitlab/events/_events", @events.count) }
         format.atom { render layout: false }
       end
     end

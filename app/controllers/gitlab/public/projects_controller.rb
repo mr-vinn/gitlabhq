@@ -4,7 +4,7 @@ module Gitlab
                        :reject_blocked, :set_current_user_for_observers,
                        :add_abilities
 
-    layout 'public'
+    layout 'gitlab/public'
 
     def index
       @projects = Project.publicish(current_user)

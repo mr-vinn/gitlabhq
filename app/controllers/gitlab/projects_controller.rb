@@ -21,7 +21,7 @@ module Gitlab
     end
 
     def create
-      @project = ::Projects::CreateService.new(current_user, params[:project]).execute
+      @project = Gitlab::Projects::CreateService.new(current_user, params[:project]).execute
       flash[:notice] = 'Project was successfully created.' if @project.saved?
 
       respond_to do |format|
@@ -30,7 +30,7 @@ module Gitlab
     end
 
     def update
-      status = ::Projects::UpdateService.new(@project, current_user, params).execute
+      status = Gitlab::Projects::UpdateService.new(@project, current_user, params).execute
 
       respond_to do |format|
         if status
@@ -45,7 +45,7 @@ module Gitlab
     end
 
     def transfer
-      ::Projects::TransferService.new(project, current_user, params).execute
+      Gitlab::Projects::TransferService.new(project, current_user, params).execute
     end
 
     def show
@@ -64,13 +64,13 @@ module Gitlab
       respond_to do |format|
         format.html do
           if @project.empty_repo?
-            render "projects/empty", layout: user_layout
+            render "gitlab/projects/empty", layout: user_layout
           else
             @last_push = current_user.recent_push(@project.id) if current_user
             render :show, layout: user_layout
           end
         end
-        format.json { pager_json("events/_events", @events.count) }
+        format.json { pager_json("gitlab/events/_events", @events.count) }
       end
     end
 
@@ -108,7 +108,7 @@ module Gitlab
     end
 
     def fork
-      @forked_project = ::Projects::ForkService.new(project, current_user).execute
+      @forked_project = Gitlab::Projects::ForkService.new(project, current_user).execute
 
       respond_to do |format|
         format.html do

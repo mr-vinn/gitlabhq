@@ -16,9 +16,9 @@ module Gitlab
 
     def determine_layout
       if current_user
-        'navless'
+        'gitlab/navless'
       else
-        'public_users'
+        'gitlab/public_users'
       end
     end
   end

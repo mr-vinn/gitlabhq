@@ -5,7 +5,7 @@ module Gitlab
     # Authorize
     before_filter :authorize_admin_group!
 
-    layout 'group'
+    layout 'gitlab/group'
 
     def create
       @group.add_users(params[:user_ids].split(','), params[:group_access])

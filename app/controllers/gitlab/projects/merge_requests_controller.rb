@@ -44,7 +44,7 @@ module Gitlab
       @commit = @merge_request.last_commit
 
       @comments_allowed = @reply_allowed = true
-      @comments_target = {noteable_type: 'MergeRequest',
+      @comments_target = {noteable_type: 'Gitlab::MergeRequest',
                           noteable_id: @merge_request.id}
       @line_notes = @merge_request.notes.where("line_code is not null")
 
@@ -54,7 +54,7 @@ module Gitlab
 
       respond_to do |format|
         format.html
-        format.json { render json: { html: view_to_html_string("projects/merge_requests/show/_diffs") } }
+        format.json { render json: { html: view_to_html_string("gitlab/projects/merge_requests/show/_diffs") } }
       end
     end
 

@@ -1,6 +1,6 @@
 module Gitlab
   module Files
-    class BaseService < ::BaseService
+    class BaseService < Gitlab::BaseService
       attr_reader :ref, :path
 
       def initialize(project, user, params, ref, path = nil)

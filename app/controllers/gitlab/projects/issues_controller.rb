@@ -36,7 +36,7 @@ module Gitlab
         format.atom { render layout: false }
         format.json do
           render json: {
-            html: view_to_html_string("projects/issues/_issues")
+            html: view_to_html_string("gitlab/projects/issues/_issues")
           }
         end
       end

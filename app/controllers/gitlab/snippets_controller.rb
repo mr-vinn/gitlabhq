@@ -12,7 +12,7 @@ module Gitlab
 
     respond_to :html
 
-    layout 'navless'
+    layout 'gitlab/navless'
 
     def index
       @snippets = Snippet.public.fresh.non_expired.page(params[:page]).per(20)

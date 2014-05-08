@@ -6,7 +6,7 @@ module Gitlab
 
     respond_to :html
 
-    layout "project_settings"
+    layout "gitlab/project_settings"
 
     def index
       @project.build_missing_services

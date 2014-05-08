@@ -29,7 +29,7 @@ module Gitlab
       @noteable = @commit
       @comments_allowed = @reply_allowed = true
       @comments_target  = {
-        noteable_type: 'Commit',
+        noteable_type: 'Gitlab::Commit',
         commit_id: @commit.id
       }
 
