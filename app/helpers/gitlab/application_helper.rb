@@ -232,5 +232,13 @@ module Gitlab
         content_tag(:i, nil, class: 'icon-spinner icon-spin') + text
       end
     end
+
+    def dom_id(object, prefix = nil)
+      ActionView::RecordIdentifier.dom_id(object, prefix).gsub(/gitlab_/, '')
+    end
+
+    def dom_class(object, prefix = nil)
+      ActionView::RecordIdentifier.dom_class(object, prefix).gsub(/gitlab_/, '')
+    end
   end
 end
