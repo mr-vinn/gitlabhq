@@ -43,6 +43,6 @@
       - color_schemes.each do |color_scheme_id, color_scheme|
         = label_tag do
           .prev
-            = image_tag "#{color_scheme}-scheme-preview.png"
+            = image_tag "gitlab/#{color_scheme}-scheme-preview.png"
           = f.radio_button :color_scheme_id, color_scheme_id
           = color_scheme.gsub(/[-_]+/, ' ').humanize
