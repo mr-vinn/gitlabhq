@@ -28,7 +28,7 @@ module Gitlab
 
       if @group.save
         @group.add_owner(current_user)
-        redirect_to @group, notice: 'Group was successfully created.'
+        redirect_to group_path(@group), notice: 'Group was successfully created.'
       else
         render action: "new"
       end
@@ -82,7 +82,7 @@ module Gitlab
 
     def update
       if @group.update_attributes(params[:group])
-        redirect_to @group, notice: 'Group was successfully updated.'
+        redirect_to group_path(@group), notice: 'Group was successfully updated.'
       else
         render action: "edit"
       end

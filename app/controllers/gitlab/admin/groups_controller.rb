@@ -24,7 +24,7 @@ module Gitlab
 
       if @group.save
         @group.add_owner(current_user)
-        redirect_to [:admin, @group], notice: 'Group was successfully created.'
+        redirect_to admin_group_path(@group), notice: 'Group was successfully created.'
       else
         render "new"
       end
@@ -32,7 +32,7 @@ module Gitlab
 
     def update
       if @group.update_attributes(params[:group])
-        redirect_to [:admin, @group], notice: 'Group was successfully updated.'
+        redirect_to admin_group_path(@group), notice: 'Group was successfully updated.'
       else
         render "edit"
       end
@@ -41,7 +41,7 @@ module Gitlab
     def project_teams_update
       @group.add_users(params[:user_ids].split(','), params[:group_access])
 
-      redirect_to [:admin, @group], notice: 'Users were successfully added.'
+      redirect_to admin_group_path(@group), notice: 'Users were successfully added.'
     end
 
     def destroy

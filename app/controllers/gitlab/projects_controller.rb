@@ -113,7 +113,7 @@ module Gitlab
       respond_to do |format|
         format.html do
           if @forked_project.saved? && @forked_project.forked?
-            redirect_to(@forked_project, notice: 'Project was successfully forked.')
+            redirect_to(project_path(@forked_project), notice: 'Project was successfully forked.')
           else
             @title = 'Fork project'
             render "fork"
@@ -150,7 +150,7 @@ module Gitlab
       project.archive!
 
       respond_to do |format|
-        format.html { redirect_to @project }
+        format.html { redirect_to project_path(@project) }
       end
     end
 
@@ -159,7 +159,7 @@ module Gitlab
       project.unarchive!
 
       respond_to do |format|
-        format.html { redirect_to @project }
+        format.html { redirect_to project_path(@project) }
       end
     end
 

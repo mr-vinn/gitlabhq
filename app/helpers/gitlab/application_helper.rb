@@ -162,7 +162,7 @@ module Gitlab
     alias_method :url_to_image, :image_url
 
     def body_data_page
-      path = controller.controller_path.split('/')
+      path = controller.controller_path.sub(/^gitlab\//, '').split('/')
       namespace = path.first if path.second
 
       [namespace, controller.controller_name, controller.action_name].compact.join(":")

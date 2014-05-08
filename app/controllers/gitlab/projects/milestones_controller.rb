@@ -54,7 +54,7 @@ module Gitlab
         format.js
         format.html do
           if @milestone.valid?
-            redirect_to [@project, @milestone]
+            redirect_to project_milestone_path(@project, @milestone)
           else
             render :edit
           end

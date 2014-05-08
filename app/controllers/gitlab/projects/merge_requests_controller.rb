@@ -96,7 +96,7 @@ module Gitlab
         respond_to do |format|
           format.js
           format.html do
-            redirect_to [@merge_request.target_project, @merge_request], notice: 'Merge request was successfully updated.'
+            redirect_to project_merge_request_path(@merge_request.target_project, @merge_request), notice: 'Merge request was successfully updated.'
           end
         end
       else
