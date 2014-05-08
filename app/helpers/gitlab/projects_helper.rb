@@ -5,7 +5,7 @@ module Gitlab
     end
 
     def link_to_project project
-      link_to project do
+      link_to project_path(project) do
         title = content_tag(:span, project.name, class: 'project-name')
 
         if project.namespace
