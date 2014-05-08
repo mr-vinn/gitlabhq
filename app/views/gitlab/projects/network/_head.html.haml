@@ -1,6 +1,6 @@
 .row.append-bottom-20
   .col-md-2.append-bottom-10
-    = render partial: 'shared/ref_switcher', locals: {destination: 'graph'}
+    = render partial: 'gitlab/shared/ref_switcher', locals: {destination: 'graph'}
   .col-md-10
     = form_tag project_network_path(@project, @id), method: :get, class: 'form-inline network-form' do |f|
       = label_tag :extended_sha1 , "Looking for", class: 'light inline-label'
