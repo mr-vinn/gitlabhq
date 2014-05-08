@@ -95,7 +95,7 @@ module Gitlab
       if event.note? && event.note_commit?
         project_commit_path(event.project, event.note_target)
       else
-        polymorphic_path([event.project, event.note_target], anchor: dom_id(event.target))
+        self.send("project_#{event.note_target.class.to_s.underscore.gsub(/gitlab\//, '')}_path", event.project, event.note_target, { anchor: dom_id(event.target) })
       end
     end
 
