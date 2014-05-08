@@ -51,7 +51,7 @@
                   = f.check_box :issues_enabled
                   %span.descr Lightweight issue tracking system for this project
 
-            - if Project.issues_tracker.values.count > 1
+            - if Gitlab::Project.issues_tracker.values.count > 1
               .form-group
                 = f.label :issues_tracker, "Issues tracker", class: 'control-label'
                 .col-sm-10= f.select(:issues_tracker, project_issues_trackers(@project.issues_tracker), {}, { disabled: !@project.issues_enabled })

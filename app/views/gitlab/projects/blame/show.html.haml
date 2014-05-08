@@ -12,7 +12,7 @@
       %table
         - current_line = 1
         - @blame.each do |commit, lines|
-          - commit = Commit.new(commit)
+          - commit = Gitlab::Commit.new(commit)
           %tr
             %td.blame-commit
               %span.commit

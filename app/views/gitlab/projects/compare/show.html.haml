@@ -9,19 +9,19 @@
   %div.ui-box
     .title
       Commits (#{@commits.count})
-    - if @commits.size > MergeRequestDiff::COMMITS_SAFE_SIZE
+    - if @commits.size > Gitlab::MergeRequestDiff::COMMITS_SAFE_SIZE
       %ul.well-list
-        - Commit.decorate(@commits.first(MergeRequestDiff::COMMITS_SAFE_SIZE)).each do |commit|
+        - Gitlab::Commit.decorate(@commits.first(Gitlab::MergeRequestDiff::COMMITS_SAFE_SIZE)).each do |commit|
           = render "gitlab/projects/commits/inline_commit", commit: commit, project: @project
         %li.warning-row.unstyled
-          other #{@commits.size - MergeRequestDiff::COMMITS_SAFE_SIZE} commits hidden to prevent performance issues.
+          other #{@commits.size - Gitlab::MergeRequestDiff::COMMITS_SAFE_SIZE} commits hidden to prevent performance issues.
     - else
       %ul.well-list= render Commit.decorate(@commits), project: @project
 
   %h4 Changes
   - if @diffs.present?
     = render "gitlab/projects/commits/diffs", diffs: @diffs, project: @project
-  - elsif @commits.size > MergeRequestDiff::COMMITS_SAFE_SIZE
+  - elsif @commits.size > Gitlab::MergeRequestDiff::COMMITS_SAFE_SIZE
     .bs-callout.bs-callout-danger
       %h4 This comparison includes more than #{MergeRequestDiff::COMMITS_SAFE_SIZE} commits.
       %p To preserve performance the line changes are not shown.
