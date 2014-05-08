@@ -8,6 +8,6 @@
         = notes.count
     %td.notes_content
       %ul.notes{ rel: note.discussion_id }
-        = render notes
+        = render partial: 'gitlab/projects/notes/note', collection: notes
 
       = render "gitlab/projects/notes/discussion_reply_button", note: note

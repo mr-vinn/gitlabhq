@@ -63,7 +63,7 @@
 
 .ui-box
   %ul.well-list.issues-list
-    = render @issues
+    = render partial: 'issue', collection: @issues
     - if @issues.blank?
       %li
         .nothing-here-block No issues to show

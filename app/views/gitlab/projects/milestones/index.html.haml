@@ -22,7 +22,7 @@
     .col-md-9
       .ui-box
         %ul.well-list
-          = render @milestones
+          = render partial: 'milestone', collection: @milestones
 
           - if @milestones.blank?
             %li

@@ -16,7 +16,7 @@
         %li.warning-row.unstyled
           other #{@commits.size - Gitlab::MergeRequestDiff::COMMITS_SAFE_SIZE} commits hidden to prevent performance issues.
     - else
-      %ul.well-list= render Commit.decorate(@commits), project: @project
+      %ul.well-list= render partial: 'gitlab/projects/commits/commit', collection: Gitlab::Commit.decorate(@commits), locals: { project: @project }
 
   %h4 Changes
   - if @diffs.present?

@@ -38,9 +38,9 @@
         = link_to 'show outdated discussion', '#', class: 'js-show-outdated-discussion'
         %div.hide.outdated-discussion
           .notes{ rel: discussion_notes.first.discussion_id }
-            = render discussion_notes
+            = render partial: 'gitlab/projects/notes/note', collection: discussion_notes
 
     - else
       .notes{ rel: discussion_notes.first.discussion_id }
-        = render discussion_notes
+        = render partial: 'gitlab/projects/notes/note', collection: discussion_notes
       = render "gitlab/projects/notes/discussion_reply_button", note: discussion_notes.first
