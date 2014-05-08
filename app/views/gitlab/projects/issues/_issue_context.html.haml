@@ -1,4 +1,4 @@
-= form_for [@project, @issue], remote: true, html: {class: 'edit-issue inline-update'} do |f|
+= form_for [@project, @issue], as: :issue, url: project_issue_path(@project, @issue), remote: true, html: {class: 'edit-issue inline-update'} do |f|
   %strong.append-right-10
     Assignee:
 

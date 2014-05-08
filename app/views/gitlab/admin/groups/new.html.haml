@@ -1,6 +1,6 @@
 %h3.page-title New Group
 %hr
-= form_for [:admin, @group], html: { class: 'group-form form-horizontal' } do |f|
+= form_for [:admin, @group], as: :group, url: admin_groups_path, method: :post, html: { class: 'group-form form-horizontal' } do |f|
   - if @group.errors.any?
     .alert.alert-danger
       %span= @group.errors.full_messages.first

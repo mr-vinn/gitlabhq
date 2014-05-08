@@ -142,7 +142,7 @@
             .title Transfer project
             .errors-holder
             .form-holder
-              = form_for(@project, url: transfer_project_path(@project), method: :put, remote: true, html: { class: 'transfer-project form-horizontal' }) do |f|
+              = form_for(@project, as: :project, url: transfer_project_path(@project), method: :put, remote: true, html: { class: 'transfer-project form-horizontal' }) do |f|
                 .form-group
                   = f.label :namespace_id, class: 'control-label' do
                     %span Namespace
@@ -162,7 +162,7 @@
           .title Rename repository
           .errors-holder
           .form-holder
-            = form_for(@project, html: { class: 'form-horizontal' }) do |f|
+            = form_for(@project, as: :project, url: project_path(@project), html: { class: 'form-horizontal' }) do |f|
               .form-group
                 = f.label :path, class: 'control-label' do
                   %span Path

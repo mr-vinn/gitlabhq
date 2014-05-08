@@ -3,7 +3,7 @@
   Change your password or recover your current one.
 %hr
 .update-password
-  = form_for @user, url: profile_password_path, method: :put, html: { class: 'form-horizontal' }  do |f|
+  = form_for @user, as: :user, url: profile_password_path, method: :put, html: { class: 'form-horizontal' }  do |f|
     %div
       %p.slead
         You must provide current password in order to change it.

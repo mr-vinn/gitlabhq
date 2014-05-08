@@ -1,5 +1,5 @@
 %div
-  = form_for [@project, @key], url: project_deploy_keys_path, html: { class: 'deploy-key-form form-horizontal' } do |f|
+  = form_for [@project, @key], as: :deploy_key, url: project_deploy_keys_path, html: { class: 'deploy-key-form form-horizontal' } do |f|
     -if @key.errors.any?
       .alert.alert-danger
         %ul

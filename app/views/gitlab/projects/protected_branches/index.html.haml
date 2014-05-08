@@ -13,7 +13,7 @@
       %p Read more about project permissions #{link_to "here", help_permissions_path, class: "underlined-link"}
 
     - if can? current_user, :admin_project, @project
-      = form_for [@project, @protected_branch], html: { class: 'form-horizontal' } do |f|
+      = form_for [@project, @protected_branch], as: :protected_branch, url: project_protected_branches_path, method: :post, html: { class: 'form-horizontal' } do |f|
         -if @protected_branch.errors.any?
           .alert.alert-danger
             %ul

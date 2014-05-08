@@ -5,7 +5,8 @@
 
 %hr
 
-= form_for [@project, @milestone], html: {class: "new_milestone form-horizontal"}  do |f|
+- path_helper = @milestone.persisted? ? project_milestone_path(@project, @milestone) : project_milestones_path
+= form_for [@project, @milestone], as: :milestone, url: path_helper, html: {class: "new_milestone form-horizontal"}  do |f|
   -if @milestone.errors.any?
     .alert.alert-danger
       %ul

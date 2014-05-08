@@ -1,5 +1,7 @@
 %div
-  = form_for [:profile, @key], html: { class: 'form-horizontal' } do |f|
+  - path_helper = @key.persisted? ? profile_key_path(@key) : profile_keys_path
+  - http_method = @key.persisted? ? :put : :post
+  = form_for [:profile, @key], as: :key, url: path_helper, method: http_method, html: { class: 'form-horizontal' } do |f|
     - if @key.errors.any?
       .alert.alert-danger
         %ul

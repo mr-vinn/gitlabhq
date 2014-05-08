@@ -12,7 +12,7 @@
 - if @show_merge_controls
   .automerge_widget.can_be_merged.hide
     .clearfix
-      = form_for [:automerge, @project, @merge_request], remote: true, method: :get do |f|
+      = form_for [:automerge, @project, @merge_request], as: :merge_request, url: automerge_project_merge_request_path(@project, @merge_request), remote: true, method: :get, html: { id: "accept_merge_request_#{@merge_request.id}" } do |f|
         %h4
           You can accept this request automatically.
         %div

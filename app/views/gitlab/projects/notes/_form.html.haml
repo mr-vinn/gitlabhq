@@ -1,5 +1,5 @@
 - path_helper = @note.id == nil ? project_notes_path : project_note_path(@project, @note)
-= form_for [@project, @note], as: :project_note, url: path_helper, remote: true, html: { :'data-type' => 'json', multipart: true, id: nil, class: "new_note js-new-note-form common-note-form" }, authenticity_token: true do |f|
+= form_for [@project, @note], as: :note, url: path_helper, remote: true, html: { :'data-type' => 'json', multipart: true, id: nil, class: "new_note js-new-note-form common-note-form" }, authenticity_token: true do |f|
   = note_target_fields
   = f.hidden_field :commit_id
   = f.hidden_field :line_code

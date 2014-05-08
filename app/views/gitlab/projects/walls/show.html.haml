@@ -4,7 +4,7 @@
   - if can? current_user, :write_note, @project
     .note-form-holder
       - path_helper = @note.id == nil ? project_notes_path : project_note_path(@project, @note)
-      = form_for [@project, @note], as: :project_note, url: path_helper, remote: true, html: { multipart: true, id: nil, class: "new_note wall-note-form" }, authenticity_token: true do |f|
+      = form_for [@project, @note], as: :note, url: path_helper, remote: true, html: { multipart: true, id: nil, class: "new_note wall-note-form" }, authenticity_token: true do |f|
         = note_target_fields
         .note_text_and_preview
           = f.text_area :note, size: 255, class: 'note_text js-note-text js-gfm-input turn-on'

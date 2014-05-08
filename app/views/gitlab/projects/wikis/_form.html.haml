@@ -1,4 +1,5 @@
-= form_for [@project, @page], method: @page.persisted? ? :put : :post, html: { class: 'form-horizontal' } do |f|
+- path_helper = @page.persisted? ? project_wiki_path(@project, @page) : project_wikis_path(@project)
+= form_for [@project, @page], as: :wiki, url: path_helper, method: @page.persisted? ? :put : :post, html: { class: 'form-horizontal' } do |f|
   -if @page.errors.any?
     #error_explanation
       %h2= "#{pluralize(@page.errors.count, "error")} prohibited this wiki from being saved:"
