@@ -1,4 +1,5 @@
 require_relative "base_service"
+require 'gitlab/satellite/files/edit_file_action'
 
 module Gitlab
   module Files

@@ -1,5 +1,5 @@
 require 'sidekiq/web'
-require 'api/api'
+require 'gitlab/api/api'
 
 module Gitlab
   Gitlab::Application.routes.draw do

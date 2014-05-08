@@ -1,3 +1,5 @@
+require 'gitlab/projects_finder'
+
 module Gitlab
   class Ability
     class << self
