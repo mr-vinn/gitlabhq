@@ -1,7 +1,7 @@
 %h3.page-title Compare branches for new Merge Request
 %hr
 
-= form_for [@project, @merge_request], url: new_project_merge_request_path(@project), method: :get, html: { class: "merge-request-form form-inline" } do |f|
+= form_for [@project, @merge_request], as: :merge_request, url: new_project_merge_request_path(@project), method: :get, html: { class: "merge-request-form form-inline" } do |f|
   .hide.alert.alert-danger.mr-compare-errors
   .merge-request-branches.row
     .col-md-6
