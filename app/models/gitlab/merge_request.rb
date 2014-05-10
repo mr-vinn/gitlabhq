@@ -251,6 +251,14 @@ module Gitlab
       end
     end
 
+    def target_project_namespace
+      if target_project && target_project.namespace
+        target_project.namespace.path
+      else
+        "(removed)"
+      end
+    end
+
     def source_branch_exists?
       return false unless self.source_project
 

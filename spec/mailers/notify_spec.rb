@@ -240,7 +240,7 @@ module Gitlab
             it_behaves_like 'an assignee email'
 
             it 'has the correct subject' do
-              should have_subject /#{merge_request.title} \(!#{merge_request.iid}\)/
+            should have_subject /#{merge_request.title} \(##{merge_request.iid}\)/
             end
 
             it 'contains a link to the new merge request' do
@@ -276,7 +276,7 @@ module Gitlab
             end
 
             it 'has the correct subject' do
-              should have_subject /#{merge_request.title} \(!#{merge_request.iid}\)/
+            should have_subject /#{merge_request.title} \(##{merge_request.iid}\)/
             end
 
             it 'contains the name of the previous assignee' do
@@ -304,7 +304,7 @@ module Gitlab
             end
 
             it 'has the correct subject' do
-              should have_subject /#{merge_request.title} \(!#{merge_request.iid}\)/
+            should have_subject /#{merge_request.title} \(##{merge_request.iid}\)/
             end
 
             it 'contains the new status' do
@@ -427,7 +427,7 @@ module Gitlab
           it_behaves_like 'a note email'
 
           it 'has the correct subject' do
-            should have_subject /#{merge_request.title} \(!#{merge_request.iid}\)/
+          should have_subject /#{merge_request.title} \(##{merge_request.iid}\)/
           end
 
           it 'contains a link to the merge request note' do

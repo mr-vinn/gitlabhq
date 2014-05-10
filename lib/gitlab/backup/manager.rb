@@ -102,7 +102,7 @@ module Gitlab
 
       def tar_version
         tar_version, _ = Gitlab::Popen.popen(%W(tar --version))
-        tar_version.split("\n").first
+        tar_version.force_encoding('locale').split("\n").first
       end
     end
   end

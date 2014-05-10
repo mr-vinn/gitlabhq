@@ -15,8 +15,8 @@ module Gitlab
       css_class << (opts[:class] || '')
       value = opts[:selected] || ''
       placeholder = opts[:placeholder] || 'Select user'
-
-      hidden_field_tag(id, value, class: css_class, 'data-placeholder' => placeholder)
+      project_id = opts[:project_id] || @project.id
+      hidden_field_tag(id, value, class: css_class, 'data-placeholder' => placeholder, 'data-project-id' => project_id)
     end
   end
 end

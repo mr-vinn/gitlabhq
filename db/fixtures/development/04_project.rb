@@ -40,7 +40,8 @@ Gitlab::Seeder.quiet do
       import_url: url,
       namespace_id: group.id,
       name: project_path.titleize,
-      description: Faker::Lorem.sentence
+      description: Faker::Lorem.sentence,
+      visibility_level: Gitlab::VisibilityLevel.values.sample
     }
 
     project = Gitlab::Projects::CreateService.new(Gitlab::User.first, params).execute

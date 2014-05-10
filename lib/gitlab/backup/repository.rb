@@ -11,9 +11,15 @@ module Gitlab
         Project.find_each(batch_size: 1000) do |project|
           print " * #{project.path_with_namespace} ... "
 
+          # Create namespace dir if missing
+          FileUtils.mkdir_p(File.join(backup_repos_path, project.namespace.path)) if project.namespace
+
           if project.empty_repo?
             puts "[SKIPPED]".cyan
-            next
+          elsif system(*%W(git --git-dir=#{path_to_repo(project)} bundle create #{path_to_bundle(project)} --all), silent)
+            puts "[DONE]".green
+          else
+            puts "[FAILED]".red
           end
 
           # Create namespace dir if missing

@@ -85,7 +85,7 @@ module Gitlab
     # between target and source branches
     def unmerged_commits
       commits = if merge_request.for_fork?
-                  Gitlab::Satellite::MergeAction.new(merge_request.author, merge_request).commits_between
+                  compare_action.commits
                 else
                   repository.commits_between(target_branch, source_branch)
                 end
@@ -149,7 +149,7 @@ module Gitlab
     # between target and source branches
     def unmerged_diffs
       diffs = if merge_request.for_fork?
-                Gitlab::Satellite::MergeAction.new(merge_request.author, merge_request).diffs_between_satellite
+                compare_action.diffs
               else
                 Gitlab::Git::Diff.between(repository, source_branch, target_branch)
               end
@@ -163,6 +163,18 @@ module Gitlab
 
     def repository
       merge_request.target_project.repository
+    end
+
+    private
+
+    def compare_action
+      Gitlab::Satellite::CompareAction.new(
+        merge_request.author,
+        merge_request.target_project,
+        merge_request.target_branch,
+        merge_request.source_project,
+        merge_request.source_branch
+      )
     end
   end
 end
