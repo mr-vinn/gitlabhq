@@ -67,7 +67,7 @@ module Gitlab
     #
     # Attachments serving
     #
-    get 'files/:type/:id/:filename' => 'files#download', constraints: { id: /\d+/, type: /[a-z]+/, filename:  /.+/ }
+    get 'files/:type/:id/:filename' => 'gitlab/files#download', constraints: { id: /\d+/, type: /[a-z]+/, filename:  /.+/ }
 
     #
     # Admin Area
