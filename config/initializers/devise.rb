@@ -239,4 +239,6 @@ Devise.setup do |config|
 
     config.omniauth provider['name'].to_sym, *provider_arguments
   end
+
+  config.parent_controller = 'Gitlab::ApplicationController'
 end
