@@ -118,6 +118,11 @@ module Gitlab
       return access_denied! unless can?(current_user, :push_code, project)
     end
 
+    def authorize_labels!
+      # Labels should be accessible for issues and/or merge requests
+      authorize_read_issue! || authorize_read_merge_request!
+    end
+
     def access_denied!
       render "gitlab/errors/access_denied", layout: "gitlab/errors", status: 404
     end
