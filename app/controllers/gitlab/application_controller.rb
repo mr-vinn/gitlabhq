@@ -148,7 +148,7 @@ module Gitlab
     end
 
     def render_404
-      render file: Rails.root.join("public", "404"), layout: false, status: "404"
+      render file: Gitlab::Engine.root.join("public", "404"), layout: false, status: "404"
     end
 
     def require_non_empty_project

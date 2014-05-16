@@ -2,7 +2,7 @@ require 'gitlab/theme'
 require 'gitlab/visibility_level'
 
 class Settings < Settingslogic
-  source ENV.fetch('GITLAB_CONFIG') { "#{Rails.root}/config/gitlab.yml" }
+  source ENV.fetch('GITLAB_CONFIG') { "#{Gitlab::Engine.root}/config/gitlab.yml" }
   namespace Rails.env
 
   class << self
@@ -102,7 +102,7 @@ Settings.gitlab.default_projects_features['wiki']           = true if Settings.g
 Settings.gitlab.default_projects_features['wall']           = false if Settings.gitlab.default_projects_features['wall'].nil?
 Settings.gitlab.default_projects_features['snippets']       = false if Settings.gitlab.default_projects_features['snippets'].nil?
 Settings.gitlab.default_projects_features['visibility_level']    = Settings.send(:verify_constant, Gitlab::VisibilityLevel, Settings.gitlab.default_projects_features['visibility_level'], Gitlab::VisibilityLevel::PRIVATE)
-Settings.gitlab['repository_downloads_path'] = File.absolute_path(Settings.gitlab['repository_downloads_path'] || 'tmp/repositories', Rails.root)
+Settings.gitlab['repository_downloads_path'] = File.absolute_path(Settings.gitlab['repository_downloads_path'] || 'tmp/repositories', Gitlab::Engine.root)
 
 #
 # Gravatar
@@ -132,7 +132,7 @@ Settings.gitlab_shell['ssh_path_prefix'] ||= Settings.send(:build_gitlab_shell_s
 #
 Settings['backup'] ||= Settingslogic.new({})
 Settings.backup['keep_time']  ||= 0
-Settings.backup['path']         = File.expand_path(Settings.backup['path'] || "tmp/backups/", Rails.root)
+Settings.backup['path']         = File.expand_path(Settings.backup['path'] || "tmp/backups/", Gitlab::Engine.root)
 
 #
 # Git
@@ -143,7 +143,7 @@ Settings.git['bin_path']  ||= '/usr/bin/git'
 Settings.git['timeout']   ||= 10
 
 Settings['satellites'] ||= Settingslogic.new({})
-Settings.satellites['path'] = File.expand_path(Settings.satellites['path'] || "tmp/repo_satellites/", Rails.root)
+Settings.satellites['path'] = File.expand_path(Settings.satellites['path'] || "tmp/repo_satellites/", Gitlab::Engine.root)
 
 #
 # Extra customization

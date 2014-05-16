@@ -21,4 +21,4 @@ end
 #
 # Load all libs for threadsafety
 #
-Dir["#{Rails.root}/lib/**/*.rb"].each { |file| require file }
+#Dir["#{Gitlab::Engine.root}/lib/**/*.rb"].each { |file| require file }

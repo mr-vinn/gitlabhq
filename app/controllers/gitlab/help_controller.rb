@@ -7,7 +7,7 @@ module Gitlab
       @category = params[:category]
       @category = "README" if @category.blank?
 
-      if File.exists?(Rails.root.join('doc', 'api', @category + '.md'))
+      if File.exists?(Gitlab::Engine.root.join('doc', 'api', @category + '.md'))
         render 'api'
       else
         not_found!
