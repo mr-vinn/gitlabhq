@@ -22,5 +22,5 @@ def find_secure_token
   end
 end
 
-Gitlab::Application.config.secret_token = find_secure_token
-Gitlab::Application.config.secret_key_base = find_secure_token
+Gitlab::Engine.config.secret_token = find_secure_token
+Gitlab::Engine.config.secret_key_base = find_secure_token

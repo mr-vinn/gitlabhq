@@ -2,7 +2,7 @@ require 'sidekiq/web'
 require 'gitlab/api/api'
 
 module Gitlab
-  Gitlab::Application.routes.draw do
+  Gitlab::Engine.routes.draw do
     #
     # Search
     #
