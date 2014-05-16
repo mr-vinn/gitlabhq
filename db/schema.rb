@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140502125220) do
+ActiveRecord::Schema.define(version: 20140516012115) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "fuzzystrmatch"
 
-  create_table "broadcast_messages", force: true do |t|
+  create_table "gitlab_broadcast_messages", force: true do |t|
     t.text     "message",    null: false
     t.datetime "starts_at"
     t.datetime "ends_at"
@@ -27,26 +28,26 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.string   "font"
   end
 
-  create_table "deploy_keys_projects", force: true do |t|
+  create_table "gitlab_deploy_keys_projects", force: true do |t|
     t.integer  "deploy_key_id", null: false
     t.integer  "project_id",    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "deploy_keys_projects", ["project_id"], name: "index_deploy_keys_projects_on_project_id", using: :btree
+  add_index "gitlab_deploy_keys_projects", ["project_id"], name: "index_gitlab_deploy_keys_projects_on_project_id", using: :btree
 
-  create_table "emails", force: true do |t|
+  create_table "gitlab_emails", force: true do |t|
     t.integer  "user_id",    null: false
     t.string   "email",      null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "emails", ["email"], name: "index_emails_on_email", unique: true, using: :btree
-  add_index "emails", ["user_id"], name: "index_emails_on_user_id", using: :btree
+  add_index "gitlab_emails", ["email"], name: "index_gitlab_emails_on_email", unique: true, using: :btree
+  add_index "gitlab_emails", ["user_id"], name: "index_gitlab_emails_on_user_id", using: :btree
 
-  create_table "events", force: true do |t|
+  create_table "gitlab_events", force: true do |t|
     t.string   "target_type"
     t.integer  "target_id"
     t.string   "title"
@@ -58,23 +59,23 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.integer  "author_id"
   end
 
-  add_index "events", ["action"], name: "index_events_on_action", using: :btree
-  add_index "events", ["author_id"], name: "index_events_on_author_id", using: :btree
-  add_index "events", ["created_at"], name: "index_events_on_created_at", using: :btree
-  add_index "events", ["project_id"], name: "index_events_on_project_id", using: :btree
-  add_index "events", ["target_id"], name: "index_events_on_target_id", using: :btree
-  add_index "events", ["target_type"], name: "index_events_on_target_type", using: :btree
+  add_index "gitlab_events", ["action"], name: "index_gitlab_events_on_action", using: :btree
+  add_index "gitlab_events", ["author_id"], name: "index_gitlab_events_on_author_id", using: :btree
+  add_index "gitlab_events", ["created_at"], name: "index_gitlab_events_on_created_at", using: :btree
+  add_index "gitlab_events", ["project_id"], name: "index_gitlab_events_on_project_id", using: :btree
+  add_index "gitlab_events", ["target_id"], name: "index_gitlab_events_on_target_id", using: :btree
+  add_index "gitlab_events", ["target_type"], name: "index_gitlab_events_on_target_type", using: :btree
 
-  create_table "forked_project_links", force: true do |t|
+  create_table "gitlab_forked_project_links", force: true do |t|
     t.integer  "forked_to_project_id",   null: false
     t.integer  "forked_from_project_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "forked_project_links", ["forked_to_project_id"], name: "index_forked_project_links_on_forked_to_project_id", unique: true, using: :btree
+  add_index "gitlab_forked_project_links", ["forked_to_project_id"], name: "index_gitlab_forked_project_links_on_forked_to_project_id", unique: true, using: :btree
 
-  create_table "issues", force: true do |t|
+  create_table "gitlab_issues", force: true do |t|
     t.string   "title"
     t.integer  "assignee_id"
     t.integer  "author_id"
@@ -89,15 +90,15 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.integer  "iid"
   end
 
-  add_index "issues", ["assignee_id"], name: "index_issues_on_assignee_id", using: :btree
-  add_index "issues", ["author_id"], name: "index_issues_on_author_id", using: :btree
-  add_index "issues", ["created_at"], name: "index_issues_on_created_at", using: :btree
-  add_index "issues", ["milestone_id"], name: "index_issues_on_milestone_id", using: :btree
-  add_index "issues", ["project_id", "iid"], name: "index_issues_on_project_id_and_iid", unique: true, using: :btree
-  add_index "issues", ["project_id"], name: "index_issues_on_project_id", using: :btree
-  add_index "issues", ["title"], name: "index_issues_on_title", using: :btree
+  add_index "gitlab_issues", ["assignee_id"], name: "index_gitlab_issues_on_assignee_id", using: :btree
+  add_index "gitlab_issues", ["author_id"], name: "index_gitlab_issues_on_author_id", using: :btree
+  add_index "gitlab_issues", ["created_at"], name: "index_gitlab_issues_on_created_at", using: :btree
+  add_index "gitlab_issues", ["milestone_id"], name: "index_gitlab_issues_on_milestone_id", using: :btree
+  add_index "gitlab_issues", ["project_id", "iid"], name: "index_gitlab_issues_on_project_id_and_iid", unique: true, using: :btree
+  add_index "gitlab_issues", ["project_id"], name: "index_gitlab_issues_on_project_id", using: :btree
+  add_index "gitlab_issues", ["title"], name: "index_gitlab_issues_on_title", using: :btree
 
-  create_table "keys", force: true do |t|
+  create_table "gitlab_keys", force: true do |t|
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -107,9 +108,9 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.string   "fingerprint"
   end
 
-  add_index "keys", ["user_id"], name: "index_keys_on_user_id", using: :btree
+  add_index "gitlab_keys", ["user_id"], name: "index_gitlab_keys_on_user_id", using: :btree
 
-  create_table "merge_request_diffs", force: true do |t|
+  create_table "gitlab_merge_request_diffs", force: true do |t|
     t.string   "state"
     t.text     "st_commits"
     t.text     "st_diffs"
@@ -118,9 +119,9 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.datetime "updated_at"
   end
 
-  add_index "merge_request_diffs", ["merge_request_id"], name: "index_merge_request_diffs_on_merge_request_id", unique: true, using: :btree
+  add_index "gitlab_merge_request_diffs", ["merge_request_id"], name: "index_gitlab_merge_request_diffs_on_merge_request_id", unique: true, using: :btree
 
-  create_table "merge_requests", force: true do |t|
+  create_table "gitlab_merge_requests", force: true do |t|
     t.string   "target_branch",     null: false
     t.string   "source_branch",     null: false
     t.integer  "source_project_id", null: false
@@ -137,17 +138,17 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.text     "description"
   end
 
-  add_index "merge_requests", ["assignee_id"], name: "index_merge_requests_on_assignee_id", using: :btree
-  add_index "merge_requests", ["author_id"], name: "index_merge_requests_on_author_id", using: :btree
-  add_index "merge_requests", ["created_at"], name: "index_merge_requests_on_created_at", using: :btree
-  add_index "merge_requests", ["milestone_id"], name: "index_merge_requests_on_milestone_id", using: :btree
-  add_index "merge_requests", ["source_branch"], name: "index_merge_requests_on_source_branch", using: :btree
-  add_index "merge_requests", ["source_project_id"], name: "index_merge_requests_on_source_project_id", using: :btree
-  add_index "merge_requests", ["target_branch"], name: "index_merge_requests_on_target_branch", using: :btree
-  add_index "merge_requests", ["target_project_id", "iid"], name: "index_merge_requests_on_target_project_id_and_iid", unique: true, using: :btree
-  add_index "merge_requests", ["title"], name: "index_merge_requests_on_title", using: :btree
+  add_index "gitlab_merge_requests", ["assignee_id"], name: "index_gitlab_merge_requests_on_assignee_id", using: :btree
+  add_index "gitlab_merge_requests", ["author_id"], name: "index_gitlab_merge_requests_on_author_id", using: :btree
+  add_index "gitlab_merge_requests", ["created_at"], name: "index_gitlab_merge_requests_on_created_at", using: :btree
+  add_index "gitlab_merge_requests", ["milestone_id"], name: "index_gitlab_merge_requests_on_milestone_id", using: :btree
+  add_index "gitlab_merge_requests", ["source_branch"], name: "index_gitlab_merge_requests_on_source_branch", using: :btree
+  add_index "gitlab_merge_requests", ["source_project_id"], name: "index_gitlab_merge_requests_on_source_project_id", using: :btree
+  add_index "gitlab_merge_requests", ["target_branch"], name: "index_gitlab_merge_requests_on_target_branch", using: :btree
+  add_index "gitlab_merge_requests", ["target_project_id", "iid"], name: "index_gitlab_merge_requests_on_target_project_id_and_iid", unique: true, using: :btree
+  add_index "gitlab_merge_requests", ["title"], name: "index_gitlab_merge_requests_on_title", using: :btree
 
-  create_table "milestones", force: true do |t|
+  create_table "gitlab_milestones", force: true do |t|
     t.string   "title",       null: false
     t.integer  "project_id",  null: false
     t.text     "description"
@@ -158,11 +159,11 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.integer  "iid"
   end
 
-  add_index "milestones", ["due_date"], name: "index_milestones_on_due_date", using: :btree
-  add_index "milestones", ["project_id", "iid"], name: "index_milestones_on_project_id_and_iid", unique: true, using: :btree
-  add_index "milestones", ["project_id"], name: "index_milestones_on_project_id", using: :btree
+  add_index "gitlab_milestones", ["due_date"], name: "index_gitlab_milestones_on_due_date", using: :btree
+  add_index "gitlab_milestones", ["project_id", "iid"], name: "index_gitlab_milestones_on_project_id_and_iid", unique: true, using: :btree
+  add_index "gitlab_milestones", ["project_id"], name: "index_gitlab_milestones_on_project_id", using: :btree
 
-  create_table "namespaces", force: true do |t|
+  create_table "gitlab_namespaces", force: true do |t|
     t.string   "name",                     null: false
     t.string   "path",                     null: false
     t.integer  "owner_id"
@@ -173,12 +174,12 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.string   "avatar"
   end
 
-  add_index "namespaces", ["name"], name: "index_namespaces_on_name", using: :btree
-  add_index "namespaces", ["owner_id"], name: "index_namespaces_on_owner_id", using: :btree
-  add_index "namespaces", ["path"], name: "index_namespaces_on_path", using: :btree
-  add_index "namespaces", ["type"], name: "index_namespaces_on_type", using: :btree
+  add_index "gitlab_namespaces", ["name"], name: "index_gitlab_namespaces_on_name", using: :btree
+  add_index "gitlab_namespaces", ["owner_id"], name: "index_gitlab_namespaces_on_owner_id", using: :btree
+  add_index "gitlab_namespaces", ["path"], name: "index_gitlab_namespaces_on_path", using: :btree
+  add_index "gitlab_namespaces", ["type"], name: "index_gitlab_namespaces_on_type", using: :btree
 
-  create_table "notes", force: true do |t|
+  create_table "gitlab_notes", force: true do |t|
     t.text     "note"
     t.string   "noteable_type"
     t.integer  "author_id"
@@ -193,16 +194,16 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.text     "st_diff"
   end
 
-  add_index "notes", ["author_id"], name: "index_notes_on_author_id", using: :btree
-  add_index "notes", ["commit_id"], name: "index_notes_on_commit_id", using: :btree
-  add_index "notes", ["created_at"], name: "index_notes_on_created_at", using: :btree
-  add_index "notes", ["noteable_id", "noteable_type"], name: "index_notes_on_noteable_id_and_noteable_type", using: :btree
-  add_index "notes", ["noteable_type"], name: "index_notes_on_noteable_type", using: :btree
-  add_index "notes", ["project_id", "noteable_type"], name: "index_notes_on_project_id_and_noteable_type", using: :btree
-  add_index "notes", ["project_id"], name: "index_notes_on_project_id", using: :btree
-  add_index "notes", ["updated_at"], name: "index_notes_on_updated_at", using: :btree
+  add_index "gitlab_notes", ["author_id"], name: "index_gitlab_notes_on_author_id", using: :btree
+  add_index "gitlab_notes", ["commit_id"], name: "index_gitlab_notes_on_commit_id", using: :btree
+  add_index "gitlab_notes", ["created_at"], name: "index_gitlab_notes_on_created_at", using: :btree
+  add_index "gitlab_notes", ["noteable_id", "noteable_type"], name: "index_gitlab_notes_on_noteable_id_and_noteable_type", using: :btree
+  add_index "gitlab_notes", ["noteable_type"], name: "index_gitlab_notes_on_noteable_type", using: :btree
+  add_index "gitlab_notes", ["project_id", "noteable_type"], name: "index_gitlab_notes_on_project_id_and_noteable_type", using: :btree
+  add_index "gitlab_notes", ["project_id"], name: "index_gitlab_notes_on_project_id", using: :btree
+  add_index "gitlab_notes", ["updated_at"], name: "index_gitlab_notes_on_updated_at", using: :btree
 
-  create_table "projects", force: true do |t|
+  create_table "gitlab_projects", force: true do |t|
     t.string   "name"
     t.string   "path"
     t.text     "description"
@@ -225,20 +226,20 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.float    "repository_size",        default: 0.0
   end
 
-  add_index "projects", ["creator_id"], name: "index_projects_on_creator_id", using: :btree
-  add_index "projects", ["last_activity_at"], name: "index_projects_on_last_activity_at", using: :btree
-  add_index "projects", ["namespace_id"], name: "index_projects_on_namespace_id", using: :btree
+  add_index "gitlab_projects", ["creator_id"], name: "index_gitlab_projects_on_creator_id", using: :btree
+  add_index "gitlab_projects", ["last_activity_at"], name: "index_gitlab_projects_on_last_activity_at", using: :btree
+  add_index "gitlab_projects", ["namespace_id"], name: "index_gitlab_projects_on_namespace_id", using: :btree
 
-  create_table "protected_branches", force: true do |t|
+  create_table "gitlab_protected_branches", force: true do |t|
     t.integer  "project_id", null: false
     t.string   "name",       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "protected_branches", ["project_id"], name: "index_protected_branches_on_project_id", using: :btree
+  add_index "gitlab_protected_branches", ["project_id"], name: "index_gitlab_protected_branches_on_project_id", using: :btree
 
-  create_table "services", force: true do |t|
+  create_table "gitlab_services", force: true do |t|
     t.string   "type"
     t.string   "title"
     t.string   "token"
@@ -253,9 +254,9 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.string   "api_key"
   end
 
-  add_index "services", ["project_id"], name: "index_services_on_project_id", using: :btree
+  add_index "gitlab_services", ["project_id"], name: "index_gitlab_services_on_project_id", using: :btree
 
-  create_table "snippets", force: true do |t|
+  create_table "gitlab_snippets", force: true do |t|
     t.string   "title"
     t.text     "content"
     t.integer  "author_id",                 null: false
@@ -268,12 +269,12 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.string   "type"
   end
 
-  add_index "snippets", ["author_id"], name: "index_snippets_on_author_id", using: :btree
-  add_index "snippets", ["created_at"], name: "index_snippets_on_created_at", using: :btree
-  add_index "snippets", ["expires_at"], name: "index_snippets_on_expires_at", using: :btree
-  add_index "snippets", ["project_id"], name: "index_snippets_on_project_id", using: :btree
+  add_index "gitlab_snippets", ["author_id"], name: "index_gitlab_snippets_on_author_id", using: :btree
+  add_index "gitlab_snippets", ["created_at"], name: "index_gitlab_snippets_on_created_at", using: :btree
+  add_index "gitlab_snippets", ["expires_at"], name: "index_gitlab_snippets_on_expires_at", using: :btree
+  add_index "gitlab_snippets", ["project_id"], name: "index_gitlab_snippets_on_project_id", using: :btree
 
-  create_table "taggings", force: true do |t|
+  create_table "gitlab_taggings", force: true do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
     t.string   "taggable_type"
@@ -283,14 +284,14 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.datetime "created_at"
   end
 
-  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
-  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
+  add_index "gitlab_taggings", ["tag_id"], name: "index_gitlab_taggings_on_tag_id", using: :btree
+  add_index "gitlab_taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_taggable_type_context", using: :btree
 
-  create_table "tags", force: true do |t|
+  create_table "gitlab_tags", force: true do |t|
     t.string "name"
   end
 
-  create_table "users", force: true do |t|
+  create_table "gitlab_users", force: true do |t|
     t.string   "email",                    default: "",    null: false
     t.string   "encrypted_password",       default: "",    null: false
     t.string   "reset_password_token"
@@ -334,17 +335,17 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.datetime "last_credential_check_at"
   end
 
-  add_index "users", ["admin"], name: "index_users_on_admin", using: :btree
-  add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["current_sign_in_at"], name: "index_users_on_current_sign_in_at", using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["extern_uid", "provider"], name: "index_users_on_extern_uid_and_provider", unique: true, using: :btree
-  add_index "users", ["name"], name: "index_users_on_name", using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["username"], name: "index_users_on_username", using: :btree
+  add_index "gitlab_users", ["admin"], name: "index_gitlab_users_on_admin", using: :btree
+  add_index "gitlab_users", ["authentication_token"], name: "index_gitlab_users_on_authentication_token", unique: true, using: :btree
+  add_index "gitlab_users", ["confirmation_token"], name: "index_gitlab_users_on_confirmation_token", unique: true, using: :btree
+  add_index "gitlab_users", ["current_sign_in_at"], name: "index_gitlab_users_on_current_sign_in_at", using: :btree
+  add_index "gitlab_users", ["email"], name: "index_gitlab_users_on_email", unique: true, using: :btree
+  add_index "gitlab_users", ["extern_uid", "provider"], name: "index_gitlab_users_on_extern_uid_and_provider", unique: true, using: :btree
+  add_index "gitlab_users", ["name"], name: "index_gitlab_users_on_name", using: :btree
+  add_index "gitlab_users", ["reset_password_token"], name: "index_gitlab_users_on_reset_password_token", unique: true, using: :btree
+  add_index "gitlab_users", ["username"], name: "index_gitlab_users_on_username", using: :btree
 
-  create_table "users_groups", force: true do |t|
+  create_table "gitlab_users_groups", force: true do |t|
     t.integer  "group_access",                   null: false
     t.integer  "group_id",                       null: false
     t.integer  "user_id",                        null: false
@@ -353,9 +354,9 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.integer  "notification_level", default: 3, null: false
   end
 
-  add_index "users_groups", ["user_id"], name: "index_users_groups_on_user_id", using: :btree
+  add_index "gitlab_users_groups", ["user_id"], name: "index_gitlab_users_groups_on_user_id", using: :btree
 
-  create_table "users_projects", force: true do |t|
+  create_table "gitlab_users_projects", force: true do |t|
     t.integer  "user_id",                        null: false
     t.integer  "project_id",                     null: false
     t.datetime "created_at"
@@ -364,11 +365,11 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.integer  "notification_level", default: 3, null: false
   end
 
-  add_index "users_projects", ["project_access"], name: "index_users_projects_on_project_access", using: :btree
-  add_index "users_projects", ["project_id"], name: "index_users_projects_on_project_id", using: :btree
-  add_index "users_projects", ["user_id"], name: "index_users_projects_on_user_id", using: :btree
+  add_index "gitlab_users_projects", ["project_access"], name: "index_gitlab_users_projects_on_project_access", using: :btree
+  add_index "gitlab_users_projects", ["project_id"], name: "index_gitlab_users_projects_on_project_id", using: :btree
+  add_index "gitlab_users_projects", ["user_id"], name: "index_gitlab_users_projects_on_user_id", using: :btree
 
-  create_table "web_hooks", force: true do |t|
+  create_table "gitlab_web_hooks", force: true do |t|
     t.string   "url"
     t.integer  "project_id"
     t.datetime "created_at"
@@ -381,6 +382,6 @@ ActiveRecord::Schema.define(version: 20140502125220) do
     t.boolean  "tag_push_events",       default: false
   end
 
-  add_index "web_hooks", ["project_id"], name: "index_web_hooks_on_project_id", using: :btree
+  add_index "gitlab_web_hooks", ["project_id"], name: "index_gitlab_web_hooks_on_project_id", using: :btree
 
 end
