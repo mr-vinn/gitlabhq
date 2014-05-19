@@ -12,4 +12,4 @@
         Dealing with bruteforcing
       .file-content.wiki
         = preserve do
-          = markdown File.read(Rails.root.join("doc", "security", "rack_attack.md"))
+          = markdown File.read(Gitlab::Engine.root.join("doc", "security", "rack_attack.md"))

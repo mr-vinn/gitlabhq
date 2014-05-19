@@ -3,4 +3,4 @@
 
   .help_body
     = preserve do
-      = markdown File.read(Rails.root.join("doc", "public_access", "public_access.md"))
+      = markdown File.read(Gitlab::Engine.root.join("doc", "public_access", "public_access.md"))

@@ -3,4 +3,4 @@
 
   .help_body
     = preserve do
-      = markdown File.read(Rails.root.join("doc", "system_hooks", "system_hooks.md"))
+      = markdown File.read(Gitlab::Engine.root.join("doc", "system_hooks", "system_hooks.md"))

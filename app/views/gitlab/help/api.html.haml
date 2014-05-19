@@ -11,4 +11,4 @@
       = @category
     .file-content.wiki
       = preserve do
-        = markdown File.read(Rails.root.join("doc", "api", "#{@category}.md"))
+        = markdown File.read(Gitlab::Engine.root.join("doc", "api", "#{@category}.md"))

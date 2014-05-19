@@ -24,7 +24,7 @@
           Features
         .file-content.wiki
           = preserve do
-            = markdown File.read(Rails.root.join("doc", "raketasks", "features.md"))
+            = markdown File.read(Gitlab::Engine.root.join("doc", "raketasks", "features.md"))
 
     .tab-pane#maintenance
       .file-holder
@@ -33,7 +33,7 @@
           Maintenance
         .file-content.wiki
           = preserve do
-            = markdown File.read(Rails.root.join("doc", "raketasks", "maintenance.md"))
+            = markdown File.read(Gitlab::Engine.root.join("doc", "raketasks", "maintenance.md"))
 
     .tab-pane#user_management
       .file-holder
@@ -42,7 +42,7 @@
           User Management
         .file-content.wiki
           = preserve do
-            = markdown File.read(Rails.root.join("doc", "raketasks", "user_management.md"))
+            = markdown File.read(Gitlab::Engine.root.join("doc", "raketasks", "user_management.md"))
 
     .tab-pane#cleanup
       .file-holder
@@ -51,7 +51,7 @@
           Cleanup
         .file-content.wiki
           = preserve do
-            = markdown File.read(Rails.root.join("doc", "raketasks", "cleanup.md"))
+            = markdown File.read(Gitlab::Engine.root.join("doc", "raketasks", "cleanup.md"))
 
     .tab-pane#backup_restore
       .file-holder
@@ -60,4 +60,4 @@
           Backup & Restore
         .file-content.wiki
           = preserve do
-            = markdown File.read(Rails.root.join("doc", "raketasks", "backup_restore.md"))
+            = markdown File.read(Gitlab::Engine.root.join("doc", "raketasks", "backup_restore.md"))
