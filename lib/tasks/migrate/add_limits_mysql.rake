@@ -1,4 +1,4 @@
-require Rails.root.join('db/migrate/limits_to_mysql')
+require Gitlab::Engine.root.join('db/migrate/limits_to_mysql')
 
 desc "GITLAB | Add limits to strings in mysql database"
 task add_limits_mysql: :environment do

@@ -78,7 +78,7 @@ namespace :gitlab do
     def check_gitlab_config_exists
       print "GitLab config exists? ... "
 
-      gitlab_config_file = Rails.root.join("config", "gitlab.yml")
+      gitlab_config_file = Gitlab::Engine.root.join("config", "gitlab.yml")
 
       if File.exists?(gitlab_config_file)
         puts "yes".green
@@ -98,7 +98,7 @@ namespace :gitlab do
     def check_gitlab_config_not_outdated
       print "GitLab config outdated? ... "
 
-      gitlab_config_file = Rails.root.join("config", "gitlab.yml")
+      gitlab_config_file = Gitlab::Engine.root.join("config", "gitlab.yml")
       unless File.exists?(gitlab_config_file)
         puts "can't check because of previous errors".magenta
       end
@@ -142,7 +142,7 @@ namespace :gitlab do
     def check_init_script_up_to_date
       print "Init script up-to-date? ... "
 
-      recipe_path = Rails.root.join("lib/support/init.d/", "gitlab")
+      recipe_path = Gitlab::Engine.root.join("lib/support/init.d/", "gitlab")
       script_path = "/etc/init.d/gitlab"
 
       unless File.exists?(script_path)

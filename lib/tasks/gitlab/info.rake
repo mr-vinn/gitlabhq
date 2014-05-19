@@ -43,7 +43,7 @@ namespace :gitlab do
       puts "GitLab information".yellow
       puts "Version:\t#{Gitlab::VERSION}"
       puts "Revision:\t#{Gitlab::REVISION}"
-      puts "Directory:\t#{Rails.root}"
+      puts "Directory:\t#{Gitlab::Engine.root}"
       puts "DB Adapter:\t#{database_adapter}"
       puts "URL:\t\t#{Gitlab.config.gitlab.url}"
       puts "HTTP Clone URL:\t#{http_clone_url}"
