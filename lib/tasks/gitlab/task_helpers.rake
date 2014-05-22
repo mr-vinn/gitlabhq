@@ -19,7 +19,7 @@ namespace :gitlab do
   # Returns "yes" the user chose to continue
   # Raises Gitlab::TaskAbortedByUserError if the user chose *not* to continue
   def ask_to_continue
-    answer = prompt("Do you want to continue (yes/no)? ".blue, %w{yes no})
+    answer = prompt("Do you want to continue (yes/no)? ".green, %w{yes no})
     raise Gitlab::TaskAbortedByUserError unless answer == "yes"
   end
 
