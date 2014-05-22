@@ -69,7 +69,7 @@ module Gitlab
       @members = group.users_groups
 
       if params[:search].present?
-        users = group.users.search(params[:search])
+        users = group.users.search(params[:search]).to_a
         @members = @members.where(user_id: users)
       end
 
