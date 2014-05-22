@@ -126,15 +126,15 @@ module Gitlab
     private
 
     def testing_path
-      Rails.root.join('tmp', 'test-git-base-path')
+      Gitlab::Engine.root.join('tmp', 'test-git-base-path')
     end
 
     def seed_repo_path
-      Rails.root.join('tmp', 'repositories', 'gitlabhq')
+      Gitlab::Engine.root.join('tmp', 'repositories', 'gitlabhq')
     end
 
     def seed_satellite_path
-      Rails.root.join('tmp', 'satellite', 'gitlabhq')
+      Gitlab::Engine.root.join('tmp', 'satellite', 'gitlabhq')
     end
 
     def satellite_path

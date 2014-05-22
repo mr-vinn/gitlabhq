@@ -105,7 +105,7 @@ module Gitlab
     end
 
     step 'I change group "Owned" avatar' do
-      attach_file(:group_avatar, File.join(Rails.root, 'public', 'gitlab_logo.png'))
+      attach_file(:group_avatar, File.join(Gitlab::Engine.root, 'public', 'gitlab_logo.png'))
       click_button "Save group"
       Group.find_by(name: "Owned").reload
     end
@@ -120,7 +120,7 @@ module Gitlab
     end
 
     step 'I have group "Owned" avatar' do
-      attach_file(:group_avatar, File.join(Rails.root, 'public', 'gitlab_logo.png'))
+      attach_file(:group_avatar, File.join(Gitlab::Engine.root, 'public', 'gitlab_logo.png'))
       click_button "Save group"
       Group.find_by(name: "Owned").reload
     end

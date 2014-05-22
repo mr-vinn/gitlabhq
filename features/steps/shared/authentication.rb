@@ -1,4 +1,4 @@
-require Rails.root.join('spec', 'support', 'login_helpers')
+require Gitlab::Engine.root.join('spec', 'support', 'login_helpers')
 
 module Gitlab
   module SharedAuthentication

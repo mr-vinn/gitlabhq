@@ -24,7 +24,7 @@ module Gitlab
     end
 
     step 'I change my avatar' do
-      attach_file(:user_avatar, File.join(Rails.root, 'public', 'gitlab_logo.png'))
+      attach_file(:user_avatar, File.join(Gitlab::Engine.root, 'public', 'gitlab_logo.png'))
       click_button "Save changes"
       @user.reload
     end
@@ -39,7 +39,7 @@ module Gitlab
     end
 
     step 'I have an avatar' do
-      attach_file(:user_avatar, File.join(Rails.root, 'public', 'gitlab_logo.png'))
+      attach_file(:user_avatar, File.join(Gitlab::Engine.root, 'public', 'gitlab_logo.png'))
       click_button "Save changes"
       @user.reload
     end

@@ -16,10 +16,10 @@ require 'sidekiq/testing/inline'
 
 
 %w(valid_commit valid_commit_with_alt_email big_commits select2_helper test_env).each do |f|
-  require Rails.root.join('spec', 'support', f)
+  require Gitlab::Engine.root.join('spec', 'support', f)
 end
 
-Dir["#{Rails.root}/features/steps/shared/*.rb"].each {|file| require file}
+Dir["#{Gitlab::Engine.root}/features/steps/shared/*.rb"].each {|file| require file}
 
 WebMock.allow_net_connect!
 #
