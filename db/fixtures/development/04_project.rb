@@ -1,3 +1,5 @@
+require 'ffaker'
+
 Gitlab::Seeder.quiet do
   project_urls = [
     'https://github.com/documentcloud/underscore.git',
