@@ -158,6 +158,13 @@ module Gitlab
       # poltergeist always confirms popups.
     end
 
+    step 'I search for \'Mary\' member' do
+      within '.member-search-form' do
+        fill_in 'search', with: 'Mary'
+        click_button 'Search'
+      end
+    end
+
     protected
 
     def assigned_to_me key
