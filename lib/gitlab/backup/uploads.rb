@@ -4,7 +4,7 @@ module Gitlab
       attr_reader :app_uploads_dir, :backup_uploads_dir, :backup_dir
 
       def initialize
-        @app_uploads_dir = File.realpath(Rails.root.join('public', 'uploads'))
+        @app_uploads_dir = File.realpath(Gitlab::Engine.root.join('public', 'uploads'))
         @backup_dir = Gitlab.config.backup.path
         @backup_uploads_dir = File.join(Gitlab.config.backup.path, 'uploads')
       end

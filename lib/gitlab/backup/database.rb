@@ -6,7 +6,7 @@ module Gitlab
       attr_reader :config, :db_dir
 
       def initialize
-        @config = YAML.load_file(File.join(Rails.root,'config','database.yml'))[Rails.env]
+        @config = YAML.load_file(File.join(Gitlab::Engine.root,'config','database.yml'))[Rails.env]
         @db_dir = File.join(Gitlab.config.backup.path, 'db')
         FileUtils.mkdir_p(@db_dir) unless Dir.exists?(@db_dir)
       end

@@ -1,4 +1,4 @@
-Dir["#{Rails.root}/lib/gitlab/api/*.rb"].each {|file| require file}
+Dir["#{Gitlab::Engine.root}/lib/gitlab/api/*.rb"].each {|file| require file}
 
 module Gitlab
   module API

@@ -43,7 +43,7 @@ module Gitlab
 
         if keep_time > 0
           removed = 0
-          file_list = Dir.glob(Rails.root.join(path, "*_gitlab_backup.tar"))
+          file_list = Dir.glob(Gitlab::Engine.root.join(path, "*_gitlab_backup.tar"))
           file_list.map! { |f| $1.to_i if f =~ /(\d+)_gitlab_backup.tar/ }
           file_list.sort.each do |timestamp|
             if Time.at(timestamp) < (Time.now - keep_time)
