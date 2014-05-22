@@ -20,7 +20,6 @@
 #= require bootstrap
 #= require select2
 #= require raphael
-#= require g.raphael-min
 #= require g.bar-min
 #= require gitlab/branch-graph
 #= require highlightjs.min
