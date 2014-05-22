@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = "The Gitlab Community Edition app packaged as a Rails mountable engine."
 
   s.files = Dir["{app,config,db,lib,vendor}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.test_files = Dir["test/**/*"]
+  s.test_files = Dir["spec/controllers/*"]
 
   s.add_dependency "rails", "~> 4.0.0"
   s.add_dependency "protected_attributes"
