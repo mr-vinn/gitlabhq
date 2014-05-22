@@ -6,15 +6,15 @@ module Gitlab
     #
     # Search
     #
-    get 'search' => "gitlab/search#show"
-    get 'search/autocomplete' => "gitlab/search#autocomplete", as: :search_autocomplete
+    get 'search' => "search#show"
+    get 'search/autocomplete' => "search#autocomplete", as: :search_autocomplete
 
     # API
     API::API.logger Rails.logger
     mount API::API => '/api'
 
     # Get all keys of user
-    get ':username.keys' => 'gitlab/profiles/keys#get_keys' , constraints: { username: /.*/ }
+    get ':username.keys' => 'profiles/keys#get_keys' , constraints: { username: /.*/ }
 
     constraint = lambda { |request| request.env["warden"].authenticate? and request.env['warden'].user.admin? }
     constraints constraint do
@@ -32,34 +32,34 @@ module Gitlab
     #
     # Help
     #
-    get 'help'                => 'gitlab/help#index'
-    get 'help/api'            => 'gitlab/help#api'
-    get 'help/api/:category'  => 'gitlab/help#api', as: 'help_api_file'
-    get 'help/markdown'       => 'gitlab/help#markdown'
-    get 'help/permissions'    => 'gitlab/help#permissions'
-    get 'help/public_access'  => 'gitlab/help#public_access'
-    get 'help/raketasks'      => 'gitlab/help#raketasks'
-    get 'help/ssh'            => 'gitlab/help#ssh'
-    get 'help/system_hooks'   => 'gitlab/help#system_hooks'
-    get 'help/web_hooks'      => 'gitlab/help#web_hooks'
-    get 'help/workflow'       => 'gitlab/help#workflow'
+    get 'help'                => 'help#index'
+    get 'help/api'            => 'help#api'
+    get 'help/api/:category'  => 'help#api', as: 'help_api_file'
+    get 'help/markdown'       => 'help#markdown'
+    get 'help/permissions'    => 'help#permissions'
+    get 'help/public_access'  => 'help#public_access'
+    get 'help/raketasks'      => 'help#raketasks'
+    get 'help/ssh'            => 'help#ssh'
+    get 'help/system_hooks'   => 'help#system_hooks'
+    get 'help/web_hooks'      => 'help#web_hooks'
+    get 'help/workflow'       => 'help#workflow'
     get 'help/shortcuts'
     get 'help/security'
 
     #
     # Global snippets
     #
-    resources :snippets, controller: 'gitlab/snippets' do
+    resources :snippets do
       member do
         get "raw"
       end
     end
-    get "/s/:username" => "gitlab/snippets#user_index", as: :user_snippets, constraints: { username: /.*/ }
+    get "/s/:username" => "snippets#user_index", as: :user_snippets, constraints: { username: /.*/ }
 
     #
     # Public namespace
     #
-    namespace :public, module: 'gitlab/public' do
+    namespace :public do
       resources :projects, only: [:index]
       root to: "projects#index"
     end
@@ -67,12 +67,12 @@ module Gitlab
     #
     # Attachments serving
     #
-    get 'files/:type/:id/:filename' => 'gitlab/files#download', constraints: { id: /\d+/, type: /[a-z]+/, filename:  /.+/ }
+    get 'files/:type/:id/:filename' => 'files#download', constraints: { id: /\d+/, type: /[a-z]+/, filename:  /.+/ }
 
     #
     # Admin Area
     #
-    namespace :admin, module: 'gitlab/admin' do
+    namespace :admin do
       resources :users, constraints: { id: /[a-zA-Z.\/0-9_\-]+/ } do
         member do
           put :team_update
@@ -107,7 +107,7 @@ module Gitlab
     #
     # Profile Area
     #
-    resource :profile, controller: 'gitlab/profiles', only: [:show, :update] do
+    resource :profile, only: [:show, :update] do
       member do
         get :history
         get :design
@@ -116,7 +116,7 @@ module Gitlab
         put :update_username
       end
 
-      scope module: :'gitlab/profiles' do
+      scope module: :profiles do
         resource :account, only: [:show, :update]
         resource :notifications, only: [:show, :update]
         resource :password, only: [:new, :create, :edit, :update] do
@@ -135,14 +135,14 @@ module Gitlab
       end
     end
 
-    match "/u/:username" => "gitlab/users#show", as: :user, constraints: { username: /.*/ }, via: :get
+    match "/u/:username" => "users#show", as: :user, constraints: { username: /.*/ }, via: :get
 
 
 
     #
     # Dashboard Area
     #
-    resource :dashboard, controller: "gitlab/dashboard", only: [:show] do
+    resource :dashboard, controller: 'dashboard', only: [:show] do
       member do
         get :projects
         get :issues
@@ -153,27 +153,27 @@ module Gitlab
     #
     # Groups Area
     #
-    resources :groups, controller: 'gitlab/groups', constraints: {id: /(?:[^.]|\.(?!atom$))+/, format: /atom/}  do
+    resources :groups, constraints: {id: /(?:[^.]|\.(?!atom$))+/, format: /atom/}  do
       member do
         get :issues
         get :merge_requests
         get :members
       end
 
-      resources :users_groups, controller: 'gitlab/users_groups', only: [:create, :update, :destroy]
-      scope module: :'gitlab/groups' do
+      resources :users_groups, only: [:create, :update, :destroy]
+      scope module: :groups do
         resource :avatar, only: [:destroy]
       end
     end
 
-    resources :projects, controller: 'gitlab/projects', constraints: { id: /[^\/]+/ }, only: [:new, :create]
+    resources :projects, constraints: { id: /[^\/]+/ }, only: [:new, :create]
 
-    devise_for :users, module: :devise, class_name: 'Gitlab::User', controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :'gitlab/registrations' , passwords: :passwords}
+    devise_for :users, module: :devise, class_name: 'Gitlab::User', controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :registrations , passwords: :passwords}
 
     #
     # Project Area
     #
-    resources :projects, controller: :'gitlab/projects', constraints: { id: /[a-zA-Z.0-9_\-]+\/[a-zA-Z.0-9_\-]+/ }, except: [:new, :create, :index], path: "/" do
+    resources :projects, constraints: { id: /[a-zA-Z.0-9_\-]+\/[a-zA-Z.0-9_\-]+/ }, except: [:new, :create, :index], path: "/" do
       member do
         put :transfer
         post :fork
@@ -184,7 +184,7 @@ module Gitlab
         put :retry_import
       end
 
-      scope module: :'gitlab/projects' do
+      scope module: :projects do
         resources :blob,      only: [:show, :destroy], constraints: {id: /.+/}
         resources :raw,       only: [:show], constraints: {id: /.+/}
         resources :tree,      only: [:show], constraints: {id: /.+/, format: /(html|js)/ }
@@ -330,8 +330,8 @@ module Gitlab
       end
     end
 
-    get ':id' => "gitlab/groups#show", constraints: {id: /(?:[^.]|\.(?!atom$))+/, format: /atom/}
+    get ':id' => "groups#show", constraints: {id: /(?:[^.]|\.(?!atom$))+/, format: /atom/}
 
-    root to: "gitlab/dashboard#show"
+    root to: "dashboard#show"
   end
 end
