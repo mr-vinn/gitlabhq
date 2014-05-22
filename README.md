@@ -1,3 +1,62 @@
+# Gitlab - The Engine
+
+This is a fork of the [Gitlab Community Edition
+project](https://github.com/gitlabhq/gitlabhq).  I am not affiliated in any
+way with the official Gitlab project or with Gitlab B.V.
+
+This fork aims to repackage the Gitlab Community Edition application into a
+[Rails Mountable Engine](http://guides.rubyonrails.org/engines.html) so that
+you can easily embed a self-hosted Gitlab instance into a custom Rails
+application.  You can already interact with a Gitlab instance from your own
+Rails app via the [Gitlab API](doc/api/README.md), and with [web
+hooks](doc/web_hooks/web_hooks.md) and [system
+hooks](doc/system_hooks/system_hooks.md).  The API lets you view and manipulate
+Gitlab's objects, and your application can use web and system hooks to respond
+to Gitlab's events.  You can interact with Gitlab in the same ways when you use
+it as a mountable engine, but doing so means that you only deal with a single
+application and database.  Deploying with the Gitlab engine is the same as with Gitlab itself, 
+
+See my gitlab-engine-examples project for some simple apps that
+build functionality on top of Gitlab.
+
+## Maintenance Process
+
+The master branch of this project pulls from the master branch of Gitlab's
+Github [repository](https://github.com/gitlabhq/gitlabhq.git).  This README is
+the only file that diverges from upstream.  Commits from upstream are merged
+whenever Gitlab releases a new stable version, using the merge base between the
+upstream master and the latest x-x-stable branch.
+
+The `namespace` branch is functionally identical to the official Gitlab app,
+but Ruby classes and view files are moved into a namespaced directory tree.
+After merging a new upstream release into our master branch, the master branch
+is merged into `namespace`.  After resolving merge conflicts, additional
+commits are made on this branch as necessary to make Rspec and Spinach tests
+pass.  When all tests pass, a new branch is checked out named
+`x-x-stable-namespace`.  Each stable branch receives security and bug fixes
+from the corresponding upstream `x-x-stable` branch.
+
+The `engine` branch is based on the `namespace` branch, but is configured as a
+mountable engine instead of a standalone Rails application.  This branch
+receives updates from `namespace` after new upstream releases are merged.  When
+`namespace`->`engine` merge conflicts are resolved, the engine is tested with a
+dummy application created for the `engine` branch.  When all tests pass, a new
+branch is checked out named `x-x-stable-engine`.  These stable branches receive
+security and bug fixes from the upstream `x-x-stable` branches.
+
+## Using Gitlab as an Engine
+
+To add the Gitlab engine to your Rails app, update your Gemfile with something like this:
+
+    gem 'gitlab', '6.9.0', :github => 'mr-vinn/gitlab', :branch => '6-9-stable-engine'
+
+You can use one of the `x-x-stable-engine` branches, or the `engine` branch
+directly.  The `x-y-z` tags are only available on the stable engine branches,
+so if you want to configure a specific version of gitlab in your app then you
+should use the appropriate `x-x-stable-engine` branch.
+
+## NOTE: The rest of this document is the official Gitlab Community Edition README
+
 ## GitLab: self hosted Git management software
 
 ![logo](https://gitlab.com/gitlab-org/gitlab-ce/raw/master/public/gitlab_logo.png)
@@ -15,7 +74,7 @@
 
 ### Canonical source
 
-* The source of GitLab Communinity Edition is [hosted on GitLab Cloud](https://gitlab.com/gitlab-org/gitlab-ce/) and there are mirrors to make [contributing](CONTRIBUTING.md) as easy as possible.
+* The source of GitLab Community Edition is [hosted on GitLab.com](https://gitlab.com/gitlab-org/gitlab-ce/) and there are mirrors to make [contributing](CONTRIBUTING.md) as easy as possible.
 
 ### Code status
 
@@ -53,7 +112,7 @@
 
 * [GitLab packages](https://www.gitlab.com/downloads/) **recommended** These packages contain GitLab and all its depencies (Ruby, PostgreSQL, Redis, Nginx, Unicorn, etc.). They are made with [omnibus-gitlab](https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md) that also contains the installation instructions.
 
-* [GitLab Chef Cookbook](https://gitlab.com/gitlab-org/cookbook-gitlab/blob/master/README.md) This cookbook can be used both for development installations and production installations. If you want to [contribute](CONTRIBUTE.md) to GitLab we suggest you follow the [development installation on a virtual machine with Vagrant](https://gitlab.com/gitlab-org/cookbook-gitlab/blob/master/doc/development.md) instructions to install all testing dependencies.
+* [GitLab Chef Cookbook](https://gitlab.com/gitlab-org/cookbook-gitlab/blob/master/README.md) This cookbook can be used both for development installations and production installations. If you want to [contribute](CONTRIBUTE.md) to GitLab we suggest you follow the [development installation](https://gitlab.com/gitlab-org/cookbook-gitlab/blob/master/doc/development.md) instructions to install all testing dependencies.
 
 * [Manual installation guide](doc/install/installation.md) This guide to set up a production server on Ubuntu offers detailed and complete step-by-step instructions.
 
@@ -62,6 +121,8 @@
 * [Digital Ocean 1-Click Application Install](https://www.digitalocean.com/blog_posts/host-your-git-repositories-in-55-seconds-with-gitlab) Have a new server up in 55 seconds. Digital Ocean uses SSD disks which is great for an IO intensive app such as GitLab. We recommend selecting a droplet with [1GB of memory](https://github.com/gitlabhq/gitlabhq/blob/master/doc/install/requirements.md).
 
 * [BitNami one-click installers](http://bitnami.com/stack/gitlab) This package contains both GitLab and GitLab CI. It is available as installer, virtual machine or for cloud hosting providers (Amazon Web Services/Azure/etc.).
+
+* [Cloud 66 deployment and management](http://blog.cloud66.com/installing-gitlab-ubuntu/) Use Cloud 66 to deploy GitLab to your own server or any cloud (eg. DigitalOcean, AWS, Rackspace, GCE) and then manage it with database backups, scaling and more.
 
 #### Unofficial installation methods
 
