@@ -39,7 +39,7 @@ module Gitlab
     private
 
     def init_collection
-      table_name = klass.table_name
+      table_name = klass.table_name.sub(/^gitlab_/, '')
 
       if project
         if project.public? || (current_user && current_user.can?(:read_project, project))

@@ -34,7 +34,7 @@ module Gitlab
             #   joined projects
             #
             group.projects.where(
-              "projects.id IN (?) OR projects.visibility_level IN (?)",
+              "gitlab_projects.id IN (?) OR gitlab_projects.visibility_level IN (?)",
               projects_members.pluck(:project_id),
               Project.public_and_internal_levels
             )

@@ -90,7 +90,7 @@ module Gitlab
     # Groups
     has_many :users_groups, dependent: :destroy, class_name: Gitlab::UsersGroup
     has_many :groups, through: :users_groups, class_name: Gitlab::Group
-    has_many :owned_groups, -> { where :users_groups => { group_access: UsersGroup::OWNER } }, through: :users_groups, source: :group, class_name: Gitlab::Group
+    has_many :owned_groups, -> { where :gitlab_users_groups => { group_access: UsersGroup::OWNER } }, through: :users_groups, source: :group, class_name: Gitlab::Group
     # Projects
     has_many :groups_projects,          through: :groups, source: :projects, class_name: Gitlab::Project
     has_many :personal_projects,        through: :namespace, source: :projects, class_name: Gitlab::Project
@@ -172,9 +172,9 @@ module Gitlab
     scope :active, -> { with_state(:active) }
     scope :alphabetically, -> { order('name ASC') }
     scope :in_team, ->(team){ where(id: team.member_ids) }
-    scope :not_in_team, ->(team){ where('users.id NOT IN (:ids)', ids: team.member_ids) }
+    scope :not_in_team, ->(team){ where('gitlab_users.id NOT IN (:ids)', ids: team.member_ids) }
     scope :not_in_project, ->(project) { project.users.present? ? where("id not in (:ids)", ids: project.users.map(&:id) ) : all }
-    scope :without_projects, -> { where('id NOT IN (SELECT DISTINCT(user_id) FROM users_projects)') }
+    scope :without_projects, -> { where('id NOT IN (SELECT DISTINCT(user_id) FROM gitlab_users_projects)') }
     scope :ldap, -> { where(provider:  'ldap') }
 
     scope :potential_team_members, ->(team) { team.members.any? ? active.not_in_team(team) : active  }
@@ -196,7 +196,7 @@ module Gitlab
       def find_for_commit(email, name)
         # Prefer email match over name match
         User.where(email: email).first ||
-          User.joins(:emails).where(emails: { email: email }).first ||
+          User.joins(:emails).where(gitlab_emails: { email: email }).first ||
           User.where(name: name).first
       end
 
@@ -215,7 +215,7 @@ module Gitlab
       end
 
       def by_username_or_id(name_or_id)
-        where('users.username = ? OR users.id = ?', name_or_id.to_s, name_or_id.to_i).first
+        where('gitlab_users.username = ? OR gitlab_users.id = ?', name_or_id.to_s, name_or_id.to_i).first
       end
 
       def build_user(attrs = {}, options= {})
@@ -274,7 +274,7 @@ module Gitlab
     def authorized_groups
       @authorized_groups ||= begin
                                group_ids = (groups.pluck(:id) + authorized_projects.pluck(:namespace_id))
-                               Group.where(id: group_ids).order('namespaces.name ASC')
+                               Group.where(id: group_ids).order('gitlab_namespaces.name ASC')
                              end
     end
 
@@ -285,7 +285,7 @@ module Gitlab
                                  project_ids = personal_projects.pluck(:id)
                                  project_ids += groups_projects.pluck(:id)
                                  project_ids += projects.pluck(:id).uniq
-                                 Project.where(id: project_ids).joins(:namespace).order('namespaces.name ASC')
+                                 Project.where(id: project_ids).joins(:namespace).order('gitlab_namespaces.name ASC')
                                end
     end
 

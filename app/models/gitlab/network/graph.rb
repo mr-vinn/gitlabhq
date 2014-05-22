@@ -23,7 +23,7 @@ module Gitlab
 
       def collect_notes
         h = Hash.new(0)
-        @project.notes.where('noteable_type = ?' ,"Gitlab::Commit").group('notes.commit_id').select('notes.commit_id, count(notes.id) as note_count').each do |item|
+        @project.notes.where('noteable_type = ?' ,"Gitlab::Commit").group('gitlab_notes.commit_id').select('gitlab_notes.commit_id, count(gitlab_notes.id) as note_count').each do |item|
           h[item.commit_id] = item.note_count.to_i
         end
         h

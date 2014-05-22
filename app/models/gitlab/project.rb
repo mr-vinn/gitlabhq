@@ -110,15 +110,15 @@ module Gitlab
     validate :check_limit, on: :create
 
     # Scopes
-    scope :without_user, ->(user)  { where("projects.id NOT IN (:ids)", ids: user.authorized_projects.map(&:id) ) }
-    scope :without_team, ->(team) { team.projects.present? ? where("projects.id NOT IN (:ids)", ids: team.projects.map(&:id)) : scoped  }
-    scope :not_in_group, ->(group) { where("projects.id NOT IN (:ids)", ids: group.project_ids ) }
-    scope :in_team, ->(team) { where("projects.id IN (:ids)", ids: team.projects.map(&:id)) }
+    scope :without_user, ->(user)  { where("gitlab_projects.id NOT IN (:ids)", ids: user.authorized_projects.map(&:id) ) }
+    scope :without_team, ->(team) { team.projects.present? ? where("gitlab_projects.id NOT IN (:ids)", ids: team.projects.map(&:id)) : scoped  }
+    scope :not_in_group, ->(group) { where("gitlab_projects.id NOT IN (:ids)", ids: group.project_ids ) }
+    scope :in_team, ->(team) { where("gitlab_projects.id IN (:ids)", ids: team.projects.map(&:id)) }
     scope :in_namespace, ->(namespace) { where(namespace_id: namespace.id) }
     scope :in_group_namespace, -> { joins(:group) }
-    scope :sorted_by_activity, -> { reorder("projects.last_activity_at DESC") }
+    scope :sorted_by_activity, -> { reorder("gitlab_projects.last_activity_at DESC") }
     scope :personal, ->(user) { where(namespace_id: user.namespace_id) }
-    scope :joined, ->(user) { where("namespace_id != ?", user.namespace_id) }
+    scope :joined, ->(user) { where("gitlab_namespace_id != ?", user.namespace_id) }
     scope :public_only, -> { where(visibility_level: Project::PUBLIC) }
     scope :public_and_internal_only, -> { where(visibility_level: Project.public_and_internal_levels) }
     scope :non_archived, -> { where(archived: false) }
@@ -155,7 +155,7 @@ module Gitlab
       end
 
       def abandoned
-        where('projects.last_activity_at < ?', 6.months.ago)
+        where('gitlab_projects.last_activity_at < ?', 6.months.ago)
       end
 
       def publicish(user)
@@ -171,19 +171,19 @@ module Gitlab
       end
 
       def with_push
-        includes(:events).where('events.action = ?', Event::PUSHED)
+        includes(:events).where('gitlab_events.action = ?', Event::PUSHED)
       end
 
       def active
-        joins(:issues, :notes, :merge_requests).order("issues.created_at, notes.created_at, merge_requests.created_at DESC")
+        joins(:issues, :notes, :merge_requests).order("gitlab_issues.created_at, notes.created_at, merge_requests.created_at DESC")
       end
 
       def search query
-        joins(:namespace).where("projects.archived = ?", false).where("projects.name LIKE :query OR projects.path LIKE :query OR namespaces.name LIKE :query OR projects.description LIKE :query", query: "%#{query}%")
+        joins(:namespace).where("gitlab_projects.archived = ?", false).where("gitlab_projects.name LIKE :query OR gitlab_projects.path LIKE :query OR gitlab_namespaces.name LIKE :query OR gitlab_projects.description LIKE :query", query: "%#{query}%")
       end
 
       def search_by_title query
-        where("projects.archived = ?", false).where("LOWER(projects.name) LIKE :query", query: "%#{query.downcase}%")
+        where("gitlab_projects.archived = ?", false).where("LOWER(gitlab_projects.name) LIKE :query", query: "%#{query.downcase}%")
       end
 
       def find_with_namespace(id)
@@ -202,12 +202,12 @@ module Gitlab
 
       def sort(method)
         case method.to_s
-        when 'newest' then reorder('projects.created_at DESC')
-        when 'oldest' then reorder('projects.created_at ASC')
-        when 'recently_updated' then reorder('projects.updated_at DESC')
-        when 'last_updated' then reorder('projects.updated_at ASC')
-        when 'largest_repository' then reorder('projects.repository_size DESC')
-        else reorder("namespaces.path, projects.name ASC")
+        when 'newest' then reorder('gitlab_projects.created_at DESC')
+        when 'oldest' then reorder('gitlab_projects.created_at ASC')
+        when 'recently_updated' then reorder('gitlab_projects.updated_at DESC')
+        when 'last_updated' then reorder('gitlab_projects.updated_at ASC')
+        when 'largest_repository' then reorder('gitlab_projects.repository_size DESC')
+        else reorder("gitlab_namespaces.path, gitlab_projects.name ASC")
         end
       end
     end

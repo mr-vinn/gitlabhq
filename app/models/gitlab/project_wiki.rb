@@ -1,3 +1,5 @@
+require 'gollum-lib'
+
 module Gitlab
   class ProjectWiki
     include Gitlab::ShellAdapter
