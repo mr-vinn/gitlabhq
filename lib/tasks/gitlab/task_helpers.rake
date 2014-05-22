@@ -1,3 +1,5 @@
+require 'colored'
+
 module Gitlab
   class TaskAbortedByUserError < StandardError; end
 end
