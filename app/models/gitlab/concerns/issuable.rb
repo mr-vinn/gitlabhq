@@ -54,8 +54,8 @@ module Gitlab
           when 'oldest' then reorder("#{table_name}.created_at ASC")
           when 'recently_updated' then reorder("#{table_name}.updated_at DESC")
           when 'last_updated' then reorder("#{table_name}.updated_at ASC")
-          when 'milestone_due_soon' then joins(:milestone).reorder("milestones.due_date ASC")
-          when 'milestone_due_later' then joins(:milestone).reorder("milestones.due_date DESC")
+          when 'milestone_due_soon' then joins(:milestone).reorder("gitlab_milestones.due_date ASC")
+          when 'milestone_due_later' then joins(:milestone).reorder("gitlab_milestones.due_date DESC")
           else reorder("#{table_name}.created_at DESC")
           end
         end

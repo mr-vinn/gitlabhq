@@ -14,7 +14,7 @@ module Gitlab
         @projects = @projects.abandoned if params[:abandoned].present?
         @projects = @projects.search(params[:name]) if params[:name].present?
         @projects = @projects.sort(@sort = params[:sort])
-        @projects = @projects.includes(:namespace).order("namespaces.path, projects.name ASC").page(params[:page]).per(20)
+        @projects = @projects.includes(:namespace).order("gitlab_namespaces.path, gitlab_projects.name ASC").page(params[:page]).per(20)
       end
 
     def show

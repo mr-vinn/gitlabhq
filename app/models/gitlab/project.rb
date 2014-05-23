@@ -56,7 +56,7 @@ module Gitlab
     belongs_to :group, -> { where(type: Group) }, foreign_key: "namespace_id"
     belongs_to :namespace
 
-    has_one :last_event, -> {order 'events.created_at DESC'}, class_name: 'Gitlab::Event', foreign_key: 'project_id'
+    has_one :last_event, -> {order 'gitlab_events.created_at DESC'}, class_name: 'Gitlab::Event', foreign_key: 'project_id'
     has_one :gitlab_ci_service, dependent: :destroy, class_name: Gitlab::ProjectServices::GitlabCiService
     has_one :campfire_service, dependent: :destroy, class_name: Gitlab::ProjectServices::CampfireService
     has_one :emails_on_push_service, dependent: :destroy, class_name: Gitlab::ProjectServices::EmailsOnPushService
@@ -175,7 +175,7 @@ module Gitlab
       end
 
       def active
-        joins(:issues, :notes, :merge_requests).order("gitlab_issues.created_at, notes.created_at, merge_requests.created_at DESC")
+        joins(:issues, :notes, :merge_requests).order("gitlab_issues.created_at, gitlab_notes.created_at, gitlab_merge_requests.created_at DESC")
       end
 
       def search query
