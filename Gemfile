@@ -9,5 +9,3 @@ end
 def linux_only(require_as)
   RUBY_PLATFORM.include?('linux') && require_as
 end
-
-gem 'seed-fu'
