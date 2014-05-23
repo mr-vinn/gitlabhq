@@ -38,3 +38,4 @@ public/assets/
 .envrc
 dump.rdb
 Gemfile.lock
+spec/dummy/public/uploads/
