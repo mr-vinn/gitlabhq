@@ -63,7 +63,7 @@ module Gitlab
 
       before do
         Gitlab::Shell.any_instance.stub(:add_repository) do
-          create_temp_repo("#{Rails.root}/tmp/test-git-base-path/non-existant.wiki.git")
+          create_temp_repo("#{Gitlab::Engine.root}/tmp/test-git-base-path/non-existant.wiki.git")
         end
         project.stub(:path_with_namespace).and_return("non-existant")
       end
@@ -85,7 +85,7 @@ module Gitlab
       context "when the wiki repository is empty" do
         before do
           Gitlab::Shell.any_instance.stub(:add_repository) do
-            create_temp_repo("#{Rails.root}/tmp/test-git-base-path/non-existant.wiki.git")
+            create_temp_repo("#{Gitlab::Engine.root}/tmp/test-git-base-path/non-existant.wiki.git")
           end
           project.stub(:path_with_namespace).and_return("non-existant")
         end
