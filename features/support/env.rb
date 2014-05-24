@@ -46,6 +46,7 @@ Capybara.ignore_hidden_elements = false
 DatabaseCleaner.strategy = :truncation
 
 Spinach.hooks.before_scenario do
+  include Gitlab::TestEnv
   Gitlab::TestEnv.setup_stubs
   DatabaseCleaner.start
 end
