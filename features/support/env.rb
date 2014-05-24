@@ -6,20 +6,27 @@ if ENV['TRAVIS']
 end
 
 ENV['RAILS_ENV'] = 'test'
-require './config/environment'
+require File.expand_path("../../../spec/dummy/config/environment", __FILE__)
 
 require 'rspec'
 require 'rspec/expectations'
 require 'database_cleaner'
+require 'capybara/rails'
 require 'spinach/capybara'
 require 'sidekiq/testing/inline'
-
+require 'webmock'
+require 'factory_girl'
+require 'ffaker'
 
 %w(valid_commit valid_commit_with_alt_email big_commits select2_helper test_env).each do |f|
   require Gitlab::Engine.root.join('spec', 'support', f)
 end
 
 Dir["#{Gitlab::Engine.root}/features/steps/shared/*.rb"].each {|file| require file}
+
+# Require factories in spec/factories/ and spec/factories.rb
+require Gitlab::Engine.root.join('spec', 'factories')
+Dir["#{Gitlab::Engine.root}/spec/factories/**/*.rb"].each {|f| require f }
 
 WebMock.allow_net_connect!
 #
