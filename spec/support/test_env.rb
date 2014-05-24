@@ -189,5 +189,9 @@ module Gitlab
       FileUtils.mkdir_p path
       system(*%W(git init --quiet --bare -- #{path}))
     end
+
+    def gitlab_routes
+      Gitlab::Engine.routes.url_helpers
+    end
   end
 end

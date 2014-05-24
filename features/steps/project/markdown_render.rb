@@ -14,7 +14,7 @@ module Gitlab
     end
 
     Then 'I should see files from repository in master' do
-      current_path.should == project_tree_path(@project, "master")
+      current_path.should == gitlab_routes.project_tree_path(@project, "master")
       page.should have_content "Gemfile"
       page.should have_content "app"
       page.should have_content "README"
@@ -35,7 +35,7 @@ module Gitlab
     end
 
     Then 'I should see correct document rendered' do
-      current_path.should == project_blob_path(@project, "master/doc/api/README.md")
+      current_path.should == gitlab_routes.project_blob_path(@project, "master/doc/api/README.md")
       page.should have_content "All API requests require authentication"
     end
 
@@ -44,7 +44,7 @@ module Gitlab
     end
 
     Then 'I should see correct directory rendered' do
-      current_path.should == project_tree_path(@project, "master/doc/raketasks")
+      current_path.should == gitlab_routes.project_tree_path(@project, "master/doc/raketasks")
       page.should have_content "backup_restore.md"
       page.should have_content "maintenance.md"
     end
@@ -54,7 +54,7 @@ module Gitlab
     end
 
     Then 'I should see correct doc/api directory rendered' do
-      current_path.should == project_tree_path(@project, "master/doc/api")
+      current_path.should == gitlab_routes.project_tree_path(@project, "master/doc/api")
       page.should have_content "README.md"
       page.should have_content "users.md"
     end
@@ -64,7 +64,7 @@ module Gitlab
     end
 
     Then 'I should see correct maintenance file rendered' do
-      current_path.should == project_blob_path(@project, "master/doc/raketasks/maintenance.md")
+      current_path.should == gitlab_routes.project_blob_path(@project, "master/doc/raketasks/maintenance.md")
       page.should have_content "bundle exec rake gitlab:env:info RAILS_ENV=production"
     end
 
@@ -87,7 +87,7 @@ module Gitlab
     end
 
     And 'I see correct file rendered' do
-      current_path.should == project_blob_path(@project, "master/doc/api/README.md")
+      current_path.should == gitlab_routes.project_blob_path(@project, "master/doc/api/README.md")
       page.should have_content "Contents"
       page.should have_link "Users"
       page.should have_link "Rake tasks"
@@ -98,7 +98,7 @@ module Gitlab
     end
 
     Then 'I should see the correct document file' do
-      current_path.should == project_blob_path(@project, "master/doc/api/users.md")
+      current_path.should == gitlab_routes.project_blob_path(@project, "master/doc/api/users.md")
       page.should have_content "Get a list of users."
     end
 
@@ -109,98 +109,98 @@ module Gitlab
     # Markdown branch
 
     When 'I visit markdown branch' do
-      visit project_tree_path(@project, "markdown")
+      visit gitlab_routes.project_tree_path(@project, "markdown")
     end
 
     When 'I visit markdown branch "README.md" blob' do
-      visit project_blob_path(@project, "markdown/README.md")
+      visit gitlab_routes.project_blob_path(@project, "markdown/README.md")
     end
 
     When 'I visit markdown branch "d" tree' do
-      visit project_tree_path(@project, "markdown/d")
+      visit gitlab_routes.project_tree_path(@project, "markdown/d")
     end
 
     When 'I visit markdown branch "d/README.md" blob' do
-      visit project_blob_path(@project, "markdown/d/README.md")
+      visit gitlab_routes.project_blob_path(@project, "markdown/d/README.md")
     end
 
     Then 'I should see files from repository in markdown branch' do
-      current_path.should == project_tree_path(@project, "markdown")
+      current_path.should == gitlab_routes.project_tree_path(@project, "markdown")
       page.should have_content "Gemfile"
       page.should have_content "app"
       page.should have_content "README"
     end
 
     And 'I see correct file rendered in markdown branch' do
-      current_path.should == project_blob_path(@project, "markdown/doc/api/README.md")
+      current_path.should == gitlab_routes.project_blob_path(@project, "markdown/doc/api/README.md")
       page.should have_content "Contents"
       page.should have_link "Users"
       page.should have_link "Rake tasks"
     end
 
     Then 'I should see correct document rendered for markdown branch' do
-      current_path.should == project_blob_path(@project, "markdown/doc/api/README.md")
+      current_path.should == gitlab_routes.project_blob_path(@project, "markdown/doc/api/README.md")
       page.should have_content "All API requests require authentication"
     end
 
     Then 'I should see correct directory rendered for markdown branch' do
-      current_path.should == project_tree_path(@project, "markdown/doc/raketasks")
+      current_path.should == gitlab_routes.project_tree_path(@project, "markdown/doc/raketasks")
       page.should have_content "backup_restore.md"
       page.should have_content "maintenance.md"
     end
 
     Then 'I should see the users document file in markdown branch' do
-      current_path.should == project_blob_path(@project, "markdown/doc/api/users.md")
+      current_path.should == gitlab_routes.project_blob_path(@project, "markdown/doc/api/users.md")
       page.should have_content "Get a list of users."
     end
 
     # Expected link contents
 
     Then 'The link with text "empty" should have url "tree/markdown"' do
-      find('a', text: /^empty$/)['href'] == current_host + project_tree_path(@project, "markdown")
+      find('a', text: /^empty$/)['href'] == current_host + gitlab_routes.project_tree_path(@project, "markdown")
     end
 
     Then 'The link with text "empty" should have url "blob/markdown/README.md"' do
-      find('a', text: /^empty$/)['href'] == current_host + project_blob_path(@project, "markdown/README.md")
+      find('a', text: /^empty$/)['href'] == current_host + gitlab_routes.project_blob_path(@project, "markdown/README.md")
     end
 
     Then 'The link with text "empty" should have url "tree/markdown/d"' do
-      find('a', text: /^empty$/)['href'] == current_host + project_tree_path(@project, "markdown/d")
+      find('a', text: /^empty$/)['href'] == current_host + gitlab_routes.project_tree_path(@project, "markdown/d")
     end
 
     Then 'The link with text "empty" should have url "blob/markdown/d/README.md"' do
-      find('a', text: /^empty$/)['href'] == current_host + project_blob_path(@project, "markdown/d/README.md")
+      find('a', text: /^empty$/)['href'] == current_host + gitlab_routes.project_blob_path(@project, "markdown/d/README.md")
     end
 
     Then 'The link with text "ID" should have url "tree/markdownID"' do
-      find('a', text: /^#id$/)['href'] == current_host + project_tree_path(@project, "markdown") + '#id'
+      find('a', text: /^#id$/)['href'] == current_host + gitlab_routes.project_tree_path(@project, "markdown") + '#id'
     end
 
     Then 'The link with text "/ID" should have url "tree/markdownID"' do
-      find('a', text: /^\/#id$/)['href'] == current_host + project_tree_path(@project, "markdown") + '#id'
+      find('a', text: /^\/#id$/)['href'] == current_host + gitlab_routes.project_tree_path(@project, "markdown") + '#id'
     end
 
     Then 'The link with text "README.mdID" should have url "blob/markdown/README.mdID"' do
-      find('a', text: /^README.md#id$/)['href'] == current_host + project_blob_path(@project, "markdown/README.md") + '#id'
+      find('a', text: /^README.md#id$/)['href'] == current_host + gitlab_routes.project_blob_path(@project, "markdown/README.md") + '#id'
     end
 
     Then 'The link with text "d/README.mdID" should have url "blob/markdown/d/README.mdID"' do
-      find('a', text: /^d\/README.md#id$/)['href'] == current_host + project_blob_path(@project, "d/markdown/README.md") + '#id'
+      find('a', text: /^d\/README.md#id$/)['href'] == current_host + gitlab_routes.project_blob_path(@project, "d/markdown/README.md") + '#id'
     end
 
     Then 'The link with text "ID" should have url "blob/markdown/README.mdID"' do
-      find('a', text: /^#id$/)['href'] == current_host + project_blob_path(@project, "markdown/README.md") + '#id'
+      find('a', text: /^#id$/)['href'] == current_host + gitlab_routes.project_blob_path(@project, "markdown/README.md") + '#id'
     end
 
     Then 'The link with text "/ID" should have url "blob/markdown/README.mdID"' do
-      find('a', text: /^\/#id$/)['href'] == current_host + project_blob_path(@project, "markdown/README.md") + '#id'
+      find('a', text: /^\/#id$/)['href'] == current_host + gitlab_routes.project_blob_path(@project, "markdown/README.md") + '#id'
     end
 
     # Wiki
 
     Given 'I go to wiki page' do
       click_link "Wiki"
-      current_path.should == project_wiki_path(@project, "home")
+      current_path.should == gitlab_routes.project_wiki_path(@project, "home")
     end
 
     And 'I add various links to the wiki page' do
@@ -210,7 +210,7 @@ module Gitlab
     end
 
     Then 'Wiki page should have added links' do
-      current_path.should == project_wiki_path(@project, "home")
+      current_path.should == gitlab_routes.project_wiki_path(@project, "home")
       page.should have_content "test GitLab API doc Rake tasks"
     end
 
@@ -229,13 +229,13 @@ module Gitlab
     end
 
     Then 'I see new wiki page named test' do
-      current_path.should ==  project_wiki_path(@project, "test")
+      current_path.should ==  gitlab_routes.project_wiki_path(@project, "test")
       page.should have_content "Editing"
     end
 
     When 'I go back to wiki page home' do
-      visit project_wiki_path(@project, "home")
-      current_path.should == project_wiki_path(@project, "home")
+      visit gitlab_routes.project_wiki_path(@project, "home")
+      current_path.should == gitlab_routes.project_wiki_path(@project, "home")
     end
 
     And 'I click on GitLab API doc link' do
@@ -243,7 +243,7 @@ module Gitlab
     end
 
     Then 'I see Gitlab API document' do
-      current_path.should == project_wiki_path(@project, "api")
+      current_path.should == gitlab_routes.project_wiki_path(@project, "api")
       page.should have_content "Editing"
     end
 
@@ -252,13 +252,13 @@ module Gitlab
     end
 
     Then 'I see Rake tasks directory' do
-      current_path.should == project_wiki_path(@project, "raketasks")
+      current_path.should == gitlab_routes.project_wiki_path(@project, "raketasks")
       page.should have_content "Editing"
     end
 
     Given 'I go directory which contains README file' do
-      visit project_tree_path(@project, "master/doc/api")
-      current_path.should == project_tree_path(@project, "master/doc/api")
+      visit gitlab_routes.project_tree_path(@project, "master/doc/api")
+      current_path.should == gitlab_routes.project_tree_path(@project, "master/doc/api")
     end
 
     And 'I click on a relative link in README' do
@@ -266,7 +266,7 @@ module Gitlab
     end
 
     Then 'I should see the correct markdown' do
-      current_path.should == project_blob_path(@project, "master/doc/api/users.md")
+      current_path.should == gitlab_routes.project_blob_path(@project, "master/doc/api/users.md")
       page.should have_content "List users"
     end
 

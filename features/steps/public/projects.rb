@@ -23,12 +23,12 @@ module Gitlab
 
     step 'I visit empty project page' do
       project = Project.find_by(name: 'Empty Public Project')
-      visit project_path(project)
+      visit gitlab_routes.project_path(project)
     end
 
     step 'I visit project "Community" page' do
       project = Project.find_by(name: 'Community')
-      visit project_path(project)
+      visit gitlab_routes.project_path(project)
     end
 
     step 'I should see empty public project details' do
@@ -51,7 +51,7 @@ module Gitlab
 
     step 'I visit project "Enterprise" page' do
       project = Project.find_by(name: 'Enterprise')
-      visit project_path(project)
+      visit gitlab_routes.project_path(project)
     end
 
     step 'I should see project "Community" home page' do
@@ -62,7 +62,7 @@ module Gitlab
 
     step 'I visit project "Internal" page' do
       project = Project.find_by(name: 'Internal')
-      visit project_path(project)
+      visit gitlab_routes.project_path(project)
     end
 
     step 'I should see project "Internal" home page' do
@@ -90,7 +90,7 @@ module Gitlab
          title: "New feature",
          project: public_project
         )
-      visit project_issues_path(public_project)
+      visit gitlab_routes.project_issues_path(public_project)
     end
 
 
@@ -109,7 +109,7 @@ module Gitlab
          title: "New internal feature",
          project: internal_project
         )
-      visit project_issues_path(internal_project)
+      visit gitlab_routes.project_issues_path(internal_project)
     end
 
 
@@ -120,7 +120,7 @@ module Gitlab
     end
 
     step 'I visit "Community" merge requests page' do
-      visit project_merge_requests_path(public_project)
+      visit gitlab_routes.project_merge_requests_path(public_project)
     end
 
     step 'project "Community" has "Bug fix" open merge request' do
@@ -137,7 +137,7 @@ module Gitlab
     end
 
     step 'I visit "Internal" merge requests page' do
-      visit project_merge_requests_path(internal_project)
+      visit gitlab_routes.project_merge_requests_path(internal_project)
     end
 
     step 'project "Internal" has "Feature implemented" open merge request' do

@@ -11,7 +11,7 @@ module Gitlab
     end
 
     step 'I should see files from repository for "8470d70"' do
-      current_path.should == project_tree_path(@project, "8470d70")
+      current_path.should == gitlab_routes.project_tree_path(@project, "8470d70")
       page.should have_content "app"
       page.should have_content "history"
       page.should have_content "Gemfile"

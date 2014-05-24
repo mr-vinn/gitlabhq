@@ -9,7 +9,7 @@ module Gitlab
 
     When 'I visit project "Shop" graph page' do
       project = Project.find_by(name: "Shop")
-      visit project_graph_path(project, "master")
+      visit gitlab_routes.project_graph_path(project, "master")
     end
   end
 end

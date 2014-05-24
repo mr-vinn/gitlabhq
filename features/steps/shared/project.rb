@@ -54,7 +54,7 @@ module Gitlab
     end
 
     Then 'I should see project settings' do
-      current_path.should == edit_project_path(@project)
+      current_path.should == gitlab_routes.edit_project_path(@project)
       page.should have_content("Project name")
       page.should have_content("Features:")
     end

@@ -24,7 +24,7 @@ module Gitlab
     end
 
     Then 'I should see newly created hook' do
-      page.current_path.should == project_hooks_path(current_project)
+      page.current_path.should == gitlab_routes.project_hooks_path(current_project)
       page.should have_content(@url)
     end
 
@@ -34,7 +34,7 @@ module Gitlab
     end
 
     Then 'hook should be triggered' do
-      page.current_path.should == project_hooks_path(current_project)
+      page.current_path.should == gitlab_routes.project_hooks_path(current_project)
     end
   end
 end

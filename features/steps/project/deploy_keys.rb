@@ -25,7 +25,7 @@ module Gitlab
     end
 
     step 'I should be on deploy keys page' do
-      current_path.should == project_deploy_keys_path(@project)
+      current_path.should == gitlab_routes.project_deploy_keys_path(@project)
     end
 
     step 'I should see newly created deploy key' do

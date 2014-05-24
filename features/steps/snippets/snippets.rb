@@ -56,7 +56,7 @@ module Gitlab
     end
 
     And 'I visit snippet page "Personal snippet one"' do
-      visit snippet_path(snippet)
+      visit gitlab_routes.snippet_path(snippet)
     end
 
     def snippet

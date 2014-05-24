@@ -84,7 +84,7 @@ module Gitlab
     end
 
     Then 'I should be redirected to group "Samurai" page' do
-      current_path.should == group_path(Group.last)
+      current_path.should == gitlab_routes.group_path(Group.last)
     end
 
     Then 'I should see newly created group "Samurai"' do

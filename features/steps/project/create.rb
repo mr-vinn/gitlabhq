@@ -10,7 +10,7 @@ module Gitlab
 
     Then 'I should see project page' do
       page.should have_content "Empty"
-      current_path.should == project_path(Project.last)
+      current_path.should == gitlab_routes.project_path(Project.last)
     end
 
     And 'I should see empty project instuctions' do

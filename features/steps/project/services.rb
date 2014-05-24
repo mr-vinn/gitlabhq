@@ -5,7 +5,7 @@ module Gitlab
     include SharedPaths
 
     step 'I visit project "Shop" services page' do
-      visit project_services_path(@project)
+      visit gitlab_routes.project_services_path(@project)
     end
 
     step 'I should see list of available services' do

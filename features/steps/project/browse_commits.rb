@@ -24,7 +24,7 @@ module Gitlab
     end
 
     Given 'I click on commit link' do
-      visit project_commit_path(@project, ValidCommit::ID)
+      visit gitlab_routes.project_commit_path(@project, ValidCommit::ID)
     end
 
     Then 'I see commit info' do
@@ -61,7 +61,7 @@ module Gitlab
     end
 
     Given 'I visit big commit page' do
-      visit project_commit_path(@project, BigCommits::BIG_COMMIT_ID)
+      visit gitlab_routes.project_commit_path(@project, BigCommits::BIG_COMMIT_ID)
     end
 
     Then 'I see big commit warning' do
@@ -71,7 +71,7 @@ module Gitlab
     end
 
     Given 'I visit huge commit page' do
-      visit project_commit_path(@project, BigCommits::HUGE_COMMIT_ID)
+      visit gitlab_routes.project_commit_path(@project, BigCommits::HUGE_COMMIT_ID)
     end
 
     Then 'I see huge commit message' do
@@ -81,7 +81,7 @@ module Gitlab
     end
 
     Given 'I visit a commit with an image that changed' do
-      visit project_commit_path(@project, 'cc1ba255d6c5ffdce87a357ba7ccc397a4f4026b')
+      visit gitlab_routes.project_commit_path(@project, 'cc1ba255d6c5ffdce87a357ba7ccc397a4f4026b')
     end
 
     Then 'The diff links to both the previous and current image' do

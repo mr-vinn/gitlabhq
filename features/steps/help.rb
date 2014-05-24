@@ -5,11 +5,11 @@ module Gitlab
     include SharedMarkdown
 
     step 'I visit the help page' do
-      visit help_path
+      visit gitlab_routes.help_path
     end
 
     step 'I visit the "Rake Tasks" help page' do
-      visit help_raketasks_path
+      visit gitlab_routes.help_raketasks_path
     end
 
     step 'I should see "Rake Tasks" page markdown rendered' do

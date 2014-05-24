@@ -87,7 +87,7 @@ module Gitlab
     end
 
     And 'I visit snippet page "Snippet one"' do
-      visit project_snippet_path(project, project_snippet)
+      visit gitlab_routes.project_snippet_path(project, project_snippet)
     end
 
     def project

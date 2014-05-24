@@ -98,11 +98,11 @@ module Gitlab
     end
 
     step 'I switch to the diff tab' do
-      visit diffs_project_merge_request_path(project, merge_request)
+      visit gitlab_routes.diffs_project_merge_request_path(project, merge_request)
     end
 
     step 'I switch to the merge request\'s comments tab' do
-      visit project_merge_request_path(project, merge_request)
+      visit gitlab_routes.project_merge_request_path(project, merge_request)
     end
 
     step 'I click on the first commit in the merge request' do

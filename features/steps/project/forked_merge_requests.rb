@@ -31,7 +31,7 @@ module Gitlab
     step 'I should see merge request "Merge Request On Forked Project"' do
       @project.merge_requests.size.should >= 1
       @merge_request = @project.merge_requests.last
-      current_path.should == project_merge_request_path(@project, @merge_request)
+      current_path.should == gitlab_routes.project_merge_request_path(@project, @merge_request)
       @merge_request.title.should == "Merge Request On Forked Project"
       @merge_request.source_project.should == @forked_project
       @merge_request.source_branch.should == "master"
@@ -78,7 +78,7 @@ module Gitlab
     end
 
     step 'I see prefilled new Merge Request page for the forked project' do
-      current_path.should == new_project_merge_request_path(@forked_project)
+      current_path.should == gitlab_routes.new_project_merge_request_path(@forked_project)
       find("#merge_request_source_project_id").value.should == @forked_project.id.to_s
       find("#merge_request_target_project_id").value.should == @project.id.to_s
       find("#merge_request_source_branch").value.should have_content "new_design"
@@ -100,7 +100,7 @@ module Gitlab
       page.should have_content "An Edited Forked Merge Request"
       @project.merge_requests.size.should >= 1
       @merge_request = @project.merge_requests.last
-      current_path.should == project_merge_request_path(@project, @merge_request)
+      current_path.should == gitlab_routes.project_merge_request_path(@project, @merge_request)
       @merge_request.source_project.should == @forked_project
       @merge_request.source_branch.should == "master"
       @merge_request.target_branch.should == "stable"
@@ -147,7 +147,7 @@ module Gitlab
     end
 
     step 'I see the edit page prefilled for "Merge Request On Forked Project"' do
-      current_path.should == edit_project_merge_request_path(@project, @merge_request)
+      current_path.should == gitlab_routes.edit_project_merge_request_path(@project, @merge_request)
       page.should have_content "Edit merge request ##{@merge_request.id}"
       find("#merge_request_title").value.should == "Merge Request On Forked Project"
     end

@@ -4,7 +4,7 @@ module Gitlab
     include SharedProject
 
     step 'I visit profile notifications page' do
-      visit profile_notifications_path
+      visit gitlab_routes.profile_notifications_path
     end
 
     step 'I should see global notifications settings' do

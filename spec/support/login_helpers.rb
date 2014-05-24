@@ -15,7 +15,7 @@ module Gitlab
     #
     # user - User instance to login with
     def login_with(user)
-      visit new_user_session_path
+      visit gitlab_routes.new_user_session_path
       fill_in "user_login", with: user.email
       fill_in "user_password", with: "12345678"
       click_button "Sign in"

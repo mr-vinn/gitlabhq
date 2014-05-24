@@ -142,7 +142,7 @@ module Gitlab
     end
 
     step 'I redirected to expired password page' do
-      current_path.should == new_profile_password_path
+      current_path.should == gitlab_routes.new_profile_password_path
     end
 
     step 'I submit new password' do
@@ -152,15 +152,15 @@ module Gitlab
     end
 
     step 'I redirected to sign in page' do
-      current_path.should == new_user_session_path
+      current_path.should == gitlab_routes.new_user_session_path
     end
 
     step 'I should be redirected to password page' do
-      current_path.should == edit_profile_password_path
+      current_path.should == gitlab_routes.edit_profile_password_path
     end
 
     step 'I should be redirected to account page' do
-      current_path.should == profile_account_path
+      current_path.should == gitlab_routes.profile_account_path
     end
 
     step 'I click on my profile picture' do

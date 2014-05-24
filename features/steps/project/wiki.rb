@@ -13,7 +13,7 @@ module Gitlab
 
     Then 'I should be redirected back to the Edit Home Wiki page' do
       url = URI.parse(current_url)
-      url.path.should == project_wiki_path(project, :home)
+      url.path.should == gitlab_routes.project_wiki_path(project, :home)
     end
 
     Given 'I create the Wiki Home page' do
@@ -35,7 +35,7 @@ module Gitlab
     end
 
     And 'I browse to that Wiki page' do
-      visit project_wiki_path(project, @page)
+      visit gitlab_routes.project_wiki_path(project, @page)
     end
 
     And 'I click on the Edit button' do
@@ -53,7 +53,7 @@ module Gitlab
 
     Then 'I should be redirected back to that Wiki page' do
       url = URI.parse(current_url)
-      url.path.should == project_wiki_path(project, @page)
+      url.path.should == gitlab_routes.project_wiki_path(project, @page)
     end
 
     And 'That page has two revisions' do
@@ -93,7 +93,7 @@ module Gitlab
   end
 
   And 'I browse to wiki page with images' do
-    visit project_wiki_path(project, @wiki_page)
+    visit gitlab_routes.project_wiki_path(project, @wiki_page)
   end
 
   And 'I click on existing image link' do

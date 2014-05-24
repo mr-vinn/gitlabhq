@@ -16,7 +16,7 @@ module Gitlab
 
     Then 'I should see project details' do
       project = Project.first
-      current_path.should == admin_project_path(project)
+      current_path.should == gitlab_routes.admin_project_path(project)
       page.should have_content(project.name_with_namespace)
       page.should have_content(project.creator.name)
     end

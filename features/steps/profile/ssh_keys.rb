@@ -22,7 +22,7 @@ module Gitlab
       key = Key.find_by(title: "Laptop")
       page.should have_content(key.title)
       page.should have_content(key.key)
-      current_path.should == profile_key_path(key)
+      current_path.should == gitlab_routes.profile_key_path(key)
     end
 
     Given 'I click link "Work"' do
@@ -34,7 +34,7 @@ module Gitlab
     end
 
     Then 'I visit profile keys page' do
-      visit profile_keys_path
+      visit gitlab_routes.profile_keys_path
     end
 
     And 'I should not see "Work" ssh key' do

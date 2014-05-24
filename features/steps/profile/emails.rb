@@ -3,7 +3,7 @@ module Gitlab
     include SharedAuthentication
 
     Then 'I visit profile emails page' do
-      visit profile_emails_path
+      visit gitlab_routes.profile_emails_path
     end
 
     Then 'I should see my emails' do

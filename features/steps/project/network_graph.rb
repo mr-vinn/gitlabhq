@@ -13,7 +13,7 @@ module Gitlab
       Network::Graph.stub(max_count: 10)
 
       project = Project.find_by(name: "Shop")
-      visit project_network_path(project, "master")
+      visit gitlab_routes.project_network_path(project, "master")
     end
 
     And 'page should select "master" in select box' do

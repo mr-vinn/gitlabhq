@@ -22,7 +22,7 @@ module Gitlab
     end
 
     step 'I should be redirected to sign in page' do
-      current_path.should == new_user_session_path
+      current_path.should == gitlab_routes.new_user_session_path
     end
 
     def current_user

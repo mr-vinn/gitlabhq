@@ -22,7 +22,7 @@ module Gitlab
     end
 
     Then 'I see prefilled new Merge Request page' do
-      current_path.should == new_project_merge_request_path(@project)
+      current_path.should == gitlab_routes.new_project_merge_request_path(@project)
       find("#merge_request_target_project_id").value.should == @project.id.to_s
       find("#merge_request_source_branch").value.should == "new_design"
       find("#merge_request_target_branch").value.should == "master"

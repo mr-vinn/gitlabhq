@@ -5,7 +5,7 @@ module Gitlab
     include SharedSnippet
 
     Given 'I visit my snippets page' do
-      visit user_snippets_path(current_user)
+      visit gitlab_routes.user_snippets_path(current_user)
     end
 
     Then 'I should see "Personal snippet one" in snippets' do

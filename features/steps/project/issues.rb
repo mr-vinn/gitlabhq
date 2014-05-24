@@ -150,7 +150,7 @@ module Gitlab
 
     When 'I visit empty project page' do
       project = Project.find_by(name: 'Empty Project')
-      visit project_path(project)
+      visit gitlab_routes.project_path(project)
     end
 
     And 'I see empty project details with ssh clone info' do
@@ -162,7 +162,7 @@ module Gitlab
 
     When "I visit empty project's issues page" do
       project = Project.find_by(name: 'Empty Project')
-      visit project_issues_path(project)
+      visit gitlab_routes.project_issues_path(project)
     end
   end
 end

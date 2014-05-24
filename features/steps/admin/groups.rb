@@ -7,7 +7,7 @@ module Gitlab
     include Select2Helper
 
     When 'I visit admin group page' do
-      visit admin_group_path(current_group)
+      visit gitlab_routes.admin_group_path(current_group)
     end
 
     When 'I click new group link' do
@@ -34,7 +34,7 @@ module Gitlab
     end
 
     Then 'I should be redirected to group page' do
-      current_path.should == admin_group_path(Group.last)
+      current_path.should == gitlab_routes.admin_group_path(Group.last)
     end
 
     When 'I select user "John Doe" from user list as "Reporter"' do

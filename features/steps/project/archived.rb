@@ -16,7 +16,7 @@ module Gitlab
 
     When 'I visit project "Forum" page' do
       project = Project.find_by(name: "Forum")
-      visit project_path(project)
+      visit gitlab_routes.project_path(project)
     end
 
     Then 'I should not see "Archived"' do

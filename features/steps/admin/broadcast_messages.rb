@@ -19,7 +19,7 @@ module Gitlab
     end
 
     step 'I should be redirected to admin messages page' do
-      current_path.should == admin_broadcast_messages_path
+      current_path.should == gitlab_routes.admin_broadcast_messages_path
     end
 
     step 'I should see newly created broadcast message' do

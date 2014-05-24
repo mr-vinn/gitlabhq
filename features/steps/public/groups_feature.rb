@@ -24,19 +24,19 @@ module Gitlab
     end
 
     step 'I visit group "TestGroup" page' do
-      visit group_path(Group.find_by(name: "TestGroup"))
+      visit gitlab_routes.group_path(Group.find_by(name: "TestGroup"))
     end
 
     step 'I visit group "TestGroup" issues page' do
-      visit issues_group_path(Group.find_by(name: "TestGroup"))
+      visit gitlab_routes.issues_group_path(Group.find_by(name: "TestGroup"))
     end
 
     step 'I visit group "TestGroup" merge requests page' do
-      visit merge_requests_group_path(Group.find_by(name: "TestGroup"))
+      visit gitlab_routes.merge_requests_group_path(Group.find_by(name: "TestGroup"))
     end
 
     step 'I visit group "TestGroup" members page' do
-      visit members_group_path(Group.find_by(name: "TestGroup"))
+      visit gitlab_routes.members_group_path(Group.find_by(name: "TestGroup"))
     end
     
     step 'I should not see project "Enterprise" items' do
