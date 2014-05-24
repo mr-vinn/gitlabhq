@@ -19,7 +19,7 @@ module Gitlab
     #
     # Returns the relative path to the requested API resource
     def api(path, user = nil)
-      "/gitlab/api/#{API::API.version}#{path}" +
+      "/api/#{API::API.version}#{path}" +
 
         # Normalize query string
         (path.index('?') ? '' : '?') +

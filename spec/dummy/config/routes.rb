@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
 
-  mount Gitlab::Engine => "/gitlab"
+  mount Gitlab::Engine => "/"
 end
