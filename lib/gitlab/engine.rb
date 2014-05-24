@@ -45,6 +45,9 @@ require 'letter_opener'
 require 'diffy'
 require 'omniauth-ldap'
 require 'sass-rails'
+require 'seed-fu'
+require 'coffee_script'
+require 'sanitize'
 
 if RbConfig::CONFIG['host_os'] =~ /linux/
   require 'rb-inotify'
