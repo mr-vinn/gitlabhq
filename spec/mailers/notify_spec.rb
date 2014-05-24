@@ -16,7 +16,7 @@ module Gitlab
     end
 
     shared_examples 'an email sent from GitLab' do
-      it 'is sent from GitLab' do
+      it 'is sent from GitLab', js: true do
         sender = subject.header[:from].addrs[0]
         sender.display_name.should eq('GitLab')
         sender.address.should eq(gitlab_sender)
@@ -498,6 +498,7 @@ module Gitlab
     end
 
     describe 'confirmation if email changed' do
+
       let(:example_site_path) { root_path }
       let(:user) { create(:user, email: 'old-email@mail.com') }
 
@@ -510,15 +511,15 @@ module Gitlab
 
       it_behaves_like 'an email sent from GitLab'
 
-      it 'is sent to the new user' do
+      it 'is sent to the new user', js: true do
         should deliver_to 'new-email@mail.com'
       end
 
-      it 'has the correct subject' do
+      it 'has the correct subject', js: true do
         should have_subject "Confirmation instructions"
       end
 
-      it 'includes a link to the site' do
+      it 'includes a link to the site', js: true do
         should have_body_text /#{example_site_path}/
       end
     end
