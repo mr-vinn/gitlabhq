@@ -5,7 +5,7 @@ require "gitlab/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "gitlab"
+  s.name        = "gitlab-engine"
   s.version     = Gitlab::VERSION
   s.authors     = ["Vince Okada"]
   s.email       = ["vokada@mrvinn.com"]
