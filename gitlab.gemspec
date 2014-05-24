@@ -104,7 +104,7 @@ Gem::Specification.new do |s|
   s.add_dependency "state_machine"
 
   # Issue tags
-  s.add_dependency "acts-as-taggable-on"
+  s.add_dependency "acts-as-taggable-on", '~> 3.2.3'
 
   # Background jobs
   s.add_dependency 'slim'
