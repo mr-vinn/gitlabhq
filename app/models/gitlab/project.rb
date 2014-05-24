@@ -118,7 +118,7 @@ module Gitlab
     scope :in_group_namespace, -> { joins(:group) }
     scope :sorted_by_activity, -> { reorder("gitlab_projects.last_activity_at DESC") }
     scope :personal, ->(user) { where(namespace_id: user.namespace_id) }
-    scope :joined, ->(user) { where("gitlab_namespace_id != ?", user.namespace_id) }
+    scope :joined, ->(user) { where("namespace_id != ?", user.namespace_id) }
     scope :public_only, -> { where(visibility_level: Project::PUBLIC) }
     scope :public_and_internal_only, -> { where(visibility_level: Project.public_and_internal_levels) }
     scope :non_archived, -> { where(archived: false) }
