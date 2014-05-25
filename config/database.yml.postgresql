@@ -4,7 +4,7 @@
 production:
   adapter: postgresql
   encoding: unicode
-  database: gitlabhq_production
+  database: <%= app_name %>_production
   pool: 10
   # username: git
   # password:
@@ -18,7 +18,7 @@ production:
 development:
   adapter: postgresql
   encoding: unicode
-  database: gitlabhq_development
+  database: <%= app_name %>_development
   pool: 5
   username: postgres
   password:
@@ -30,7 +30,7 @@ development:
 staging:
   adapter: postgresql
   encoding: unicode
-  database: gitlabhq_staging
+  database: <%= app_name %>_staging
   pool: 5
   username: postgres
   password:
@@ -42,7 +42,7 @@ staging:
 test: &test
   adapter: postgresql
   encoding: unicode
-  database: gitlabhq_test
+  database: <%= app_name %>_test
   pool: 5
   username: postgres
   password:

@@ -5,7 +5,7 @@ production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: gitlabhq_production
+  database: <%= app_name %>_production
   pool: 10
   username: git
   password: "secure password"
@@ -19,7 +19,7 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: gitlabhq_development
+  database: <%= app_name %>_development
   pool: 5
   username: root
   password: "secure password"
@@ -32,7 +32,7 @@ test: &test
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: gitlabhq_test
+  database: <%= app_name %>_test
   pool: 5
   username: root
   password:
