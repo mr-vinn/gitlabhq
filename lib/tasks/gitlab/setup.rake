@@ -16,8 +16,7 @@ namespace :gitlab do
 
     Rake::Task["db:setup"].invoke
     Rake::Task["add_limits_mysql"].invoke
-    ENV["FIXTURE_PATH"] = "db/fixtures/#{Rails.env}"
-    Rake::Task["app:db:seed_fu"].invoke
+    Rake::Task["gitlab:seed_fu"].invoke
   rescue Gitlab::TaskAbortedByUserError
     puts "Quitting...".red
     exit 1
