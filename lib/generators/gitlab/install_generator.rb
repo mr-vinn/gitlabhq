@@ -1,13 +1,20 @@
 require 'rails/generators/base'
+require 'rails/generators/active_record'
 
 module Gitlab
   class InstallGenerator < Rails::Generators::Base
     source_root File.expand_path("../../../../config", __FILE__)
 
+    include Rails::Generators::Migration
+
     argument :db_type, :type => :string, :default => "postgresql", :desc => "Specify the database type.  Valid database types are 'postgresql' (default) or 'mysql'", :banner => "database type"
 
     def copy_db_config
       template "database.yml.erb", "config/database.yml"
+    end
+
+    def copy_migrations
+      migration_template "db/migrate/20140524184438_init_schema.rb", "db/migrate/init_schema.rb"
     end
 
     def copy_config_examples
@@ -19,6 +26,10 @@ module Gitlab
     end
 
     private
+
+    def self.next_migration_number(dirname)
+      ActiveRecord::Generators::Base.next_migration_number dirname
+    end
 
     def app_name
       Rails.application.class.parent_name.underscore
