@@ -25,6 +25,25 @@ module Gitlab
       copy_file "unicorn.rb.example.development", "config/unicorn.rb.example.development"
     end
 
+    def add_engine_route
+      route "mount Gitlab::Engine => '/'"
+    end
+
+    def post_install_message
+      puts <<-EOT.sub(/^ {8}/, '')
+        Gitlab has copied some stuff into your app:
+
+        * A #{db_type} database config file, config/database.yml
+        * A database migration file to build the Gitlab schema
+        * Default configuration files in config/*.yml and config/unicorn.rb*
+          for Gitlab and its dependencies
+
+        Before you do anything else, you should modify config/database.yml to
+        suit your needs, then run `bundle exec rake db:migrate` to build the
+        gitlab database schema.
+      EOT
+    end
+
     private
 
     def self.next_migration_number(dirname)
