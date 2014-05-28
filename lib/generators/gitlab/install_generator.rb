@@ -14,7 +14,7 @@ module Gitlab
     end
 
     def copy_migrations
-      migration_template "db/migrate/20140524184438_init_schema.rb", "db/migrate/init_schema.rb"
+      migration_template "../db/migrate/20140524184438_init_schema.rb", "db/migrate/init_schema.rb"
     end
 
     def copy_config_examples
