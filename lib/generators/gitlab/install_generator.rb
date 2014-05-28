@@ -30,7 +30,7 @@ module Gitlab
     end
 
     def post_install_message
-      puts <<-EOT.sub(/^ {8}/, '')
+      puts <<-EOT.gsub(/^ {8}/, '')
         Gitlab has copied some stuff into your app:
 
         * A #{db_type} database config file, config/database.yml
