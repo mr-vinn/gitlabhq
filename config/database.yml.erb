@@ -3,12 +3,12 @@
 #
 production:
   adapter: <%= adapter_name %>
-  <%- if db_type == 'mysql' %>
+<% if db_type == 'mysql' -%>
   encoding: utf8
   reconnect: false
-  <%- else %>
+<% else -%>
   encoding: unicode
-  <%- end %>
+<% end -%>
   database: <%= app_name %>_production
   pool: 10
   username: git
@@ -21,20 +21,20 @@ production:
 #
 development:
   adapter: <%= adapter_name %>
-  <%- if db_type == 'mysql' %>
+<% if db_type == 'mysql' -%>
   encoding: utf8
   reconnect: false
   username: root
-  <%- else %>
+<% else -%>
   encoding: unicode
   username: postgres
-  <%- end %>
+<% end -%>
   database: <%= app_name %>_development
   pool: 5
   password: "secure password"
   # socket: /tmp/<%= db_type %>.sock
 
-<%- if db_type == 'postgresql' %>
+<% if db_type == 'postgresql' -%>
 #
 # Staging specific
 #
@@ -46,21 +46,21 @@ staging:
   username: postgres
   password:
   # socket: /tmp/postgresql.sock
-<%- end %>
+<% end -%>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test: &test
   adapter: <%= adapter_name %>
-  <%- if db_type == 'mysql' %>
+<% if db_type == 'mysql' -%>
   encoding: utf8
   reconnect: false
   username: root
-  <%- else %>
+<% else -%>
   encoding: unicode
   username: postgres
-  <%- end %>
+<% end -%>
   database: <%= app_name %>_test
   pool: 5
   password:
