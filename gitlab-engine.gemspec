@@ -13,7 +13,17 @@ Gem::Specification.new do |s|
   s.summary     = "Project management and code hosting application."
   s.description = "The Gitlab Community Edition app packaged as a Rails mountable engine."
 
-  s.files = Dir["{app,config/initializers,config/locales,db,lib,vendor}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir[
+    "{app,db,lib,vendor}/**/*",
+    "config/{initializers,locales}/*",
+    "config/database.yml.erb",
+    "config/*.example*",
+    "LICENSE",
+    "Rakefile",
+    "README.rdoc",
+    "gitlab-engine.gemspec",
+    "VERSION"
+  ]
   s.test_files = Dir["spec/controllers/*"]
 
   s.add_dependency "rails", "~> 4.0.0"
