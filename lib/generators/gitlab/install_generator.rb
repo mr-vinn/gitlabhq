@@ -17,12 +17,25 @@ module Gitlab
       migration_template "../db/migrate/20140524184438_init_schema.rb", "db/migrate/init_schema.rb"
     end
 
-    def copy_config_examples
-      copy_file "aws.yml.example", "config/aws.yml"
-      copy_file "gitlab.yml.example", "config/gitlab.yml"
-      copy_file "resque.yml.example", "config/resque.yml"
+    def copy_dependency_configs
+      copy_file "aws.yml.example", "config/aws.yml.example"
+      copy_file "resque.yml.example", "config/resque.yml.example"
+
       copy_file "unicorn.rb.example", "config/unicorn.rb"
       copy_file "unicorn.rb.example.development", "config/unicorn.rb.example.development"
+    end
+
+    def copy_gitlab_config
+      @email_from_address = ask("What email address should Gitlab send from?")
+
+      @support_email_address = ask(<<-EOT.gsub(/^ {8}/, '')
+        Enter the email address of the support contact, or leave it blank to
+        use the previously-entered address:
+        EOT
+      )
+      @support_email_address = @email_from_address if @support_email_address.blank?
+
+      template "gitlab.yml.example", "config/gitlab.yml"
     end
 
     def add_engine_route
