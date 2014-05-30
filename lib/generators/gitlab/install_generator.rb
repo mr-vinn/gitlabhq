@@ -7,14 +7,21 @@ module Gitlab
 
     include Rails::Generators::Migration
 
-    argument :db_type, :type => :string, :default => "postgresql", :desc => "Specify the database type.  Valid database types are 'postgresql' (default) or 'mysql'", :banner => "database type"
+    argument :db_type,
+      :type => :string,
+      :default => "postgresql",
+      :desc => "Specify the database type.  Valid database types are 'postgresql' (default) or 'mysql'",
+      :banner => "database type"
 
     def copy_db_config
       template "database.yml.erb", "config/database.yml"
     end
 
     def copy_migrations
-      migration_template "../db/migrate/20140524184438_init_schema.rb", "db/migrate/init_schema.rb"
+      migration_template(
+        "../db/migrate/20140524184438_init_schema.rb",
+        "db/migrate/init_schema.gitlab.rb"
+      )
     end
 
     def copy_dependency_configs
