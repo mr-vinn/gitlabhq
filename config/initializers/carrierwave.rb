@@ -1,6 +1,6 @@
 CarrierWave::SanitizedFile.sanitize_regexp = /[^[:word:]\.\-\+]/
 
-aws_file = Gitlab::Engine.root.join('config', 'aws.yml')
+aws_file = Rails.root.join('config', 'aws.yml')
 
 if File.exists?(aws_file)
   AWS_CONFIG = YAML.load(File.read(aws_file))[Rails.env]
