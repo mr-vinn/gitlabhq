@@ -9,20 +9,20 @@ module Gitlab
     end
 
     def self.read_latest
-      path = Gitlab::Engine.root.join("log", file_name)
+      path = Rails.root.join("log", file_name)
       self.build unless File.exist?(path)
       tail_output, _ = Gitlab::Popen.popen(%W(tail -n 2000 #{path}))
       tail_output.split("\n")
     end
 
     def self.read_latest_for filename
-      path = Gitlab::Engine.root.join("log", filename)
+      path = Rails.root.join("log", filename)
       tail_output, _ = Gitlab::Popen.popen(%W(tail -n 2000 #{path}))
       tail_output.split("\n")
     end
 
     def self.build
-      new(Gitlab::Engine.root.join("log", file_name))
+      new(Rails.root.join("log", file_name))
     end
   end
 end
