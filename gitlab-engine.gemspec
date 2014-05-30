@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
     "config/{initializers,locales}/*",
     "config/database.yml.erb",
     "config/*.example*",
+    "config/routes.rb",
     "LICENSE",
     "Rakefile",
     "README.rdoc",
