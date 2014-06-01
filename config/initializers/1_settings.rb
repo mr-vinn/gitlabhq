@@ -12,7 +12,8 @@ class Settings < Settingslogic
       to engine defaults.
     EOT
 
-    source "#{Gitlab::Engine.root}/config/gitlab.yml.example"
+    # Pass a fake key to source() to use the default config values
+    source :foo => nil
   end
   namespace Rails.env
 
