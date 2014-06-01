@@ -38,11 +38,13 @@ module Gitlab
     end
 
     def copy_gitlab_config
-      @app_host_name = ask("Enter the web server's fully-qualified host name, or leave it blank to use 'localhost':")
-      @app_host_name = "localhost" if @app_host_name.blank?
+      default_host_name = "localhost"
+      @app_host_name = ask("Enter the web server's fully-qualified host name, or leave it blank to use '#{default_host_name}':")
+      @app_host_name = default_host_name if @app_host_name.blank?
 
-      @app_os_user = ask("Enter the OS user that will run your application, or leave it blank to use 'git':")
-      @app_os_user = "git" if @app_os_user.blank?
+      default_os_user = "git"
+      @app_os_user = ask("Enter the OS user that will run your application, or leave it blank to use '#{default_os_user}':")
+      @app_os_user = default_os_user if @app_os_user.blank?
 
       @app_user_home = begin
         Etc.getpwnam(@app_os_user).dir
@@ -50,17 +52,25 @@ module Gitlab
         "/home/#{@app_os_user}"
       end
 
-      @email_from_address = ask("Enter the email address from which Gitlab should send, or leave it blank to use 'gitlab@#{@app_host_name}':")
-      @email_from_address = "gitlab@#{@app_host_name}" if @email_from_address.blank?
+      default_from_address = "gitlab@#{@app_host_name}"
+      @email_from_address = ask("Enter the 'from' email address that Gitlab should use for notifications, or leave it blank to use '#{default_from_address}':")
+      @email_from_address = default_from_address if @email_from_address.blank?
 
-      @support_email_address = ask(<<-EOT.gsub(/^ {8}/, '').chomp
-        Enter the email address of the support contact, or leave it blank to
-        use the previously-entered address:
-        EOT
-      )
-      @support_email_address = @email_from_address if @support_email_address.blank?
+      default_support_address = @email_from_address
+      @support_email_address = ask("Enter the email address of the support contact, or leave it blank to use '#{default_support_address}':")
+      @support_email_address = default_support_address if @support_email_address.blank?
 
       template "gitlab.yml.erb", "config/gitlab.yml"
+    end
+
+    def copy_initializers
+      copy_file "initializers/session_store.rb", "config/initializers/session_store.rb"
+      copy_file "initializers/mime_types.rb", "config/initializers/mime_types.rb"
+      copy_file "initializers/kaminari_config.rb", "config/initializers/kaminari_config.rb"
+      copy_file "initializers/rack_attack.rb.example", "config/initializers/rack_attack.rb"
+    end
+
+    def copy_scripts
     end
 
     def add_engine_route
@@ -68,17 +78,25 @@ module Gitlab
     end
 
     def post_install_message
-      puts <<-EOT.gsub(/^ {8}/, '')
-        Gitlab has copied some stuff into your app:
+      puts <<-EOT.gsub(/^ {8}/, '').green
+        Gitlab has copied some things into your app:
 
         * A #{db_type} database config file, config/database.yml
         * A database migration file to build the Gitlab schema
-        * Default configuration files in config/*.yml and config/unicorn.rb*
-          for Gitlab and its dependencies
+        * Scripts for command-line tasks
+        * Default configuration files for Gitlab and Unicorn in config/
+        * Example configuration files for Resque and AWS in config/
+        * Initializers in config/initializers that should be modified as required
 
         Before you do anything else, you should modify config/database.yml to
         suit your needs, then run `bundle exec rake db:migrate` to build the
         gitlab database schema.
+
+        Visit the engine's project website for more information about using
+        Gitlab in your application: https://github.com/mr-vinn/gitlabhq
+
+        For more information about Gitlab in general, check out Gitlab's
+        website: https://www.gitlab.com/documentation/
       EOT
     end
 
