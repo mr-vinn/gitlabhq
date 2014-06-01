@@ -55,7 +55,7 @@ module Gitlab
       )
       @support_email_address = @email_from_address if @support_email_address.blank?
 
-      template "gitlab.yml.example", "config/gitlab.yml"
+      template "gitlab.yml.erb", "config/gitlab.yml"
     end
 
     def add_engine_route
