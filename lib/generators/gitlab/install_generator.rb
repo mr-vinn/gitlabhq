@@ -3,7 +3,12 @@ require 'rails/generators/active_record'
 
 module Gitlab
   class InstallGenerator < Rails::Generators::Base
-    source_root File.expand_path("../../../../config", __FILE__)
+    def source_paths
+      [
+        "#{Gitlab::Engine.root}/config",
+        "#{Gitlab::Engine.root}/lib/generators/templates"
+      ]
+    end
 
     include Rails::Generators::Migration
 
