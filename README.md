@@ -14,18 +14,20 @@ hooks](doc/system_hooks/system_hooks.md).  The API lets you view and manipulate
 Gitlab's objects, and your application can use web and system hooks to respond
 to Gitlab's events.  You can interact with Gitlab in the same ways when you use
 it as a mountable engine, but doing so means that you only deal with a single
-application and database.  Deploying with the Gitlab engine is the same as with Gitlab itself, 
+application and database.  You can also customize Gitlab more deeply by
+overriding default behavior, or by modifying Gitlab's views (without having to
+maintain a fork of its source code).
 
 See my gitlab-engine-examples project for some simple apps that
 build functionality on top of Gitlab.
 
-## Maintenance Process
+## Engine Maintenance Process
 
 The master branch of this project pulls from the master branch of Gitlab's
 Github [repository](https://github.com/gitlabhq/gitlabhq.git).  This README is
 the only file that diverges from upstream.  Commits from upstream are merged
 whenever Gitlab releases a new stable version, using the merge base between the
-upstream master and the latest x-x-stable branch.
+upstream master and the latest upstream x-x-stable branch.
 
 The `namespace` branch is functionally identical to the official Gitlab app,
 but Ruby classes and view files are moved into a namespaced directory tree.
@@ -42,18 +44,34 @@ receives updates from `namespace` after new upstream releases are merged.  When
 `namespace`->`engine` merge conflicts are resolved, the engine is tested with a
 dummy application created for the `engine` branch.  When all tests pass, a new
 branch is checked out named `x-x-stable-engine`.  These stable branches receive
-security and bug fixes from the upstream `x-x-stable` branches.
+security and bug fixes from the upstream `x-x-stable` branches via the
+`x-x-stable-namespace` branches.
 
 ## Using Gitlab as an Engine
 
-To add the Gitlab engine to your Rails app, update your Gemfile with something like this:
+* To add the Gitlab engine to your Rails app, update your Gemfile with something
+  like this:
 
-    gem 'gitlab', '6.9.0', :github => 'mr-vinn/gitlab', :branch => '6-9-stable-engine'
+        gem 'gitlab', '6.9.0', :github => 'mr-vinn/gitlab', :branch => '6-9-stable-engine'
 
-You can use one of the `x-x-stable-engine` branches, or the `engine` branch
-directly.  The `x-y-z` tags are only available on the stable engine branches,
-so if you want to configure a specific version of gitlab in your app then you
-should use the appropriate `x-x-stable-engine` branch.
+  You can use one of the `x-x-stable-engine` branches, or the `engine` branch
+  directly.  The `x-y-z` tags are only available on the stable engine branches,
+  so if you want to configure a specific version of upstream Gitlab in your app
+  then you should use the appropriate `x-x-stable-engine` branch.
+
+* Run `bundle install` to install the gitlab-engine gem and its dependencies.
+
+* Run `rails g gitlab:install [postgresql|mysql]` to add default configuration
+  files, a database migration, and scripts to your application.  A database
+  configuration file is also copied for the database type you specify on the
+  command line.
+
+  By default, the install generator runs in interactive mode and prompts you
+  for things like email addresses and hostnames; it uses your answers to
+  customize your Gitlab configuration files.
+
+* Review the YML files that the generator copied to `config/`, and edit them to
+  suit your needs.
 
 ## NOTE: The rest of this document is the official Gitlab Community Edition README
 
