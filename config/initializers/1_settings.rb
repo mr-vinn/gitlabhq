@@ -1,11 +1,12 @@
 require 'gitlab/theme'
 require 'gitlab/visibility_level'
+require 'colored'
 
 class Settings < Settingslogic
   if File.exists?(ENV.fetch('GITLAB_CONFIG') { "#{Rails.root}/config/gitlab.yml" })
     source ENV.fetch('GITLAB_CONFIG') { "#{Rails.root}/config/gitlab.yml" }
   else
-    puts <<-EOT.gsub(/^ {6}/, '')
+    puts <<-EOT.gsub(/^ {6}/, '').yellow_on_black
       WARNING: Couldn't find 'config/gitlab.yml'; this is only OK if you're
       running `rails generate gitlab:install` for the first time.  Falling back
       to engine defaults.
