@@ -15,7 +15,7 @@ production: &base
   ## GitLab settings
   gitlab:
     ## Web server settings (note: host is the FQDN, do not include http://)
-    host: localhost
+    host: <%= @app_host_name %>
     port: 80
     https: false
 
@@ -29,7 +29,7 @@ production: &base
     # relative_url_root: /gitlab
 
     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
-    # user: git
+    user: <%= @app_os_user %>
 
     ## Email settings
     # Email address used in the "From" field in mails sent by GitLab
@@ -197,7 +197,7 @@ production: &base
   # GitLab Satellites
   satellites:
     # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
-    path: /home/git/gitlab-satellites/
+    path: <%= @app_user_home %>/gitlab-satellites/
 
   ## Backup settings
   backup:
@@ -206,11 +206,11 @@ production: &base
 
   ## GitLab Shell settings
   gitlab_shell:
-    path: /home/git/gitlab-shell/
+    path: <%= @app_user_home %>/gitlab-shell/
 
     # REPOS_PATH MUST NOT BE A SYMLINK!!!
-    repos_path: /home/git/repositories/
-    hooks_path: /home/git/gitlab-shell/hooks/
+    repos_path: <%= @app_user_home %>/repositories/
+    hooks_path: <%= @app_user_home %>/gitlab-shell/hooks/
 
     # Git over HTTP
     upload_pack: true

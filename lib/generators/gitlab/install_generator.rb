@@ -33,9 +33,22 @@ module Gitlab
     end
 
     def copy_gitlab_config
-      @email_from_address = ask("What email address should Gitlab send from?")
+      @app_host_name = ask("Enter the web server's fully-qualified host name, or leave it blank to use 'localhost':")
+      @app_host_name = "localhost" if @app_host_name.blank?
 
-      @support_email_address = ask(<<-EOT.gsub(/^ {8}/, '')
+      @app_os_user = ask("Enter the OS user that will run your application, or leave it blank to use 'git':")
+      @app_os_user = "git" if @app_os_user.blank?
+
+      @app_user_home = begin
+        Etc.getpwnam(@app_os_user).dir
+      rescue
+        "/home/#{@app_os_user}"
+      end
+
+      @email_from_address = ask("Enter the email address from which Gitlab should send, or leave it blank to use 'gitlab@#{@app_host_name}':")
+      @email_from_address = "gitlab@#{@app_host_name}" if @email_from_address.blank?
+
+      @support_email_address = ask(<<-EOT.gsub(/^ {8}/, '').chomp
         Enter the email address of the support contact, or leave it blank to
         use the previously-entered address:
         EOT
