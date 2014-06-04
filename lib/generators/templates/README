@@ -1,0 +1,18 @@
+Gitlab has copied some things into your app:
+
+* A #{db_type} database config file, config/database.yml
+* A database migration file to build the Gitlab schema
+* Scripts for command-line tasks
+* Default configuration files for Gitlab and Unicorn in config/
+* Example configuration files for Resque and AWS in config/
+* Initializers in config/initializers that should be modified as required
+
+Before you do anything else, you should modify config/database.yml to
+suit your needs, then run `bundle exec rake db:migrate` to build the
+gitlab database schema.
+
+Visit the engine's project website for more information about using
+Gitlab in your application: https://github.com/mr-vinn/gitlabhq
+
+For more information about Gitlab in general, check out Gitlab's
+website: https://www.gitlab.com/documentation/
