@@ -87,8 +87,12 @@ module Gitlab
       ActiveRecord::Generators::Base.next_migration_number dirname
     end
 
+    def app_class_name
+      Rails.application.class.parent_name
+    end
+
     def app_name
-      Rails.application.class.parent_name.underscore
+      app_class_name.underscore
     end
 
     def adapter_name
