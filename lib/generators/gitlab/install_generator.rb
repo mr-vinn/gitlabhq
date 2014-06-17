@@ -64,7 +64,7 @@ module Gitlab
     end
 
     def copy_initializers
-      copy_file "initializers/session_store.rb", "config/initializers/session_store.rb"
+      template "initializers/session_store.rb", "config/initializers/session_store.rb"
       copy_file "initializers/mime_types.rb", "config/initializers/mime_types.rb"
       copy_file "initializers/kaminari_config.rb", "config/initializers/kaminari_config.rb"
       copy_file "initializers/rack_attack.rb.example", "config/initializers/rack_attack.rb"
