@@ -71,6 +71,9 @@ module Gitlab
     end
 
     def copy_scripts
+      bg_script_path = "script/background_jobs"
+      copy_file "../script/background_jobs", bg_script_path
+      chmod bg_script_path, 0755
     end
 
     def add_engine_route
