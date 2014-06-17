@@ -1,6 +1,8 @@
+===============================================================================
+
 Gitlab has copied some things into your app:
 
-* A #{db_type} database config file, config/database.yml
+* A config file for the database you specified, in config/database.yml
 * A database migration file to build the Gitlab schema
 * Scripts for command-line tasks
 * Default configuration files for Gitlab and Unicorn in config/
@@ -16,3 +18,5 @@ Gitlab in your application: https://github.com/mr-vinn/gitlabhq
 
 For more information about Gitlab in general, check out Gitlab's
 website: https://www.gitlab.com/documentation/
+
+===============================================================================
