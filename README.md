@@ -1,8 +1,9 @@
-# Gitlab - The Engine
+# Gitlab: The Engine
 
 This is a fork of the [Gitlab Community Edition
 project](https://github.com/gitlabhq/gitlabhq).  I am not affiliated in any
-way with the official Gitlab project or with Gitlab B.V.
+way with the official Gitlab project or with [Gitlab
+B.V.](https://about.gitlab.com/about/)
 
 This fork aims to repackage the Gitlab Community Edition application into a
 [Rails Mountable Engine](http://guides.rubyonrails.org/engines.html) so that
