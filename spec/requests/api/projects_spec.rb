@@ -2,9 +2,6 @@ require 'spec_helper'
 
 describe API::API, api: true  do
   include ApiHelpers
-  before(:each) { enable_observers }
-  after(:each) { disable_observers }
-
   let(:user) { create(:user) }
   let(:user2) { create(:user) }
   let(:user3) { create(:user) }
@@ -37,7 +34,7 @@ describe API::API, api: true  do
         response.status.should == 200
         json_response.should be_an Array
         json_response.first['name'].should == project.name
-        json_response.first['owner']['email'].should == user.email
+        json_response.first['owner']['username'].should == user.username
       end
     end
   end
@@ -65,7 +62,7 @@ describe API::API, api: true  do
         response.status.should == 200
         json_response.should be_an Array
         json_response.first['name'].should == project.name
-        json_response.first['owner']['email'].should == user.email
+        json_response.first['owner']['username'].should == user.username
       end
     end
   end
@@ -126,7 +123,6 @@ describe API::API, api: true  do
       project = attributes_for(:project, {
         description: Faker::Lorem.sentence,
         issues_enabled: false,
-        wall_enabled: false,
         merge_requests_enabled: false,
         wiki_enabled: false
       })
@@ -208,7 +204,6 @@ describe API::API, api: true  do
       project = attributes_for(:project, {
         description: Faker::Lorem.sentence,
         issues_enabled: false,
-        wall_enabled: false,
         merge_requests_enabled: false,
         wiki_enabled: false
       })
@@ -272,7 +267,7 @@ describe API::API, api: true  do
       get api("/projects/#{project.id}", user)
       response.status.should == 200
       json_response['name'].should == project.name
-      json_response['owner']['email'].should == user.email
+      json_response['owner']['username'].should == user.username
     end
 
     it "should return a project by path name" do

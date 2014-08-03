@@ -25,8 +25,6 @@ class Note < ActiveRecord::Base
 
   default_value_for :system, false
 
-  attr_accessible :note, :noteable, :noteable_id, :noteable_type, :project_id,
-                  :attachment, :line_code, :commit_id
   attr_mentionable :note
 
   belongs_to :project
@@ -57,18 +55,19 @@ class Note < ActiveRecord::Base
 
   serialize :st_diff
   before_create :set_diff, if: ->(n) { n.line_code.present? }
+  after_update :set_references
 
   class << self
     def create_status_change_note(noteable, project, author, status, source)
       body = "_Status changed to #{status}#{' by ' + source.gfm_reference if source}_"
 
-      create({
+      create(
         noteable: noteable,
         project: project,
         author: author,
         note: body,
         system: true
-      }, without_protection: true)
+      )
     end
 
     # +noteable+ was referenced from +mentioner+, by including GFM in either +mentioner+'s description or an associated Note.
@@ -87,7 +86,23 @@ class Note < ActiveRecord::Base
         note_options.merge!(noteable: noteable)
       end
 
-      create(note_options, without_protection: true)
+      create(note_options)
+    end
+
+    def create_milestone_change_note(noteable, project, author, milestone)
+      body = if milestone.nil?
+               '_Milestone removed_'
+             else
+               "_Milestone changed to #{milestone.title}_"
+             end
+
+      create(
+        noteable: noteable,
+        project: project,
+        author: author,
+        note: body,
+        system: true
+      )
     end
 
     def create_assignee_change_note(noteable, project, author, assignee)
@@ -99,7 +114,7 @@ class Note < ActiveRecord::Base
         author: author,
         note: body,
         system: true
-      }, without_protection: true)
+      })
     end
 
     def discussions_from_notes(notes)
@@ -122,11 +137,15 @@ class Note < ActiveRecord::Base
 
       discussions
     end
-  end
 
-  # Determine whether or not a cross-reference note already exists.
-  def self.cross_reference_exists?(noteable, mentioner)
-    where(noteable_id: noteable.id, system: true, note: "_mentioned in #{mentioner.gfm_reference}_").any?
+    def build_discussion_id(type, id, line_code)
+      [:discussion, type.try(:underscore), id, line_code].join("-").to_sym
+    end
+
+    # Determine whether or not a cross-reference note already exists.
+    def cross_reference_exists?(noteable, mentioner)
+      where(noteable_id: noteable.id, system: true, note: "_mentioned in #{mentioner.gfm_reference}_").any?
+    end
   end
 
   def commit_author
@@ -158,10 +177,28 @@ class Note < ActiveRecord::Base
     @diff ||= Gitlab::Git::Diff.new(st_diff) if st_diff.respond_to?(:map)
   end
 
+  # Check if such line of code exists in merge request diff
+  # If exists - its active discussion
+  # If not - its outdated diff
   def active?
-    # TODO: determine if discussion is outdated
-    # according to recent MR diff or not
-    true
+    return true unless self.diff
+
+    noteable.diffs.each do |mr_diff|
+      next unless mr_diff.new_path == self.diff.new_path
+
+      Gitlab::DiffParser.new(mr_diff.diff.lines.to_a, mr_diff.new_path).
+        each do |full_line, type, line_code, line_new, line_old|
+        if full_line == diff_line
+          return true
+        end
+      end
+    end
+
+    false
+  end
+
+  def outdated?
+    !active?
   end
 
   def diff_file_index
@@ -194,7 +231,7 @@ class Note < ActiveRecord::Base
   end
 
   def discussion_id
-    @discussion_id ||= [:discussion, noteable_type.try(:underscore), noteable_id || commit_id, line_code].join("-").to_sym
+    @discussion_id ||= Note.build_discussion_id(noteable_type, noteable_id || commit_id, line_code)
   end
 
   # Returns true if this is a downvote note,
@@ -229,10 +266,6 @@ class Note < ActiveRecord::Base
 
   def for_merge_request_diff_line?
     for_merge_request? && for_diff_line?
-  end
-
-  def for_wall?
-    noteable_type.blank?
   end
 
   # override to return commits, which are not active record
@@ -275,8 +308,6 @@ class Note < ActiveRecord::Base
   def noteable_type_name
     if noteable_type.present?
       noteable_type.downcase
-    else
-      "wall"
     end
   end
 
@@ -299,5 +330,9 @@ class Note < ActiveRecord::Base
     Event.where(target_id: self.id, target_type: 'Note').
       order('id DESC').limit(100).
       update_all(updated_at: Time.now)
+  end
+
+  def set_references
+    notice_added_references(project, author)
   end
 end

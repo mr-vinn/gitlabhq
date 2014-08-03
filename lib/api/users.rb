@@ -13,7 +13,12 @@ module API
         @users = @users.active if params[:active].present?
         @users = @users.search(params[:search]) if params[:search].present?
         @users = paginate @users
-        present @users, with: Entities::User
+
+        if current_user.is_admin?
+          present @users, with: Entities::UserFull
+        else
+          present @users, with: Entities::UserBasic
+        end
       end
 
       # Get a single user
@@ -24,7 +29,12 @@ module API
       #   GET /users/:id
       get ":id" do
         @user = User.find(params[:id])
-        present @user, with: Entities::User
+
+        if current_user.is_admin?
+          present @user, with: Entities::UserFull
+        else
+          present @user, with: Entities::UserBasic
+        end
       end
 
       # Create user. Available only for admin
@@ -49,11 +59,11 @@ module API
         authenticated_as_admin!
         required_attributes! [:email, :password, :name, :username]
         attrs = attributes_for_keys [:email, :name, :password, :skype, :linkedin, :twitter, :projects_limit, :username, :extern_uid, :provider, :bio, :can_create_group, :admin]
-        user = User.build_user(attrs, as: :admin)
+        user = User.build_user(attrs)
         admin = attrs.delete(:admin)
         user.admin = admin unless admin.nil?
         if user.save
-          present user, with: Entities::User
+          present user, with: Entities::UserFull
         else
           not_found!
         end
@@ -86,8 +96,8 @@ module API
 
         admin = attrs.delete(:admin)
         user.admin = admin unless admin.nil?
-        if user.update_attributes(attrs, as: :admin)
-          present user, with: Entities::User
+        if user.update_attributes(attrs)
+          present user, with: Entities::UserFull
         else
           not_found!
         end

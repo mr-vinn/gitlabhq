@@ -12,9 +12,10 @@ class Commit
   # User can force display of diff above this size
   DIFF_SAFE_FILES  = 100
   DIFF_SAFE_LINES  = 5000
+
   # Commits above this size will not be rendered in HTML
-  DIFF_HARD_LIMIT_FILES = 500
-  DIFF_HARD_LIMIT_LINES = 10000
+  DIFF_HARD_LIMIT_FILES = 1000
+  DIFF_HARD_LIMIT_LINES = 50000
 
   class << self
     def decorate(commits)
@@ -23,23 +24,7 @@ class Commit
 
     # Calculate number of lines to render for diffs
     def diff_line_count(diffs)
-      diffs.reduce(0){|sum, d| sum + d.diff.lines.count}
-    end
-
-    def diff_suppress?(diffs, line_count = nil)
-      # optimize - check file count first
-      return true if diffs.size > DIFF_SAFE_FILES
-
-      line_count ||= Commit::diff_line_count(diffs)
-      line_count > DIFF_SAFE_LINES
-    end
-
-    def diff_force_suppress?(diffs, line_count = nil)
-      # optimize - check file count first
-      return true if diffs.size > DIFF_HARD_LIMIT_FILES
-
-      line_count ||= Commit::diff_line_count(diffs)
-      line_count > DIFF_HARD_LIMIT_LINES
+      diffs.reduce(0) { |sum, d| sum + d.diff.lines.count }
     end
   end
 
@@ -58,14 +43,6 @@ class Commit
   def diff_line_count
     @diff_line_count ||= Commit::diff_line_count(self.diffs)
     @diff_line_count
-  end
-
-  def diff_suppress?
-    Commit::diff_suppress?(self.diffs, diff_line_count)
-  end
-
-  def diff_force_suppress?
-    Commit::diff_force_suppress?(self.diffs, diff_line_count)
   end
 
   # Returns a string describing the commit for use in a link title
@@ -111,22 +88,10 @@ class Commit
     description.present?
   end
 
-  # Regular expression that identifies commit message clauses that trigger issue closing.
-  def issue_closing_regex
-    @issue_closing_regex ||= Regexp.new(Gitlab.config.gitlab.issue_closing_pattern)
-  end
-
   # Discover issues should be closed when this commit is pushed to a project's
   # default branch.
   def closes_issues project
-    md = issue_closing_regex.match(safe_message)
-    if md
-      extractor = Gitlab::ReferenceExtractor.new
-      extractor.analyze(md[0])
-      extractor.issues_for(project)
-    else
-      []
-    end
+    Gitlab::ClosingIssueExtractor.closed_by_message_in_project(safe_message, project)
   end
 
   # Mentionable override.

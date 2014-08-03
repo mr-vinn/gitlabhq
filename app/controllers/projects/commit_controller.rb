@@ -12,14 +12,18 @@ class Projects::CommitController < Projects::ApplicationController
     return git_not_found! unless @commit
 
     @line_notes = project.notes.for_commit_id(commit.id).inline
-    @branches = project.repository.branch_names_contains(commit.id)
+
+    @branches = begin
+                  project.repository.branch_names_contains(commit.id)
+                rescue Grit::Git::GitTimeout
+                  []
+                end
 
     begin
-      @suppress_diff = true if commit.diff_suppress? && !params[:force_show_diff]
-      @force_suppress_diff = commit.diff_force_suppress?
+      @diffs = @commit.diffs
     rescue Grit::Git::GitTimeout
-      @suppress_diff = true
-      @status = :huge_commit
+      @diffs = []
+      @diff_timeout = true
     end
 
     @note = project.build_commit_note(commit)
@@ -33,12 +37,7 @@ class Projects::CommitController < Projects::ApplicationController
     }
 
     respond_to do |format|
-      format.html do
-        if @status == :huge_commit
-          render "huge_commit" and return
-        end
-      end
-
+      format.html
       format.diff  { render text: @commit.to_diff }
       format.patch { render text: @commit.to_patch }
     end

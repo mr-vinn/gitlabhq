@@ -22,8 +22,6 @@
 class Service < ActiveRecord::Base
   default_value_for :active, false
 
-  attr_accessible :title, :token, :type, :active, :api_key
-
   belongs_to :project
   has_one :service_hook
 
@@ -33,11 +31,19 @@ class Service < ActiveRecord::Base
     active
   end
 
+  def category
+    :common
+  end
+
   def title
     # implement inside child
   end
 
   def description
+    # implement inside child
+  end
+
+  def help
     # implement inside child
   end
 
