@@ -28,6 +28,8 @@ module Gitlab
   WebMock.disable_net_connect!(allow_localhost: true)
 
   RSpec.configure do |config|
+    config.use_transactional_fixtures = false
+    config.use_instantiated_fixtures  = false
     config.mock_with :rspec
 
     config.include LoginHelpers, type: :feature
@@ -40,10 +42,9 @@ module Gitlab
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
-    config.use_transactional_fixtures = false
 
     config.before(:suite) do
-      TestEnv.init(observers: false, init_repos: true, repos: false)
+      TestEnv.init(init_repos: true, repos: false)
     end
     config.before(:each) do
       TestEnv.setup_stubs

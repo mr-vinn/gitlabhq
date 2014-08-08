@@ -7,7 +7,6 @@ module Gitlab
 
     before do
       sign_in(user)
-
       project.team << [user, :master]
     end
 

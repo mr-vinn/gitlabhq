@@ -2,10 +2,10 @@ require 'gon'
 
 module Gitlab
   class ApplicationController < ActionController::Base
+    before_filter :authenticate_user_from_token!
     before_filter :authenticate_user!
     before_filter :reject_blocked!
     before_filter :check_password_expiration
-    around_filter :set_current_user_for_thread
     before_filter :add_abilities
     before_filter :ldap_security_check
     before_filter :dev_tools if Rails.env == 'development'
@@ -30,6 +30,25 @@ module Gitlab
 
     protected
 
+    # From https://github.com/plataformatec/devise/wiki/How-To:-Simple-Token-Authentication-Example
+    # https://gist.github.com/josevalim/fb706b1e933ef01e4fb6
+    def authenticate_user_from_token!
+      user_token = if params[:authenticity_token].presence
+                     params[:authenticity_token].presence
+                   elsif params[:private_token].presence
+                     params[:private_token].presence
+                   end
+      user = user_token && User.find_by_authentication_token(user_token.to_s)
+
+      if user
+        # Notice we are passing store false, so the user is not
+        # actually stored in the session and a token is needed
+        # for every request. If you want the token to work as a
+        # sign in token, you can simply remove store: false.
+        sign_in user, store: false
+      end
+    end
+
     def log_exception(exception)
       application_trace = ActionDispatch::ExceptionWrapper.new(env, exception).application_trace
       application_trace.map!{ |t| "  #{t}\n" }
@@ -50,16 +69,7 @@ module Gitlab
         flash[:alert] = "Your account is blocked. Retry when an admin has unblocked it."
         new_user_session_path
       else
-        super
-      end
-    end
-
-    def set_current_user_for_thread
-      Thread.current[:current_user] = current_user
-      begin
-        yield
-      ensure
-        Thread.current[:current_user] = nil
+        stored_location_for(:redirect) || stored_location_for(resource) || root_path
       end
     end
 
@@ -175,10 +185,13 @@ module Gitlab
     def add_gon_variables
       gon.default_issues_tracker = Project.issues_tracker.default_value
       gon.api_version = API::API.version
-      gon.api_token = current_user.private_token if current_user
-      gon.gravatar_url = request.ssl? || Gitlab.config.gitlab.https ? Gitlab.config.gravatar.ssl_url : Gitlab.config.gravatar.plain_url
       gon.relative_url_root = Gitlab.config.gitlab.relative_url_root
-      gon.gravatar_enabled = Gitlab.config.gravatar.enabled
+      gon.default_avatar_url = URI::join(Gitlab.config.gitlab.url, ActionController::Base.helpers.image_path('no_avatar.png')).to_s
+
+      if current_user
+        gon.current_user_id = current_user.id
+        gon.api_token = current_user.private_token
+      end
     end
 
     def check_password_expiration
@@ -234,8 +247,7 @@ module Gitlab
     end
 
     def configure_permitted_parameters
-      devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:username, :email, :password, :login, :remember_me) }
-      devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :name, :password, :password_confirmation) }
+      devise_parameter_sanitizer.sanitize(:sign_in) { |u| u.permit(:username, :email, :password, :login, :remember_me) }
     end
 
     def hexdigest(string)

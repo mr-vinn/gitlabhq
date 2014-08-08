@@ -7,52 +7,59 @@ module Gitlab
       NOTEABLE_TYPES = [Issue, MergeRequest, Snippet]
 
       resource :projects do
-        # Get a list of project wall notes
-        #
-        # Parameters:
-        #   id (required) - The ID of a project
-        # Example Request:
-        #   GET /projects/:id/notes
-        get ":id/notes" do
-          @notes = user_project.notes.common
+        NOTEABLE_TYPES.each do |noteable_type|
+          noteables_str = noteable_type.to_s.underscore.pluralize
+          noteable_id_str = "#{noteable_type.to_s.underscore}_id"
 
-          # Get recent notes if recent = true
-          @notes = @notes.order('id DESC') if params[:recent]
+          # Get a list of project +noteable+ notes
+          #
+          # Parameters:
+          #   id (required) - The ID of a project
+          # Example Request:
+          #   GET /projects/:id/notes
+          get ":id/notes" do
+            @notes = user_project.notes.common
 
-          present paginate(@notes), with: Entities::Note
-        end
+            # Get recent notes if recent = true
+            @notes = @notes.order('id DESC') if params[:recent]
 
-        # Get a single project wall note
-        #
-        # Parameters:
-        #   id (required) - The ID of a project
-        #   note_id (required) - The ID of a note
-        # Example Request:
-        #   GET /projects/:id/notes/:note_id
-        get ":id/notes/:note_id" do
-          @note = user_project.notes.common.find(params[:note_id])
-          present @note, with: Entities::Note
-        end
+            present paginate(@notes), with: Entities::Note
+          end
 
-        # Create a new project wall note
-        #
-        # Parameters:
-        #   id (required) - The ID of a project
-        #   body (required) - The content of a note
-        # Example Request:
-        #   POST /projects/:id/notes
-        post ":id/notes" do
-          set_current_user_for_thread do
+          # Get a single project wall note
+          #
+          # Parameters:
+          #   id (required) - The ID of a project
+          #   note_id (required) - The ID of a note
+          # Example Request:
+          #   GET /projects/:id/notes/:note_id
+          get ":id/notes/:note_id" do
+            @note = user_project.notes.common.find(params[:note_id])
+            present @note, with: Entities::Note
+          end
+
+          # Create a new project wall note
+          #
+          # Parameters:
+          #   id (required) - The ID of a project
+          #   body (required) - The content of a note
+          # Example Request:
+          #   POST /projects/:id/issues/:noteable_id/notes
+          #   POST /projects/:id/snippets/:noteable_id/notes
+          post ":id/#{noteables_str}/:#{noteable_id_str}/notes" do
             required_attributes! [:body]
 
-            @note = user_project.notes.new(note: params[:body])
-            @note.author = current_user
+            opts = {
+             note: params[:body],
+             noteable_type: noteables_str.classify,
+             noteable_id: params[noteable_id_str]
+            }
 
-            if @note.save
+            @note = ::Notes::CreateService.new(user_project, current_user, opts).execute
+
+            if @note.valid?
               present @note, with: Entities::Note
             else
-              # :note is exposed as :body, but :note is set on error
-              bad_request!(:note) if @note.errors[:note].any?
               not_found!
             end
           end

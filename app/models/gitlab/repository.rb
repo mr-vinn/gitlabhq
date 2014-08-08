@@ -56,12 +56,6 @@ module Gitlab
       tags.find { |tag| tag.name == name }
     end
 
-    def recent_branches(limit = 20)
-      branches.sort do |a, b|
-        commit(b.target).committed_date <=> commit(a.target).committed_date
-      end[0..limit]
-    end
-
     def add_branch(branch_name, ref)
       Rails.cache.delete(cache_key(:branch_names))
 
@@ -135,6 +129,7 @@ module Gitlab
       Rails.cache.delete(cache_key(:commit_count))
       Rails.cache.delete(cache_key(:graph_log))
       Rails.cache.delete(cache_key(:readme))
+      Rails.cache.delete(cache_key(:version))
       Rails.cache.delete(cache_key(:contribution_guide))
     end
 
@@ -163,9 +158,21 @@ module Gitlab
       Gitlab::Git::Blob.find(self, sha, path)
     end
 
+    def blob_by_oid(oid)
+      Gitlab::Git::Blob.raw(self, oid)
+    end
+
     def readme
       Rails.cache.fetch(cache_key(:readme)) do
         tree(:head).readme
+      end
+    end
+
+    def version
+      Rails.cache.fetch(cache_key(:version)) do
+        tree(:head).blobs.find do |file|
+          file.name.downcase == 'version'
+        end
       end
     end
 
@@ -220,6 +227,42 @@ module Gitlab
     # Remove archives older than 2 hours
     def clean_old_archives
       Gitlab::Popen.popen(%W(find #{Gitlab.config.gitlab.repository_downloads_path} -mmin +120 -delete))
+    end
+
+    def branches_sorted_by(value)
+      case value
+      when 'recently_updated'
+        branches.sort do |a, b|
+          commit(b.target).committed_date <=> commit(a.target).committed_date
+        end
+      when 'last_updated'
+        branches.sort do |a, b|
+          commit(a.target).committed_date <=> commit(b.target).committed_date
+        end
+      else
+        branches
+      end
+    end
+
+    def contributors
+      log = graph_log.group_by { |i| i[:author_email] }
+
+      log.map do |email, contributions|
+        contributor = Gitlab::Contributor.new
+        contributor.email = email
+
+        contributions.each do |contribution|
+          if contributor.name.blank?
+            contributor.name = contribution[:author_name]
+          end
+
+          contributor.commits += 1
+          contributor.additions += contribution[:additions] || 0
+          contributor.deletions += contribution[:deletions] || 0
+        end
+
+        contributor
+      end
     end
   end
 end

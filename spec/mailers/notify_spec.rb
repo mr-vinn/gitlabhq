@@ -23,6 +23,23 @@ module Gitlab
       end
     end
 
+  shared_examples 'an email starting a new thread' do |message_id_prefix|
+    it 'has a discussion identifier' do
+      should have_header 'Message-ID',  /<#{message_id_prefix}(.*)@#{Gitlab.config.gitlab.host}>/
+    end
+  end
+
+  shared_examples 'an answer to an existing thread' do |thread_id_prefix|
+    it 'has a subject that begins with Re: ' do
+      should have_subject /^Re: /
+    end
+
+    it 'has headers that reference an existing thread' do
+      should have_header 'References',  /<#{thread_id_prefix}(.*)@#{Gitlab.config.gitlab.host}>/
+      should have_header 'In-Reply-To', /<#{thread_id_prefix}(.*)@#{Gitlab.config.gitlab.host}>/
+    end
+  end
+
     describe 'for new users, the email' do
       let(:example_site_path) { root_path }
       let(:new_user) { create(:user, email: 'newguy@example.com', created_by_id: 1) }
@@ -154,6 +171,7 @@ module Gitlab
             subject { Notify.new_issue_email(issue.assignee_id, issue.id) }
 
             it_behaves_like 'an assignee email'
+          it_behaves_like 'an email starting a new thread', 'issue'
 
             it 'has the correct subject' do
               should have_subject /#{project.name} \| #{issue.title} \(##{issue.iid}\)/
@@ -162,10 +180,6 @@ module Gitlab
             it 'contains a link to the new issue' do
               should have_body_text /#{project_issue_path project, issue}/
             end
-
-          it 'has the correct message-id set' do
-            should have_header 'Message-ID', "<issue_#{issue.id}@#{Gitlab.config.gitlab.host}>"
-          end
           end
 
           describe 'that are new with a description' do
@@ -180,6 +194,7 @@ module Gitlab
             subject { Notify.reassigned_issue_email(recipient.id, issue.id, previous_assignee.id, current_user) }
 
             it_behaves_like 'a multiple recipients email'
+          it_behaves_like 'an answer to an existing thread', 'issue'
 
             it 'is sent as the author' do
               sender = subject.header[:from].addrs[0]
@@ -202,15 +217,13 @@ module Gitlab
             it 'contains a link to the issue' do
               should have_body_text /#{project_issue_path project, issue}/
             end
-
-          it 'has the correct reference set' do
-            should have_header 'References', "<issue_#{issue.id}@#{Gitlab.config.gitlab.host}>"
-          end
           end
 
           describe 'status changed' do
             let(:status) { 'closed' }
             subject { Notify.issue_status_changed_email(recipient.id, issue.id, status, current_user) }
+
+          it_behaves_like 'an answer to an existing thread', 'issue'
 
             it 'is sent as the author' do
               sender = subject.header[:from].addrs[0]
@@ -233,10 +246,6 @@ module Gitlab
             it 'contains a link to the issue' do
               should have_body_text /#{project_issue_path project, issue}/
             end
-
-          it 'has the correct reference set' do
-            should have_header 'References', "<issue_#{issue.id}@#{Gitlab.config.gitlab.host}>"
-          end
           end
 
         end
@@ -250,6 +259,7 @@ module Gitlab
             subject { Notify.new_merge_request_email(merge_request.assignee_id, merge_request.id) }
 
             it_behaves_like 'an assignee email'
+          it_behaves_like 'an email starting a new thread', 'merge_request'
 
             it 'has the correct subject' do
             should have_subject /#{merge_request.title} \(##{merge_request.iid}\)/
@@ -284,6 +294,7 @@ module Gitlab
             subject { Notify.reassigned_merge_request_email(recipient.id, merge_request.id, previous_assignee.id, current_user.id) }
 
             it_behaves_like 'a multiple recipients email'
+          it_behaves_like 'an answer to an existing thread', 'merge_request'
 
             it 'is sent as the author' do
               sender = subject.header[:from].addrs[0]
@@ -312,6 +323,7 @@ module Gitlab
             subject { Notify.merged_merge_request_email(recipient.id, merge_request.id, merge_author.id) }
 
             it_behaves_like 'a multiple recipients email'
+          it_behaves_like 'an answer to an existing thread', 'merge_request'
 
             it 'is sent as the merge author' do
               sender = subject.header[:from].addrs[0]
@@ -330,10 +342,6 @@ module Gitlab
             it 'contains a link to the merge request' do
               should have_body_text /#{project_merge_request_path project, merge_request}/
             end
-
-          it 'has the correct reference set' do
-            should have_header 'References', "<merge_request_#{merge_request.id}@#{Gitlab.config.gitlab.host}>"
-          end
           end
         end
       end
@@ -403,22 +411,6 @@ module Gitlab
           end
         end
 
-        describe 'on a project wall' do
-          let(:note_on_the_wall_path) { project_wall_path(project, anchor: "note_#{note.id}") }
-
-          subject { Notify.note_wall_email(recipient.id, note.id) }
-
-          it_behaves_like 'a note email'
-
-          it 'has the correct subject' do
-            should have_subject /#{project.name}/
-          end
-
-          it 'contains a link to the wall note' do
-            should have_body_text /#{note_on_the_wall_path}/
-          end
-        end
-
         describe 'on a commit' do
           let(:commit) { project.repository.commit }
 
@@ -427,6 +419,7 @@ module Gitlab
           subject { Notify.note_commit_email(recipient.id, note.id) }
 
           it_behaves_like 'a note email'
+        it_behaves_like 'an answer to an existing thread', 'commits'
 
           it 'has the correct subject' do
             should have_subject /#{commit.title} \(#{commit.short_id}\)/
@@ -445,6 +438,7 @@ module Gitlab
           subject { Notify.note_merge_request_email(recipient.id, note.id) }
 
           it_behaves_like 'a note email'
+        it_behaves_like 'an answer to an existing thread', 'merge_request'
 
           it 'has the correct subject' do
           should have_subject /#{merge_request.title} \(##{merge_request.iid}\)/
@@ -463,6 +457,7 @@ module Gitlab
           subject { Notify.note_issue_email(recipient.id, note.id) }
 
           it_behaves_like 'a note email'
+        it_behaves_like 'an answer to an existing thread', 'issue'
 
           it 'has the correct subject' do
             should have_subject /#{issue.title} \(##{issue.iid}\)/
@@ -543,7 +538,7 @@ module Gitlab
       end
 
       it 'has the correct subject' do
-        should have_subject /New push to repository/
+      should have_subject /#{commits.length} new commits pushed to repository/
       end
 
       it 'includes commits list' do
@@ -579,7 +574,7 @@ module Gitlab
       end
 
       it 'has the correct subject' do
-        should have_subject /New push to repository/
+      should have_subject /#{commits.first.title}/
       end
 
       it 'includes commits list' do

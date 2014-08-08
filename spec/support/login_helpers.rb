@@ -4,9 +4,7 @@ module Gitlab
     #
     # role - User role (e.g., :admin, :user)
     def login_as(role)
-      ActiveRecord::Base.observers.enable(:'gitlab/user_observer') do
-        @user = create(role)
-      end
+      @user = create(role)
 
       login_with(@user)
     end

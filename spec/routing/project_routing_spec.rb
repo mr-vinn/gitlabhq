@@ -57,7 +57,6 @@ module Gitlab
   #      projects POST   /projects(.:format)     projects#create
   #   new_project GET    /projects/new(.:format) projects#new
   #  fork_project POST   /:id/fork(.:format)     projects#fork
-  #  wall_project GET    /:id/wall(.:format)     projects#wall
   # files_project GET    /:id/files(.:format)    projects#files
   #  edit_project GET    /:id/edit(.:format)     projects#edit
   #       project GET    /:id(.:format)          projects#show
@@ -74,10 +73,6 @@ module Gitlab
 
     it "to #fork" do
       post("/gitlab/gitlabhq/fork").should route_to('gitlab/projects#fork', id: 'gitlab/gitlabhq')
-    end
-
-    it "to #wall" do
-      get("/gitlab/gitlabhq/wall").should route_to('gitlab/projects/walls#show', project_id: 'gitlab/gitlabhq')
     end
 
     it "to #edit" do

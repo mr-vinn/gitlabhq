@@ -3,7 +3,6 @@ module Gitlab
     # Projects API
     class Files < Grape::API
       before { authenticate! }
-      before { authorize! :push_code, user_project }
 
       resource :projects do
         # Get file from repository
@@ -29,6 +28,8 @@ module Gitlab
         # }
         #
         get ":id/repository/files" do
+          authorize! :download_code, user_project
+
           required_attributes! [:file_path, :ref]
           attrs = attributes_for_keys [:file_path, :ref]
           ref = attrs.delete(:ref)
@@ -69,11 +70,13 @@ module Gitlab
         #   POST /projects/:id/repository/files
         #
         post ":id/repository/files" do
+          authorize! :push_code, user_project
+
           required_attributes! [:file_path, :branch_name, :content, :commit_message]
           attrs = attributes_for_keys [:file_path, :branch_name, :content, :commit_message, :encoding]
           branch_name = attrs.delete(:branch_name)
           file_path = attrs.delete(:file_path)
-          result = Gitlab::Files::CreateService.new(user_project, current_user, attrs, branch_name, file_path).execute
+          result = ::Files::CreateService.new(user_project, current_user, attrs, branch_name, file_path).execute
 
           if result[:status] == :success
             status(201)
@@ -99,11 +102,13 @@ module Gitlab
         #   PUT /projects/:id/repository/files
         #
         put ":id/repository/files" do
+          authorize! :push_code, user_project
+
           required_attributes! [:file_path, :branch_name, :content, :commit_message]
           attrs = attributes_for_keys [:file_path, :branch_name, :content, :commit_message, :encoding]
           branch_name = attrs.delete(:branch_name)
           file_path = attrs.delete(:file_path)
-          result = Gitlab::Files::UpdateService.new(user_project, current_user, attrs, branch_name, file_path).execute
+          result = ::Files::UpdateService.new(user_project, current_user, attrs, branch_name, file_path).execute
 
           if result[:status] == :success
             status(200)
@@ -129,11 +134,13 @@ module Gitlab
         #   DELETE /projects/:id/repository/files
         #
         delete ":id/repository/files" do
+          authorize! :push_code, user_project
+
           required_attributes! [:file_path, :branch_name, :commit_message]
           attrs = attributes_for_keys [:file_path, :branch_name, :commit_message]
           branch_name = attrs.delete(:branch_name)
           file_path = attrs.delete(:file_path)
-          result = Gitlab::Files::DeleteService.new(user_project, current_user, attrs, branch_name, file_path).execute
+          result = ::Files::DeleteService.new(user_project, current_user, attrs, branch_name, file_path).execute
 
           if result[:status] == :success
             status(200)

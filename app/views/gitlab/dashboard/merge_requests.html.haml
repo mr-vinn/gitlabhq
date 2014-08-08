@@ -1,13 +1,14 @@
 %h3.page-title
   Merge Requests
-  %span.pull-right #{@merge_requests.total_count} merge requests
 
 
 %p.light
   List all merge requests from all projects you have access to.
 %hr
 .row
-  .col-md-3
+  .fixed.sidebar-expand-button.hidden-lg.hidden-md
+    %i.icon-list.icon-2x
+  .col-md-3.responsive-side
     = render 'gitlab/shared/filter', entity: 'merge_request'
   .col-md-9
     = render 'gitlab/shared/merge_requests'

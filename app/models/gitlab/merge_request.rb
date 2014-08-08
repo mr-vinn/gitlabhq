@@ -34,15 +34,16 @@ module Gitlab
 
     delegate :commits, :diffs, :last_commit, :last_commit_short_sha, to: :merge_request_diff, prefix: nil
 
-    attr_accessible :title, :assignee_id, :source_project_id, :source_branch,
-                    :target_project_id, :target_branch, :milestone_id,
-                    :state_event, :description, :label_list
-
     attr_accessor :should_remove_source_branch
 
     # When this attribute is true some MR validation is ignored
     # It allows us to close or modify broken merge requests
     attr_accessor :allow_broken
+
+    # Temporary fields to store compare vars
+    # when creating new merge request
+    attr_accessor :can_be_created, :compare_failed, :compare_base_commit,
+      :compare_commits, :compare_diffs
 
     ActsAsTaggableOn.strict_case_match = true
     acts_as_taggable_on :labels
@@ -51,7 +52,6 @@ module Gitlab
       event :close do
         transition [:reopened, :opened] => :closed
       end
-
       event :merge do
         transition [:reopened, :opened, :locked] => :merged
       end
@@ -60,11 +60,11 @@ module Gitlab
         transition closed: :reopened
       end
 
-      event :lock do
+      event :lock_mr do
         transition [:reopened, :opened] => :locked
       end
 
-      event :unlock do
+      event :unlock_mr do
         transition locked: :reopened
       end
 
@@ -93,6 +93,7 @@ module Gitlab
       state :cannot_be_merged
     end
 
+
     validates :source_project, presence: true, unless: :allow_broken
     validates :source_branch, presence: true
     validates :target_project, presence: true
@@ -111,6 +112,7 @@ module Gitlab
     # Closed scope for merge request should return
     # both merged and closed mr's
     scope :closed, -> { with_states(:closed, :merged) }
+    scope :declined, -> { with_states(:closed) }
 
     def validate_branches
       if target_project == source_project && target_branch == source_branch
@@ -210,10 +212,6 @@ module Gitlab
       target_project != source_project
     end
 
-    def disallow_source_branch_removal?
-      source_project.root_ref?(source_branch) || source_project.protected_branches.include?(source_branch)
-    end
-
     def project
       target_project
     end
@@ -221,7 +219,9 @@ module Gitlab
     # Return the set of issues that will be closed if this merge request is accepted.
     def closes_issues
       if target_branch == project.default_branch
-        commits.map { |c| c.closes_issues(project) }.flatten.uniq.sort_by(&:id)
+        issues = commits.flat_map { |c| c.closes_issues(project) }
+        issues += Gitlab::ClosingIssueExtractor.closed_by_message_in_project(description, project)
+        issues.uniq.sort_by(&:id)
       else
         []
       end
@@ -296,6 +296,8 @@ module Gitlab
       message << title.to_s
       message << "\n\n"
       message << description.to_s
+      message << "\n\n"
+      message << "See merge request !#{iid}"
       message
     end
 

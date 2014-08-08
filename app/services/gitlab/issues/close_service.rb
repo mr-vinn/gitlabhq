@@ -6,7 +6,7 @@ module Gitlab
           notification_service.close_issue(issue, current_user)
           event_service.close_issue(issue, current_user)
           create_note(issue, commit)
-          execute_hooks(issue)
+          execute_hooks(issue, 'close')
         end
 
         issue

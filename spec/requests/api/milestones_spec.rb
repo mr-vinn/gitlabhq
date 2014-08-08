@@ -3,9 +3,6 @@ require 'spec_helper'
 module Gitlab
   describe API::API, api: true  do
     include ApiHelpers
-    before(:each) { enable_observers }
-    after(:each) {disable_observers}
-
     let(:user) { create(:user) }
     let!(:project) { create(:project, namespace: user.namespace ) }
     let!(:milestone) { create(:milestone, project: project) }
@@ -93,9 +90,6 @@ module Gitlab
     end
 
     describe "PUT /projects/:id/milestones/:milestone_id to test observer on close" do
-      before { enable_observers }
-      after { disable_observers }
-
       it "should create an activity event when an milestone is closed" do
         Event.should_receive(:create)
 

@@ -19,9 +19,7 @@
 
 module Gitlab
   module ProjectServices
-    class ProjectServices::CampfireService < Service
-      attr_accessible :subdomain, :room
-
+    class CampfireService < Service
       validates :token, presence: true, if: :activated?
 
       def title

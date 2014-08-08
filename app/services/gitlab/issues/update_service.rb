@@ -2,7 +2,7 @@ module Gitlab
   module Issues
     class UpdateService < Issues::BaseService
       def execute(issue)
-        state = params.delete('state_event')
+        state = params[:state_event]
 
         case state
         when 'reopen'
@@ -11,8 +11,12 @@ module Gitlab
           Issues::CloseService.new(project, current_user, {}).execute(issue)
         end
 
-        if params.present? && issue.update_attributes(params)
+        if params.present? && issue.update_attributes(params.except(:state_event))
           issue.reset_events_cache
+
+          if issue.previous_changes.include?('milestone_id')
+            create_milestone_note(issue)
+          end
 
           if issue.previous_changes.include?('assignee_id')
             notification_service.reassigned_issue(issue, current_user)
@@ -20,7 +24,7 @@ module Gitlab
           end
 
           issue.notice_added_references(issue.project, current_user)
-          execute_hooks(issue)
+          execute_hooks(issue, 'update')
         end
 
         issue

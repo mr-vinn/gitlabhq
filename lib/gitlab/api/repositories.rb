@@ -17,6 +17,7 @@ module Gitlab
             not_found!
           end
         end
+
         # Get a project repository tags
         #
         # Parameters:
@@ -25,6 +26,22 @@ module Gitlab
         #   GET /projects/:id/repository/tags
         get ":id/repository/tags" do
           present user_project.repo.tags.sort_by(&:name).reverse, with: Entities::RepoObject, project: user_project
+        end
+
+        # Create tag
+        #
+        # Parameters:
+        #   id (required) - The ID of a project
+        #   tag_name (required) - The name of the tag
+        #   ref (required) - Create tag from commit sha or branch
+        # Example Request:
+        #   POST /projects/:id/repository/tags
+        post ':id/repository/tags' do
+          authorize_push_project
+          @tag = CreateTagService.new.execute(user_project, params[:tag_name],
+                                              params[:ref], current_user)
+
+          present @tag, with: Entities::RepoObject, project: user_project
         end
 
         # Get a project repository tree
@@ -120,6 +137,33 @@ module Gitlab
             not_found!
           end
         end
+      end
+
+      # Compare two branches, tags or commits
+      #
+      # Parameters:
+      #   id (required) - The ID of a project
+      #   from (required) - the commit sha or branch name
+      #   to (required) - the commit sha or branch name
+      # Example Request:
+      #   GET /projects/:id/repository/compare?from=master&to=feature
+      get ':id/repository/compare' do
+        authorize! :download_code, user_project
+        required_attributes! [:from, :to]
+        compare = Gitlab::Git::Compare.new(user_project.repository.raw_repository, params[:from], params[:to], MergeRequestDiff::COMMITS_SAFE_SIZE)
+        present compare, with: Entities::Compare
+      end
+
+      # Get repository contributors
+      #
+      # Parameters:
+      #   id (required) - The ID of a project
+      # Example Request:
+      #   GET /projects/:id/repository/contributors
+      get ':id/repository/contributors' do
+        authorize! :download_code, user_project
+
+        present user_project.repository.contributors, with: Entities::Contributor
       end
     end
   end

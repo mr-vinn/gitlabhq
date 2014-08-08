@@ -82,7 +82,7 @@ module Gitlab
 
     Then 'I should see the comment edit button' do
       within(".js-main-target-form") do
-        page.should have_css(".js-note-edit-button", visible: true)
+      page.should have_css(".js-note-write-button", visible: true)
       end
     end
 

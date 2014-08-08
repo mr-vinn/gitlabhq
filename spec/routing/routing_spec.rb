@@ -80,35 +80,35 @@ module Gitlab
     end
 
     it "to #permissions" do
-      get("/help/permissions").should route_to('gitlab/help#permissions')
+      get("/help/permissions/permissions").should route_to('gitlab/help#show', category: "permissions", file: "permissions")
     end
 
     it "to #workflow" do
-      get("/help/workflow").should route_to('gitlab/help#workflow')
+      get("/help/workflow/README").should route_to('gitlab/help#show', category: "workflow", file: "README")
     end
 
     it "to #api" do
-      get("/help/api").should route_to('gitlab/help#api')
+      get("/help/api/README").should route_to('gitlab/help#show', category: "api", file: "README")
     end
 
     it "to #web_hooks" do
-      get("/help/web_hooks").should route_to('gitlab/help#web_hooks')
+      get("/help/web_hooks/web_hooks").should route_to('gitlab/help#show', category: "web_hooks", file: "web_hooks")
     end
 
     it "to #system_hooks" do
-      get("/help/system_hooks").should route_to('gitlab/help#system_hooks')
+      get("/help/system_hooks/system_hooks").should route_to('gitlab/help#show', category: "system_hooks", file: "system_hooks")
     end
 
     it "to #markdown" do
-      get("/help/markdown").should route_to('gitlab/help#markdown')
+      get("/help/markdown/markdown").should route_to('gitlab/help#show',category: "markdown", file: "markdown")
     end
 
     it "to #ssh" do
-      get("/help/ssh").should route_to('gitlab/help#ssh')
+      get("/help/ssh/README").should route_to('gitlab/help#show', category: "ssh", file: "README")
     end
 
     it "to #raketasks" do
-      get("/help/raketasks").should route_to('gitlab/help#raketasks')
+      get("/help/raketasks/README").should route_to('gitlab/help#show', category: "raketasks", file: "README")
     end
   end
 
@@ -246,7 +246,7 @@ module Gitlab
     end
 
     it "also display group#show on the short path" do
-      get("/1").should route_to('gitlab/groups#show', id: '1')
+      get('/1').should route_to('gitlab/namespaces#show', id: '1')
     end
   end
 

@@ -140,7 +140,7 @@ module Gitlab
         nav_tabs << :settings
       end
 
-      [:issues, :wiki, :wall, :snippets].each do |feature|
+      [:issues, :wiki, :snippets].each do |feature|
         nav_tabs << feature if project.send :"#{feature}_enabled"
       end
 
@@ -220,6 +220,12 @@ module Gitlab
         time_ago_with_tooltip(project.last_activity_at, 'bottom', 'last_activity_time_ago')
       else
         "Never"
+      end
+    end
+
+    def contribution_guide_url(project)
+      if project && project.repository.contribution_guide
+        project_blob_path(project, tree_join(project.default_branch, project.repository.contribution_guide.name))
       end
     end
   end

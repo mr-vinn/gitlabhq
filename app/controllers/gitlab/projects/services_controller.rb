@@ -17,7 +17,7 @@ module Gitlab
     end
 
     def update
-      if @service.update_attributes(params[:service])
+      if @service.update_attributes(service_params)
         redirect_to edit_project_service_path(@project, @service.to_param)
       else
         render 'edit'
@@ -36,6 +36,13 @@ module Gitlab
 
     def service
       @service ||= @project.services.find { |service| service.to_param == params[:id] }
+    end
+
+    def service_params
+      params.require(:service).permit(
+        :title, :token, :type, :active, :api_key, :subdomain,
+        :room, :recipients, :project_url
+      )
     end
   end
 end

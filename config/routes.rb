@@ -32,19 +32,10 @@ module Gitlab
     #
     # Help
     #
-    get 'help'                => 'gitlab/help#index'
-    get 'help/api'            => 'gitlab/help#api'
-    get 'help/api/:category'  => 'gitlab/help#api', as: 'help_api_file'
-    get 'help/markdown'       => 'gitlab/help#markdown'
-    get 'help/permissions'    => 'gitlab/help#permissions'
-    get 'help/public_access'  => 'gitlab/help#public_access'
-    get 'help/raketasks'      => 'gitlab/help#raketasks'
-    get 'help/ssh'            => 'gitlab/help#ssh'
-    get 'help/system_hooks'   => 'gitlab/help#system_hooks'
-    get 'help/web_hooks'      => 'gitlab/help#web_hooks'
-    get 'help/workflow'       => 'gitlab/help#workflow'
+
+    get 'help'                  => 'gitlab/help#index'
+    get 'help/:category/:file'  => 'gitlab/help#show', as: :help_page
     get 'help/shortcuts'
-    get 'help/security'
 
     #
     # Global snippets
@@ -78,6 +69,7 @@ module Gitlab
           put :team_update
           put :block
           put :unblock
+          delete 'remove/:email_id', action: 'remove_email', as: 'remove_email'
         end
       end
 
@@ -137,8 +129,6 @@ module Gitlab
 
     match "/u/:username" => "gitlab/users#show", as: :user, constraints: { username: /.*/ }, via: :get
 
-
-
     #
     # Dashboard Area
     #
@@ -158,18 +148,24 @@ module Gitlab
         get :issues
         get :merge_requests
         get :members
+        get :projects
       end
 
-      resources :users_groups, controller: 'gitlab/users_groups', only: [:create, :update, :destroy]
-      scope module: :'gitlab/groups' do
+      resources :users_groups, only: [:create, :update, :destroy]
+
+      scope module: :groups do
         resource :avatar, only: [:destroy]
+        resources :milestones
       end
     end
 
     resources :projects, controller: 'gitlab/projects', constraints: { id: /[^\/]+/ }, only: [:new, :create]
 
-    devise_for :users, module: :devise, class_name: 'Gitlab::User', controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :'gitlab/registrations' , passwords: :passwords}
+    devise_for :users, module: :devise, class_name: 'Gitlab::User', controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :'gitlab/registrations' , passwords: :passwords, sessions: :sessions }
 
+    devise_scope :user do
+      get "/users/auth/:provider/omniauth_error" => "omniauth_callbacks#omniauth_error", as: :omniauth_error
+    end
     #
     # Project Area
     #
@@ -179,6 +175,7 @@ module Gitlab
         post :fork
         post :archive
         post :unarchive
+        post :upload_image
         get :autocomplete_sources
         get :import
         put :retry_import
@@ -219,12 +216,6 @@ module Gitlab
           end
         end
 
-        resource :wall, only: [:show], constraints: {id: /\d+/} do
-          member do
-            get 'notes'
-          end
-        end
-
         resource :repository, only: [:show] do
           member do
             get "stats"
@@ -245,12 +236,7 @@ module Gitlab
           end
         end
 
-        resources :branches, only: [:index, :new, :create, :destroy], constraints: { id: Gitlab::Regex.git_reference_regex } do
-          collection do
-            get :recent, constraints: { id: Gitlab::Regex.git_reference_regex }
-          end
-        end
-
+        resources :branches, only: [:index, :new, :create, :destroy], constraints: { id: Gitlab::Regex.git_reference_regex }
         resources :tags, only: [:index, :new, :create, :destroy], constraints: { id: Gitlab::Regex.git_reference_regex }
         resources :protected_branches, only: [:index, :create, :destroy], constraints: { id: Gitlab::Regex.git_reference_regex }
 
@@ -293,7 +279,12 @@ module Gitlab
         end
 
         resources :team, controller: 'team_members', only: [:index]
-        resources :milestones, except: [:destroy], constraints: {id: /\d+/}
+        resources :milestones, except: [:destroy], constraints: {id: /\d+/} do
+          member do
+            put :sort_issues
+            put :sort_merge_requests
+          end
+        end
 
         resources :labels, only: [:index] do
           collection do
@@ -330,7 +321,7 @@ module Gitlab
       end
     end
 
-    get ':id' => "gitlab/groups#show", constraints: {id: /(?:[^.]|\.(?!atom$))+/, format: /atom/}
+    get ':id' => "gitlab/namespaces#show", constraints: {id: /(?:[^.]|\.(?!atom$))+/, format: /atom/}
 
     root to: "gitlab/dashboard#show"
   end

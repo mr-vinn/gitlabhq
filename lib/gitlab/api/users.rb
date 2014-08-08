@@ -14,7 +14,12 @@ module Gitlab
           @users = @users.active if params[:active].present?
           @users = @users.search(params[:search]) if params[:search].present?
           @users = paginate @users
-          present @users, with: Entities::User
+
+          if current_user.is_admin?
+            present @users, with: Entities::UserFull
+          else
+            present @users, with: Entities::UserBasic
+          end
         end
 
         # Get a single user
@@ -25,7 +30,12 @@ module Gitlab
         #   GET /users/:id
         get ":id" do
           @user = User.find(params[:id])
-          present @user, with: Entities::User
+
+          if current_user.is_admin?
+            present @user, with: Entities::UserFull
+          else
+            present @user, with: Entities::UserBasic
+          end
         end
 
         # Create user. Available only for admin
@@ -50,11 +60,45 @@ module Gitlab
           authenticated_as_admin!
           required_attributes! [:email, :password, :name, :username]
           attrs = attributes_for_keys [:email, :name, :password, :skype, :linkedin, :twitter, :projects_limit, :username, :extern_uid, :provider, :bio, :can_create_group, :admin]
-          user = User.build_user(attrs, as: :admin)
+          user = User.build_user(attrs)
           admin = attrs.delete(:admin)
           user.admin = admin unless admin.nil?
           if user.save
-            present user, with: Entities::User
+            present user, with: Entities::UserFull
+          else
+            not_found!
+          end
+        end
+
+        # Update user. Available only for admin
+        #
+        # Parameters:
+        #   email                             - Email
+        #   name                              - Name
+        #   password                          - Password
+        #   skype                             - Skype ID
+        #   linkedin                          - Linkedin
+        #   twitter                           - Twitter account
+        #   website_url                       - Website url
+        #   projects_limit                    - Limit projects each user can create
+        #   extern_uid                        - External authentication provider UID
+        #   provider                          - External provider
+        #   bio                               - Bio
+        #   admin                             - User is admin - true or false (default)
+        #   can_create_group                  - User can create groups - true or false
+        # Example Request:
+        #   PUT /users/:id
+        put ":id" do
+          authenticated_as_admin!
+
+          attrs = attributes_for_keys [:email, :name, :password, :skype, :linkedin, :twitter, :website_url, :projects_limit, :username, :extern_uid, :provider, :bio, :can_create_group, :admin]
+          user = User.find(params[:id])
+          not_found!("User not found") unless user
+
+          admin = attrs.delete(:admin)
+          user.admin = admin unless admin.nil?
+          if user.update_attributes(attrs)
+            present user, with: Entities::UserFull
           else
             not_found!
           end

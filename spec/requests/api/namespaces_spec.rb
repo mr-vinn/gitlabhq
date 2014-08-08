@@ -3,9 +3,6 @@ require 'spec_helper'
 module Gitlab
   describe API::API, api: true  do
     include ApiHelpers
-    before(:each) { ActiveRecord::Base.observers.enable(:'gitlab/user_observer') }
-    after(:each) { ActiveRecord::Base.observers.disable(:'gitlab/user_observer') }
-
     let(:admin) { create(:admin) }
     let!(:group1) { create(:group) }
     let!(:group2) { create(:group) }

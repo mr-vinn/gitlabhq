@@ -20,8 +20,6 @@
 module Gitlab
   module ProjectServices
     class HipchatService < Service
-      attr_accessible :room
-
       validates :token, presence: true, if: :activated?
 
       def title

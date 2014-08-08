@@ -51,6 +51,27 @@ module Gitlab
         matches = mentionable_text.scan(/@[a-zA-Z][a-zA-Z0-9_\-\.]*/)
         matches.each do |match|
           identifier = match.delete "@"
+          if identifier == "all"
+            users += project.team.members.flatten
+          else
+            if has_project
+              id = project.team.members.find_by(username: identifier).try(:id)
+            else
+              id = User.find_by(username: identifier).try(:id)
+            end
+            users << User.find(id) unless id.blank?
+          end
+        end
+        users.uniq
+      end
+
+      def mentioned_users
+        users = []
+        return users if mentionable_text.blank?
+        has_project = self.respond_to? :project
+        matches = mentionable_text.scan(/@[a-zA-Z][a-zA-Z0-9_\-\.]*/)
+        matches.each do |match|
+          identifier = match.delete "@"
           if has_project
             id = project.team.members.find { |u| u.username == identifier }.try(:id)
           else

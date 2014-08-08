@@ -1,29 +1,13 @@
 .row
   .col-md-2
-    %ul.nav.nav-pills.nav-stacked.nav-stacked-menu
-      %li.active
-        = link_to '#tab-edit', 'data-toggle' => 'tab' do
-          %i.icon-edit
-          Group
-      %li
-        = link_to '#tab-projects', 'data-toggle' => 'tab' do
-          %i.icon-folder-close
-          Projects
-      %li
-        = link_to '#tab-remove', 'data-toggle' => 'tab' do
-          %i.icon-remove-sign
-          Remove
-
+    = render 'settings_nav'
   .col-md-10
-    .tab-content
-      .tab-pane.active#tab-edit
-        .ui-box
-          .title
+    .panel.panel-default
+      .panel-heading
             %strong= @group.name
             group settings:
-          %div.form-holder
-            - path_helper = @group.id == nil ? groups_path : group_path(@group)
-            = form_for @group, as: :group, url: path_helper, html: { multipart: true, class: "form-horizontal" }, authenticity_token: true do |f|
+      .panel-body
+        = form_for @group, as: :group, url: path_helper, html: { multipart: true, class: "form-horizontal" }, authenticity_token: true do |f|
               - if @group.errors.any?
                 .alert.alert-danger
                   %span= @group.errors.full_messages.first
@@ -61,36 +45,12 @@
               .form-actions
                 = f.submit 'Save group', class: "btn btn-save"
 
-      .tab-pane#tab-projects
-        .ui-box
-          .title
-            %strong= @group.name
-            projects:
-            - if can? current_user, :manage_group, @group
-              %span.pull-right
-                = link_to new_project_path(namespace_id: @group.id), class: "btn btn-tiny" do
-                  %i.icon-plus
-                  New Project
-          %ul.well-list
-            - @group.projects.each do |project|
-              %li
-                .list-item-name
-                  = visibility_level_icon(project.visibility_level)
-                  = link_to project.name_with_namespace, project_path(project)
-                .pull-right
-                  = link_to 'Members', project_team_index_path(project), id: "edit_#{dom_id(project)}", class: "btn btn-small"
-                  = link_to 'Edit', edit_project_path(project), id: "edit_#{dom_id(project)}", class: "btn btn-small"
-                  = link_to 'Remove', project_path(project), data: { confirm: remove_project_message(project)}, method: :delete, class: "btn btn-small btn-remove"
-            - if @group.projects.blank?
-              .nothing-here-block This group has no projects yet
-
-      .tab-pane#tab-remove
-        .ui-box.ui-box-danger
-          .title Remove group
-          .body
+    .panel.panel-danger
+      .panel-heading Remove group
+      .panel-body
             %p
               Removing group will cause all child projects and resources to be removed.
-            %p
+          %br
               %strong Removed group can not be restored!
 
             = link_to 'Remove Group', group_path(@group), data: {confirm: 'Removed group can not be restored! Are you sure?'}, method: :delete, class: "btn btn-remove"

@@ -6,7 +6,7 @@ module Gitlab
     end
 
     def create
-      @hook = SystemHook.new(params[:hook])
+      @hook = SystemHook.new(hook_params)
 
       if @hook.save
         redirect_to admin_hooks_path, notice: 'Hook was successfully created.'
@@ -37,6 +37,10 @@ module Gitlab
       @hook.execute(data)
 
       redirect_to :back
+    end
+
+    def hook_params
+      params.require(:hook).permit(:url)
     end
   end
 end

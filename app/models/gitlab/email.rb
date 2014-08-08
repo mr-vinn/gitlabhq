@@ -11,16 +11,8 @@
 
 module Gitlab
   class Email < ActiveRecord::Base
-    attr_accessible :email, :user_id
-
-    #
-    # Relations
-    #
     belongs_to :user, class_name: Gitlab::User
 
-    #
-    # Validations
-    #
     validates :user_id, presence: true
     validates :email, presence: true, email: { strict_mode: true }, uniqueness: true
     validate :unique_email, if: ->(email) { email.email_changed? }
@@ -40,4 +32,4 @@ module Gitlab
       NotificationService.new.new_email(self)
     end
   end
-  end
+end

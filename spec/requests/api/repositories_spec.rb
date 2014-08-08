@@ -4,9 +4,6 @@ require 'mime/types'
 module Gitlab
   describe API::API, api: true  do
     include ApiHelpers
-    before(:each) { enable_observers }
-    after(:each) {disable_observers}
-
     let(:user) { create(:user) }
     let(:user2) { create(:user) }
     let!(:project) { create(:project, creator_id: user.id) }
@@ -21,6 +18,24 @@ module Gitlab
         response.status.should == 200
         json_response.should be_an Array
         json_response.first['name'].should == project.repo.tags.sort_by(&:name).reverse.first.name
+      end
+    end
+
+    describe 'POST /projects/:id/repository/tags' do
+      it 'should create a new tag' do
+        post api("/projects/#{project.id}/repository/tags", user),
+             tag_name: 'v1.0.0',
+             ref: 'master'
+
+        response.status.should == 201
+        json_response['name'].should == 'v1.0.0'
+      end
+      it 'should deny for user without push access' do
+        post api("/projects/#{project.id}/repository/tags", user2),
+             tag_name: 'v1.0.0',
+             ref: '621491c677087aa243f165eab467bfdfbee00be1'
+
+        response.status.should == 403
       end
     end
 
@@ -111,6 +126,59 @@ module Gitlab
       it "should return 404 for invalid sha" do
         get api("/projects/#{project.id}/repository/archive/?sha=xxx", user)
         response.status.should == 404
+      end
+    end
+
+    describe 'GET /projects/:id/repository/compare' do
+      it "should compare branches" do
+        get api("/projects/#{project.id}/repository/compare", user), from: 'master', to: 'simple_merge_request'
+        response.status.should == 200
+        json_response['commits'].should be_present
+        json_response['diffs'].should be_present
+      end
+
+      it "should compare tags" do
+        get api("/projects/#{project.id}/repository/compare", user), from: 'v1.0.1', to: 'v1.0.2'
+        response.status.should == 200
+        json_response['commits'].should be_present
+        json_response['diffs'].should be_present
+      end
+
+      it "should compare commits" do
+        get api("/projects/#{project.id}/repository/compare", user), from: 'b1e6a9dbf1c85', to: '1e689bfba395'
+        response.status.should == 200
+        json_response['commits'].should be_empty
+        json_response['diffs'].should be_empty
+        json_response['compare_same_ref'].should be_false
+      end
+
+      it "should compare commits in reverse order" do
+        get api("/projects/#{project.id}/repository/compare", user), from: '1e689bfba395', to: 'b1e6a9dbf1c85'
+        response.status.should == 200
+        json_response['commits'].should be_present
+        json_response['diffs'].should be_present
+      end
+
+      it "should compare same refs" do
+        get api("/projects/#{project.id}/repository/compare", user), from: 'master', to: 'master'
+        response.status.should == 200
+        json_response['commits'].should be_empty
+        json_response['diffs'].should be_empty
+        json_response['compare_same_ref'].should be_true
+      end
+    end
+
+    describe 'GET /projects/:id/repository/contributors' do
+      it 'should return valid data' do
+        get api("/projects/#{project.id}/repository/contributors", user)
+        response.status.should == 200
+        json_response.should be_an Array
+        contributor = json_response.first
+        contributor['email'].should == 'dmitriy.zaporozhets@gmail.com'
+        contributor['name'].should == 'Dmitriy Zaporozhets'
+        contributor['commits'].should == 185
+        contributor['additions'].should == 66072
+        contributor['deletions'].should == 63013
       end
     end
   end

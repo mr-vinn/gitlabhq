@@ -1,6 +1,6 @@
 module Gitlab
   class ProjectsFinder
-    def execute(current_user, options)
+    def execute(current_user, options = {})
       group = options[:group]
 
       if group
@@ -57,9 +57,37 @@ module Gitlab
       end
     end
 
-    def all_projects
-      # TODO: implement
-      raise 'Not implemented yet'
+    def all_projects(current_user)
+      if current_user
+        if current_user.authorized_projects.any?
+          # User has access to private projects
+          #
+          # Return only:
+          #   public projects
+          #   internal projects
+          #   joined projects
+          #
+          Project.where(
+            "projects.id IN (?) OR projects.visibility_level IN (?)",
+            current_user.authorized_projects.pluck(:id),
+            Project.public_and_internal_levels
+          )
+        else
+          # User has no access to private projects
+          #
+          # Return only:
+          #   public projects
+          #   internal projects
+          #
+          Project.public_and_internal_only
+        end
+      else
+        # Not authenticated
+        #
+        # Return only:
+        #   public projects
+        Project.public_only
+      end
     end
   end
 end

@@ -123,6 +123,11 @@ namespace :gitlab do
     def check_init_script_exists
       print "Init script exists? ... "
 
+      if omnibus_gitlab?
+        puts 'skipped (omnibus-gitlab has no init script)'.magenta
+        return
+      end
+
       script_path = "/etc/init.d/gitlab"
 
       if File.exists?(script_path)
@@ -141,6 +146,11 @@ namespace :gitlab do
 
     def check_init_script_up_to_date
       print "Init script up-to-date? ... "
+
+      if omnibus_gitlab?
+        puts 'skipped (omnibus-gitlab has no init script)'.magenta
+        return
+      end
 
       recipe_path = Rails.root.join("lib/support/init.d/", "gitlab")
       script_path = "/etc/init.d/gitlab"
@@ -206,7 +216,7 @@ namespace :gitlab do
       puts ""
 
       Project.find_each(batch_size: 100) do |project|
-        print "#{project.name_with_namespace.yellow} ... "
+        print sanitized_message(project)
 
         if project.satellite.exists?
           puts "yes".green
@@ -458,7 +468,7 @@ namespace :gitlab do
       else
         puts "no".red
         try_fixing_it(
-          "sudo chmod u+rwx,g+rx,o-rwx #{satellites_path}",
+          "sudo chmod u+rwx,g=rx,o-rwx #{satellites_path}",
         )
         for_more_information(
           see_installation_guide_section "GitLab"
@@ -515,7 +525,7 @@ namespace :gitlab do
       puts ""
 
       Project.find_each(batch_size: 100) do |project|
-        print "#{project.name_with_namespace.yellow} ... "
+        print sanitized_message(project)
 
         if project.empty_repo?
           puts "repository is empty".magenta
@@ -578,7 +588,7 @@ namespace :gitlab do
       puts ""
 
       Project.find_each(batch_size: 100) do |project|
-        print "#{project.name_with_namespace.yellow} ... "
+        print sanitized_message(project)
 
         if project.namespace
           puts "yes".green
@@ -604,6 +614,22 @@ namespace :gitlab do
 
     def gitlab_shell_version
       Gitlab::Shell.new.version
+    end
+
+    def required_gitlab_shell_version
+      File.read(File.join(Rails.root, "GITLAB_SHELL_VERSION")).strip
+    end
+
+    def gitlab_shell_major_version
+      required_gitlab_shell_version.split(".")[0].to_i
+    end
+
+    def gitlab_shell_minor_version
+      required_gitlab_shell_version.split(".")[1].to_i
+    end
+
+    def gitlab_shell_patch_version
+      required_gitlab_shell_version.split(".")[2].to_i
     end
 
     def has_gitlab_shell3?
@@ -637,7 +663,7 @@ namespace :gitlab do
       else
         puts "no".red
         try_fixing_it(
-          sudo_gitlab("RAILS_ENV=production script/background_jobs start")
+          sudo_gitlab("RAILS_ENV=production bin/background_jobs start")
         )
         for_more_information(
           see_installation_guide_section("Install Init Script"),
@@ -779,7 +805,7 @@ namespace :gitlab do
   end
 
   def check_gitlab_shell
-    required_version = Gitlab::VersionInfo.new(1, 9, 4)
+    required_version = Gitlab::VersionInfo.new(gitlab_shell_major_version, gitlab_shell_minor_version, gitlab_shell_patch_version)
     current_version = Gitlab::VersionInfo.parse(gitlab_shell_version)
 
     print "GitLab Shell version >= #{required_version} ? ... "
@@ -805,6 +831,26 @@ namespace :gitlab do
         "Update your git to a version >= #{required_version} from #{current_version}"
       )
       fix_and_rerun
+    end
+  end
+
+  def omnibus_gitlab?
+    Dir.pwd == '/opt/gitlab/embedded/service/gitlab-rails'
+  end
+
+  def sanitized_message(project)
+    if sanitize
+      "#{project.namespace_id.to_s.yellow}/#{project.id.to_s.yellow} ... "
+    else
+      "#{project.name_with_namespace.yellow} ... "
+    end
+  end
+
+  def sanitize
+    if ENV['SANITIZE'] == "true"
+      true
+    else
+      false
     end
   end
 end

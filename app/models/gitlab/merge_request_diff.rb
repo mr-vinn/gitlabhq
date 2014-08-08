@@ -21,8 +21,6 @@ module Gitlab
 
     belongs_to :merge_request, class_name: Gitlab::MergeRequest
 
-    attr_accessible :state, :st_commits, :st_diffs
-
     delegate :target_branch, :source_branch, to: :merge_request, prefix: nil
 
     state_machine :state, initial: :empty do

@@ -49,8 +49,10 @@ module Gitlab
         end
       elsif current_user && params[:authorized_only].presence
         klass.of_projects(current_user.authorized_projects).references(:project)
+      elsif current_user && params[:authorized_only].presence
+        klass.of_projects(current_user.authorized_projects).references(:project)
       else
-        klass.of_projects(Project.accessible_to(current_user)).references(:project)
+        klass.of_projects(ProjectsFinder.new.execute(current_user)).references(:project)
       end
     end
 

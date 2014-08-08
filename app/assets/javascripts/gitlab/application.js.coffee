@@ -13,7 +13,7 @@
 #= require jquery.history
 #= require jquery.waitforimages
 #= require jquery.atwho
-#= require jquery.scrollto
+#= require jquery.scrollTo
 #= require jquery.blockUI
 #= require turbolinks
 #= require jquery.turbolinks
@@ -23,12 +23,14 @@
 #= require g.raphael-min
 #= require g.bar-min
 #= require gitlab/branch-graph
-#= require highlightjs.min
+#= require highlight.pack
 #= require ace/ace
 #= require d3
 #= require underscore
 #= require nprogress
 #= require nprogress-turbolinks
+#= require dropzone
+#= require semantic-ui/sidebar
 #= require_tree .
 
 window.slugify = (text) ->
@@ -140,6 +142,14 @@ $ ->
   $(".diff-content").on "click", ".supp_diff_link", ->
     $(@).next('table').show()
     $(@).remove()
+
+  # Show/hide comments on diff
+  $("body").on "click", ".js-toggle-diff-comments", (e) ->
+    $(@).find('i').
+      toggleClass('icon-chevron-down').
+      toggleClass('icon-chevron-up')
+    $(@).closest(".diff-file").find(".notes_holder").toggle()
+    e.preventDefault()
 
 (($) ->
   # Disable an element and add the 'disabled' Bootstrap class

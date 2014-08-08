@@ -1,3 +1,5 @@
+# Import
+
 ### Import bare repositories into GitLab project instance
 
 Notes:
@@ -13,6 +15,10 @@ How to use:
 2. run the command below
 
 ```
+# omnibus-gitlab
+sudo gitlab-rake gitlab:import:repos
+
+# installation from source or cookbook
 bundle exec rake gitlab:import:repos RAILS_ENV=production
 ```
 

@@ -6,6 +6,6 @@
         %span= day.stamp("28 Aug, 2010")
       %p= pluralize(commits.count, 'commit')
     .col-md-10
-      %ul.well-list
+      %ul.bordered-list
         = render partial: 'commit', collection: commits, locals: { project: @project }
   %hr.lists-separator

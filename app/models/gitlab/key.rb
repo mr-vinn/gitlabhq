@@ -20,8 +20,6 @@ module Gitlab
 
     belongs_to :user, class_name: Gitlab::User
 
-    attr_accessible :key, :title
-
     before_validation :strip_white_space, :generate_fingerpint
 
     validates :title, presence: true, length: { within: 0..255 }

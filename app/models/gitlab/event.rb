@@ -16,9 +16,6 @@
 
 module Gitlab
   class Event < ActiveRecord::Base
-    attr_accessible :project, :action, :data, :author_id, :project_id,
-                    :target_id, :target_type
-
     default_scope { where.not(author_id: nil) }
 
     CREATED   = 1
@@ -34,6 +31,7 @@ module Gitlab
     delegate :name, :email, to: :author, prefix: true, allow_nil: true
     delegate :title, to: :issue, prefix: true, allow_nil: true
     delegate :title, to: :merge_request, prefix: true, allow_nil: true
+    delegate :title, to: :note, prefix: true, allow_nil: true
 
     belongs_to :author, class_name: "Gitlab::User"
     belongs_to :project, class_name: Gitlab::Project
@@ -41,6 +39,9 @@ module Gitlab
 
     # For Hash only
     serialize :data
+
+    # Callbacks
+    after_create :reset_project_activity
 
     # Scopes
     scope :recent, -> { order("created_at DESC") }
@@ -58,17 +59,6 @@ module Gitlab
           before = commit.id
           after = '00000000'
         end
-
-        Event.create(
-          project: project,
-          action: Event::PUSHED,
-          data: {
-            ref: "#{prefix}/#{ref.name}",
-            before: before,
-            after: after
-          },
-          author_id: user.id
-        )
       end
     end
 
@@ -146,6 +136,10 @@ module Gitlab
 
     def merge_request
       target if target_type == "Gitlab::MergeRequest"
+    end
+
+    def note
+      target if target_type == "Note"
     end
 
     def action_name
@@ -287,10 +281,6 @@ module Gitlab
       end.to_s
     end
 
-    def wall_note?
-      target.noteable_type.blank?
-    end
-
     def note_target_type
       if target.noteable_type.present?
         target.noteable_type.titleize
@@ -306,6 +296,12 @@ module Gitlab
         true
       else
         target.respond_to? :title
+      end
+    end
+
+    def reset_project_activity
+      if project
+        project.update_column(:last_activity_at, self.created_at)
       end
     end
   end

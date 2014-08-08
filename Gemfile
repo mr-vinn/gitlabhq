@@ -8,10 +8,10 @@ def linux_only(require_as)
   RUBY_PLATFORM.include?('linux') && require_as
 end
 
-gem "rails", "~> 4.0.0"
+gem "rails", "~> 4.1.0"
 
-gem "protected_attributes"
-gem 'rails-observers'
+# Make links from text
+gem 'rails_autolink', '~> 1.1'
 
 # Default values for AR models
 gem "default_value_for", "~> 3.0.0"
@@ -21,8 +21,8 @@ gem "mysql2", group: :mysql
 gem "pg", group: :postgres
 
 # Auth
-gem "devise", '3.0.4'
-gem "devise-async", '0.8.0'
+gem "devise", '3.2.4'
+gem "devise-async", '0.9.0'
 gem 'omniauth', "~> 1.1.3"
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
@@ -30,7 +30,7 @@ gem 'omniauth-github'
 
 # Extracting information from a git repository
 # Provide access to Gitlab::Git library
-gem "gitlab_git", '~> 5.8'
+gem "gitlab_git", '~> 6.0'
 
 # Ruby/Rack Git Smart-HTTP Server Handler
 gem 'gitlab-grack', '~> 2.0.0.pre', require: 'grack'
@@ -46,12 +46,8 @@ gem "gitlab-linguist", "~> 3.0.0", require: "linguist"
 
 # API
 gem "grape", "~> 0.6.1"
-# Replace with rubygems when nesteted entities get released
 gem "grape-entity", "~> 0.4.2"
 gem 'rack-cors', require: 'rack/cors'
-
-# Email validation
-gem "email_validator", "~> 1.4.0", :require => 'email_validator/strict'
 
 # Format dates and times
 # based on human-friendly examples
@@ -69,6 +65,9 @@ gem "haml-rails"
 # Files attachments
 gem "carrierwave"
 
+# Drag and Drop UI
+gem 'dropzonejs-rails'
+
 # for aws storage
 gem "fog", "~> 1.14", group: :aws
 gem "unf", group: :aws
@@ -82,6 +81,7 @@ gem "seed-fu"
 # Markdown to HTML
 gem "redcarpet",     "~> 2.2.2"
 gem "github-markup"
+gem "org-ruby" # For rendering .org files
 
 # Diffs
 gem 'diffy', '~> 3.0.3'
@@ -152,6 +152,9 @@ gem "rack-attack"
 # Ace editor
 gem 'ace-rails-ap'
 
+# Semantic UI Sass for Sidebar
+gem 'semantic-ui-sass', '~> 0.16.1.0'
+
 gem "sass-rails", '~> 4.0.2'
 gem "coffee-rails"
 gem "uglifier"
@@ -163,12 +166,14 @@ gem 'select2-rails'
 gem 'jquery-atwho-rails', "~> 0.3.3"
 gem "jquery-rails"
 gem "jquery-ui-rails"
+gem "jquery-scrollto-rails"
 gem "raphael-rails", "~> 2.1.2"
 gem 'bootstrap-sass', '~> 3.0'
 gem "font-awesome-rails", '~> 3.2'
 gem "gitlab_emoji", "~> 0.0.1.1"
 gem "gon", '~> 5.0.0'
 gem 'nprogress-rails'
+gem 'request_store'
 
 group :development do
   gem "annotate", "~> 2.6.0.beta2"
@@ -194,7 +199,7 @@ group :development, :test do
   # gem 'rails-dev-tweaks'
   gem 'spinach-rails'
   gem "rspec-rails"
-  gem "capybara"
+  gem "capybara", '~> 2.2.1'
   gem "pry"
   gem "awesome_print"
   gem "database_cleaner"
@@ -202,7 +207,7 @@ group :development, :test do
   gem 'factory_girl_rails'
 
   # Prevent occasions where minitest is not bundled in packaged versions of ruby (see #3826)
-  gem 'minitest', '~> 4.7.0'
+  gem 'minitest', '~> 5.3.0'
 
   # Generate Fake data
   gem "ffaker"
@@ -217,9 +222,9 @@ group :development, :test do
   gem 'rb-inotify', require: linux_only('rb-inotify')
 
   # PhantomJS driver for Capybara
-  gem 'poltergeist', '~> 1.4.1'
+  gem 'poltergeist', '~> 1.5.1'
 
-  gem 'jasmine', '2.0.0.rc5'
+  gem 'jasmine', '2.0.2'
 
   gem "spring", '1.1.1'
   gem "spring-commands-rspec", '1.0.1'
@@ -235,5 +240,5 @@ group :test do
 end
 
 group :production do
-  gem "gitlab_meta", '6.0'
+  gem "gitlab_meta", '7.0'
 end

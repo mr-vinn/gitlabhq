@@ -19,9 +19,7 @@
 
 module Gitlab
   module ProjectServices
-    class GitlabCiService < Service
-      attr_accessible :project_url
-
+    class GitlabCiService < CiService
       validates :project_url, presence: true, if: :activated?
       validates :token, presence: true, if: :activated?
 

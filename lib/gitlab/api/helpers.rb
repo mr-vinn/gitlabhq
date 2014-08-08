@@ -37,16 +37,6 @@ module Gitlab
         end
       end
 
-      def set_current_user_for_thread
-        Thread.current[:current_user] = current_user
-
-        begin
-          yield
-        ensure
-          Thread.current[:current_user] = nil
-        end
-      end
-
       def user_project
         @project ||= find_project(params[:id])
         @project || not_found!
@@ -109,10 +99,14 @@ module Gitlab
 
       def attributes_for_keys(keys)
         attrs = {}
+
         keys.each do |key|
-          attrs[key] = params[key] if params[key].present? or (params.has_key?(key) and params[key] == false)
+          if params[key].present? or (params.has_key?(key) and params[key] == false)
+            attrs[key] = params[key]
+          end
         end
-        attrs
+
+        ActionController::Parameters.new(attrs).permit!
       end
 
       # error helpers

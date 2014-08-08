@@ -17,8 +17,6 @@ module Gitlab
   class Milestone < ActiveRecord::Base
     include Concerns::InternalId
 
-    attr_accessible :title, :description, :due_date, :state_event
-
     belongs_to :project, class_name: Gitlab::Project
     has_many :issues, class_name: Gitlab::Issue
     has_many :merge_requests, class_name: Gitlab::MergeRequest

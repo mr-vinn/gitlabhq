@@ -8,8 +8,7 @@
  *= require select2
  *= require highlightjs.min
  *= require_self
- *= require nprogress
- *= require nprogress-bootstrap
+ *= require dropzone/basic
 */
 
 @import "main/*";
@@ -18,6 +17,12 @@
  * Customized Twitter bootstrap
  */
 @import 'gl_bootstrap';
+
+/**
+ * NProgress load bar css
+ */
+@import 'nprogress';
+@import 'nprogress-bootstrap';
 
 /**
  * Font icons
@@ -33,6 +38,7 @@
 /**
  * Page specific styles (issues, projects etc):
  */
+
 @import "sections/*";
 
 /**
@@ -49,3 +55,8 @@
  * Styles for JS behaviors.
  */
 @import "behaviors.scss";
+
+/**
+* Styles for responsive sidebar
+*/
+@import "semantic-ui/modules/sidebar"
