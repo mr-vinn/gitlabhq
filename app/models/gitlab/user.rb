@@ -53,7 +53,7 @@ module Gitlab
   class User < ActiveRecord::Base
     include Gitlab::ConfigHelper
     extend Gitlab::ConfigHelper
-    include TokenAuthenticatable
+    include Concerns::TokenAuthenticatable
 
     default_value_for :admin, false
     default_value_for :can_create_group, gitlab_config.default_can_create_group

@@ -1,6 +1,6 @@
 .row
   .col-md-8
-    = render 'projects/commits/diff_stats', diffs: diffs
+    = render 'gitlab/projects/commits/diff_stats', diffs: diffs
   .col-md-4
     %ul.nav.nav-tabs
       %li.pull-right{class: params[:view] == 'parallel' ? 'active' : ''}

@@ -25,7 +25,7 @@
             Last updated
 %hr
 - unless @branches.empty?
-      %ul.bordered-list.top-list.all-branches
-        - @branches.each do |branch|
-          = render "branch", branch: branch
-      = paginate @branches, theme: 'gitlab'
+  %ul.bordered-list.top-list.all-branches
+    - @branches.each do |branch|
+      = render "branch", branch: branch
+  = paginate @branches, theme: 'gitlab'

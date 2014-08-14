@@ -1,7 +1,7 @@
 = render "head"
 
 .tree-ref-holder
-  = render 'shared/ref_switcher', destination: 'commits'
+  = render 'gitlab/shared/ref_switcher', destination: 'commits'
 
 - if current_user && current_user.private_token
   .commits-feed-holder.hidden-xs.hidden-sm

@@ -59,6 +59,17 @@ module Gitlab
           before = commit.id
           after = '00000000'
         end
+
+        Event.create(
+          project: project,
+          action: Event::PUSHED,
+          data: {
+            ref: "#{prefix}/#{ref.name}",
+            before: before,
+            after: after
+          },
+          author_id: user.id
+        )
       end
     end
 
@@ -139,7 +150,7 @@ module Gitlab
     end
 
     def note
-      target if target_type == "Note"
+      target if target_type == "Gitlab::Note"
     end
 
     def action_name

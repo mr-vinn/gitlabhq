@@ -61,6 +61,7 @@ module Gitlab
           required_attributes! [:email, :password, :name, :username]
           attrs = attributes_for_keys [:email, :name, :password, :skype, :linkedin, :twitter, :projects_limit, :username, :extern_uid, :provider, :bio, :can_create_group, :admin]
           user = User.build_user(attrs)
+          Rails.logger.debug("Created user #{user.username} with can_create_group = #{user.can_create_group}")
           admin = attrs.delete(:admin)
           user.admin = admin unless admin.nil?
           if user.save
@@ -99,40 +100,6 @@ module Gitlab
           user.admin = admin unless admin.nil?
           if user.update_attributes(attrs)
             present user, with: Entities::UserFull
-          else
-            not_found!
-          end
-        end
-
-        # Update user. Available only for admin
-        #
-        # Parameters:
-        #   email                             - Email
-        #   name                              - Name
-        #   password                          - Password
-        #   skype                             - Skype ID
-        #   linkedin                          - Linkedin
-        #   twitter                           - Twitter account
-        #   website_url                       - Website url
-        #   projects_limit                    - Limit projects each user can create
-        #   extern_uid                        - External authentication provider UID
-        #   provider                          - External provider
-        #   bio                               - Bio
-        #   admin                             - User is admin - true or false (default)
-        #   can_create_group                  - User can create groups - true or false
-        # Example Request:
-        #   PUT /users/:id
-        put ":id" do
-          authenticated_as_admin!
-
-          attrs = attributes_for_keys [:email, :name, :password, :skype, :linkedin, :twitter, :website_url, :projects_limit, :username, :extern_uid, :provider, :bio, :can_create_group, :admin]
-          user = User.find(params[:id])
-          not_found!("User not found") unless user
-
-          admin = attrs.delete(:admin)
-          user.admin = admin unless admin.nil?
-          if user.update_attributes(attrs, as: :admin)
-            present user, with: Entities::User
           else
             not_found!
           end

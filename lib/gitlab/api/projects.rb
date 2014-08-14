@@ -94,7 +94,7 @@ module Gitlab
                                        :visibility_level,
                                        :import_url]
           attrs = map_public_to_visibility_level(attrs)
-          @project = ::Projects::CreateService.new(current_user, attrs).execute
+          @project = Gitlab::Projects::CreateService.new(current_user, attrs).execute
           if @project.saved?
             present @project, with: Entities::Project
           else
@@ -132,7 +132,7 @@ module Gitlab
                                        :public,
                                        :visibility_level]
           attrs = map_public_to_visibility_level(attrs)
-          @project = ::Projects::CreateService.new(user, attrs).execute
+          @project = Gitlab::Projects::CreateService.new(user, attrs).execute
           if @project.saved?
             present @project, with: Entities::Project
           else

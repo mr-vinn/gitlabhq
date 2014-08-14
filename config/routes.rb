@@ -151,9 +151,9 @@ module Gitlab
         get :projects
       end
 
-      resources :users_groups, only: [:create, :update, :destroy]
+      resources :users_groups, controller: 'gitlab/users_groups', only: [:create, :update, :destroy]
 
-      scope module: :groups do
+      scope module: :'gitlab/groups' do
         resource :avatar, only: [:destroy]
         resources :milestones
       end
@@ -161,7 +161,7 @@ module Gitlab
 
     resources :projects, controller: 'gitlab/projects', constraints: { id: /[^\/]+/ }, only: [:new, :create]
 
-    devise_for :users, module: :devise, class_name: 'Gitlab::User', controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :'gitlab/registrations' , passwords: :passwords, sessions: :sessions }
+    devise_for :users, module: :devise, class_name: 'Gitlab::User', controllers: { omniauth_callbacks: :omniauth_callbacks, registrations: :'gitlab/registrations' , passwords: :passwords, sessions: :'gitlab/sessions' }
 
     devise_scope :user do
       get "/users/auth/:provider/omniauth_error" => "omniauth_callbacks#omniauth_error", as: :omniauth_error

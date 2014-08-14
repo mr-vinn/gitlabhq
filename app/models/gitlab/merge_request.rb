@@ -285,7 +285,7 @@ module Gitlab
     # Thus it will automatically generate a new fragment
     # when the event is updated because the key changes.
     def reset_events_cache
-      Event.where(target_id: self.id, target_type: 'MergeRequest').
+      Event.where(target_id: self.id, target_type: 'Gitlab::MergeRequest').
           order('id DESC').limit(100).
           update_all(updated_at: Time.now)
     end

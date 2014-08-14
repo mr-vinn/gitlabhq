@@ -76,7 +76,7 @@ module Gitlab
           attrs = attributes_for_keys [:file_path, :branch_name, :content, :commit_message, :encoding]
           branch_name = attrs.delete(:branch_name)
           file_path = attrs.delete(:file_path)
-          result = ::Files::CreateService.new(user_project, current_user, attrs, branch_name, file_path).execute
+          result = Gitlab::Files::CreateService.new(user_project, current_user, attrs, branch_name, file_path).execute
 
           if result[:status] == :success
             status(201)
@@ -108,7 +108,7 @@ module Gitlab
           attrs = attributes_for_keys [:file_path, :branch_name, :content, :commit_message, :encoding]
           branch_name = attrs.delete(:branch_name)
           file_path = attrs.delete(:file_path)
-          result = ::Files::UpdateService.new(user_project, current_user, attrs, branch_name, file_path).execute
+          result = Gitlab::Files::UpdateService.new(user_project, current_user, attrs, branch_name, file_path).execute
 
           if result[:status] == :success
             status(200)
@@ -140,7 +140,7 @@ module Gitlab
           attrs = attributes_for_keys [:file_path, :branch_name, :commit_message]
           branch_name = attrs.delete(:branch_name)
           file_path = attrs.delete(:file_path)
-          result = ::Files::DeleteService.new(user_project, current_user, attrs, branch_name, file_path).execute
+          result = Gitlab::Files::DeleteService.new(user_project, current_user, attrs, branch_name, file_path).execute
 
           if result[:status] == :success
             status(200)

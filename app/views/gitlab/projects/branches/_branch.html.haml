@@ -23,7 +23,7 @@
 
   - if commit
     %ul.list-unstyled
-      = render 'projects/commits/inline_commit', commit: commit, project: @project
+      = render 'gitlab/projects/commits/inline_commit', commit: commit, project: @project
   - else
     %p
       Cant find HEAD commit for this branch

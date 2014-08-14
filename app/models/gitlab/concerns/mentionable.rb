@@ -65,23 +65,6 @@ module Gitlab
         users.uniq
       end
 
-      def mentioned_users
-        users = []
-        return users if mentionable_text.blank?
-        has_project = self.respond_to? :project
-        matches = mentionable_text.scan(/@[a-zA-Z][a-zA-Z0-9_\-\.]*/)
-        matches.each do |match|
-          identifier = match.delete "@"
-          if has_project
-            id = project.team.members.find { |u| u.username == identifier }.try(:id)
-          else
-            id = User.where(username: identifier).pluck(:id).first
-          end
-          users << User.find(id) unless id.blank?
-        end
-        users.uniq
-      end
-
       # Extract GFM references to other Mentionables from this Mentionable. Always excludes its #local_reference.
       def references p = project, text = mentionable_text
         return [] if text.blank?

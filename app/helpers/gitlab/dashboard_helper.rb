@@ -38,7 +38,7 @@ module Gitlab
     end
 
     def assigned_entities_count(current_user, entity, scope = nil)
-      items = current_user.send("assigned_" + entity.pluralize).opened
+      items = current_user.send("assigned_" + entity.sub(/^gitlab\//, '').pluralize).opened
 
       if scope.kind_of?(Group)
         items = items.of_group(scope)
@@ -50,7 +50,7 @@ module Gitlab
     end
 
     def authored_entities_count(current_user, entity, scope = nil)
-      items = current_user.send(entity.pluralize).opened
+      items = current_user.send(entity.sub(/^gitlab\//, '').pluralize).opened
 
       if scope.kind_of?(Group)
         items = items.of_group(scope)

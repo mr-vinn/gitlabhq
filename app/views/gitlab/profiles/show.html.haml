@@ -69,13 +69,13 @@
               - if @user.avatar?
                 You can change your avatar here
                 - if Gitlab.config.gravatar.enabled
-                %br
-                or remove the current avatar to revert to #{link_to "gravatar.com", "http://gravatar.com"}
+                  %br
+                  or remove the current avatar to revert to #{link_to "gravatar.com", "http://gravatar.com"}
               - else
                 You can upload an avatar here
                 - if Gitlab.config.gravatar.enabled
-                %br
-                or change it at #{link_to "gravatar.com", "http://gravatar.com"}
+                  %br
+                  or change it at #{link_to "gravatar.com", "http://gravatar.com"}
             %hr
             %a.choose-btn.btn.btn-small.js-choose-user-avatar-button
               %i.icon-paper-clip

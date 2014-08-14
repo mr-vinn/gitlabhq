@@ -1,4 +1,4 @@
 %h3.page-title
   New snippet
 %hr
-= render "gitlab/shared/snippets/form", url: snippets_path(@snippet)
+= render "gitlab/shared/snippets/form", url: snippets_path(@snippet), snippet_type: :personal_snippet

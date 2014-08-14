@@ -93,7 +93,7 @@ module Gitlab
     #
     # The message-id is generated from the unique URL to a model object.
     def message_id(model)
-      model_name = model.class.model_name.singular_route_key
+      model_name = model.class.model_name.singular_route_key.sub(/^gitlab_/, '')
       "<#{model_name}_#{model.id}@#{Gitlab.config.gitlab.host}>"
     end
 

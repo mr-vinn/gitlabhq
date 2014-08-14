@@ -2,7 +2,7 @@
 - if note.for_merge_request?
   - if note.outdated?
     = render "gitlab/projects/notes/discussions/outdated", discussion_notes: discussion_notes
-        - else
-    = render "gitlab/projects/notes/discussions/active", discussion_notes: discussion_notes
+  - else
+    = render partial: "gitlab/projects/notes/discussions/active", locals: { discussion_notes: discussion_notes }
 - else
   = render "gitlab/projects/notes/discussions/commit", discussion_notes: discussion_notes

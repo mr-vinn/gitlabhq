@@ -137,33 +137,33 @@ module Gitlab
             not_found!
           end
         end
-      end
 
-      # Compare two branches, tags or commits
-      #
-      # Parameters:
-      #   id (required) - The ID of a project
-      #   from (required) - the commit sha or branch name
-      #   to (required) - the commit sha or branch name
-      # Example Request:
-      #   GET /projects/:id/repository/compare?from=master&to=feature
-      get ':id/repository/compare' do
-        authorize! :download_code, user_project
-        required_attributes! [:from, :to]
-        compare = Gitlab::Git::Compare.new(user_project.repository.raw_repository, params[:from], params[:to], MergeRequestDiff::COMMITS_SAFE_SIZE)
-        present compare, with: Entities::Compare
-      end
+        # Compare two branches, tags or commits
+        #
+        # Parameters:
+        #   id (required) - The ID of a project
+        #   from (required) - the commit sha or branch name
+        #   to (required) - the commit sha or branch name
+        # Example Request:
+        #   GET /projects/:id/repository/compare?from=master&to=feature
+        get ':id/repository/compare' do
+          authorize! :download_code, user_project
+          required_attributes! [:from, :to]
+          compare = Gitlab::Git::Compare.new(user_project.repository.raw_repository, params[:from], params[:to], MergeRequestDiff::COMMITS_SAFE_SIZE)
+          present compare, with: Entities::Compare
+        end
 
-      # Get repository contributors
-      #
-      # Parameters:
-      #   id (required) - The ID of a project
-      # Example Request:
-      #   GET /projects/:id/repository/contributors
-      get ':id/repository/contributors' do
-        authorize! :download_code, user_project
+        # Get repository contributors
+        #
+        # Parameters:
+        #   id (required) - The ID of a project
+        # Example Request:
+        #   GET /projects/:id/repository/contributors
+        get ':id/repository/contributors' do
+          authorize! :download_code, user_project
 
-        present user_project.repository.contributors, with: Entities::Contributor
+          present user_project.repository.contributors, with: Entities::Contributor
+        end
       end
     end
   end

@@ -28,23 +28,15 @@ module Gitlab
       end
     end
 
+    def edit
+    end
+
     def update
       password_attributes = user_params.select do |key, value|
         %w(password password_confirmation).include?(key.to_s)
       end
 
       unless @user.valid_password?(user_params[:current_password])
-        redirect_to edit_profile_password_path, alert: 'You must provide a valid current password'
-        return
-      end
-    end
-
-    def update
-      password_attributes = params[:user].select do |key, value|
-        %w(password password_confirmation).include?(key.to_s)
-      end
-
-      unless @user.valid_password?(params[:user][:current_password])
         redirect_to edit_profile_password_path, alert: 'You must provide a valid current password'
         return
       end

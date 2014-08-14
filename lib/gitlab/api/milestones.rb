@@ -44,7 +44,7 @@ module Gitlab
           authorize! :admin_milestone, user_project
           required_attributes! [:title]
           attrs = attributes_for_keys [:title, :description, :due_date]
-          milestone = ::Milestones::CreateService.new(user_project, current_user, attrs).execute
+          milestone = Gitlab::Milestones::CreateService.new(user_project, current_user, attrs).execute
 
           if milestone.valid?
             present milestone, with: Entities::Milestone
@@ -68,7 +68,7 @@ module Gitlab
           authorize! :admin_milestone, user_project
           attrs = attributes_for_keys [:title, :description, :due_date, :state_event]
           milestone = user_project.milestones.find(params[:milestone_id])
-          milestone = ::Milestones::UpdateService.new(user_project, current_user, attrs).execute(milestone)
+          milestone = Gitlab::Milestones::UpdateService.new(user_project, current_user, attrs).execute(milestone)
 
           if milestone.valid?
             present milestone, with: Entities::Milestone
