@@ -1,4 +1,5 @@
-= form_for [:admin, @group], html: { class: "form-horizontal" } do |f|
+- path_helper = @group.id == nil ? admin_groups_path : admin_group_path(@group)
+= form_for [:admin, @group], as: :group, url: path_helper, html: { class: "form-horizontal" } do |f|
   - if @group.errors.any?
     .alert.alert-danger
       %span= @group.errors.full_messages.first

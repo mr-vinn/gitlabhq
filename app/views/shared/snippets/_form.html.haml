@@ -1,5 +1,5 @@
 .snippet-form-holder
-  = form_for @snippet, url: url, html: { class: "form-horizontal snippet-form" } do |f|
+  = form_for @snippet, as: snippet_type, url: url, html: { class: "form-horizontal snippet-form" } do |f|
     - if @snippet.errors.any?
       .alert.alert-danger
         %ul
