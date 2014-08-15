@@ -149,10 +149,6 @@ Devise.setup do |config|
   # REST_AUTH_SITE_KEY to pepper)
   # config.encryptor = :sha512
 
-  # ==> Configuration for :token_authenticatable
-  # Defines name of the authentication token params key
-  config.token_authentication_key = :private_token
-
   # Authentication through token does not store user in session and needs
   # to be supplied on each request. Useful if you are using the token as API token.
   config.skip_session_storage << :token_auth
@@ -217,7 +213,6 @@ Devise.setup do |config|
       method:   Gitlab.config.ldap['method'],
       bind_dn:  Gitlab.config.ldap['bind_dn'],
       password: Gitlab.config.ldap['password'],
-      filter:   Gitlab.config.ldap['user_filter'],
       name_proc: email_stripping_proc
   end
 

@@ -6,9 +6,6 @@ require 'gitlab/satellite/files/new_file_action'
 module Gitlab
   describe API::API, api: true  do
     include ApiHelpers
-    before(:each) { ActiveRecord::Base.observers.enable(:'gitlab/user_observer') }
-    after(:each) { ActiveRecord::Base.observers.disable(:'gitlab/user_observer') }
-
     let(:user) { create(:user) }
     let!(:project) { create(:project, namespace: user.namespace ) }
     before { project.team << [user, :developer] }

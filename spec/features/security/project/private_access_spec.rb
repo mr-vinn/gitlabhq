@@ -88,17 +88,6 @@ module Gitlab
       it { should be_denied_for :visitor }
     end
 
-    describe "GET /:project_path/wall" do
-      subject { project_wall_path(project) }
-
-      it { should be_allowed_for master }
-      it { should be_allowed_for reporter }
-      it { should be_allowed_for :admin }
-      it { should be_denied_for guest }
-      it { should be_denied_for :user }
-      it { should be_denied_for :visitor }
-    end
-
     describe "GET /:project_path/blob" do
       before do
         commit = project.repository.commit
@@ -160,17 +149,6 @@ module Gitlab
 
     describe "GET /:project_path/merge_requests" do
       subject { project_merge_requests_path(project) }
-
-      it { should be_allowed_for master }
-      it { should be_allowed_for reporter }
-      it { should be_allowed_for :admin }
-      it { should be_denied_for guest }
-      it { should be_denied_for :user }
-      it { should be_denied_for :visitor }
-    end
-
-    describe "GET /:project_path/branches/recent" do
-      subject { recent_project_branches_path(project) }
 
       it { should be_allowed_for master }
       it { should be_allowed_for reporter }

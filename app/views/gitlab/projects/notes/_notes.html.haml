@@ -2,7 +2,7 @@
   - @discussions.each do |discussion_notes|
     - note = discussion_notes.first
     - if note_for_main_target?(note)
-      = render partial: 'gitlab/projects/notes/discussion', locals: { discussion_notes: discussion_notes }
+      = render partial: 'gitlab/projects/notes/note', collection: discussion_notes
     - else
       = render 'gitlab/projects/notes/discussion', discussion_notes: discussion_notes
 - else

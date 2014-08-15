@@ -33,7 +33,7 @@ module Gitlab
     end
 
     def ci_build_details_path merge_request
-      merge_request.source_project.gitlab_ci_service.build_page(merge_request.last_commit.sha)
+      merge_request.source_project.ci_service.build_page(merge_request.last_commit.sha)
     end
 
     def merge_path_description(merge_request, separator)
@@ -42,6 +42,10 @@ module Gitlab
       else
         "Branches: #{@merge_request.source_branch} #{separator} #{@merge_request.target_branch}"
       end
+    end
+
+    def issues_sentence(issues)
+      issues.map { |i| "##{i.iid}" }.to_sentence
     end
   end
 end

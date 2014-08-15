@@ -18,6 +18,7 @@ module Gitlab
     end
 
     step 'I should see project "Community" home page' do
+    Gitlab.config.gitlab.stub(:host).and_return("www.example.com")
       within '.project-home-title' do
         page.should have_content 'Community'
       end
@@ -32,6 +33,41 @@ module Gitlab
       project = Project.find_by(name: 'Community')
       visit gitlab_routes.project_path(project) + 'DoesNotExist'
     end
-  end
 
+    step 'I click on "Sign In"' do
+      within '.pull-right' do
+        click_link "Sign in"
+      end
+    end
+
+    step 'Authenticate' do
+      admin = create(:admin)
+      project = Project.find_by(name: 'Community')
+      fill_in "user_login", with: admin.email
+      fill_in "user_password", with: admin.password
+      click_button "Sign in"
+      Thread.current[:current_user] = admin
+    end
+
+    step 'I should be redirected to "Community" page' do
+      project = Project.find_by(name: 'Community')
+      page.current_path.should == "/#{project.path_with_namespace}"
+      page.status_code.should == 200
+    end
+
+    step 'I get redirected to signin page where I sign in' do
+      admin = create(:admin)
+      project = Project.find_by(name: 'Enterprise')
+      fill_in "user_login", with: admin.email
+      fill_in "user_password", with: admin.password
+      click_button "Sign in"
+      Thread.current[:current_user] = admin
+    end
+
+    step 'I should be redirected to "Enterprise" page' do
+      project = Project.find_by(name: 'Enterprise')
+      page.current_path.should == "/#{project.path_with_namespace}"
+      page.status_code.should == 200
+    end
+  end
 end

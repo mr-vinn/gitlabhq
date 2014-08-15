@@ -23,6 +23,7 @@ module Gitlab
 
       if file_path
         # Send file to user
+        response.headers["Content-Length"] = File.open(file_path).size.to_s
         send_file file_path
       else
         render_404

@@ -4,9 +4,6 @@ require 'mime/types'
 module Gitlab
   describe API::API, api: true  do
     include ApiHelpers
-    before(:each) { enable_observers }
-    after(:each) {disable_observers}
-
     let(:user) { create(:user) }
     let(:user2) { create(:user) }
     let!(:project) { create(:project, creator_id: user.id) }

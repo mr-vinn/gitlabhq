@@ -10,7 +10,6 @@ production:
   # password:
   # host: localhost
   # port: 5432 
-  # socket: /tmp/postgresql.sock
 
 #
 # Development specific
@@ -23,7 +22,6 @@ development:
   username: vinnie
   host: /tmp
   password:
-  # socket: /tmp/postgresql.sock
 
 #
 # Staging specific
@@ -35,7 +33,6 @@ staging:
   pool: 5
   username: postgres
   password:
-  # socket: /tmp/postgresql.sock
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -48,4 +45,3 @@ test: &test
   username: vinnie
   host: /tmp
   password:
-  # socket: /tmp/postgresql.sock

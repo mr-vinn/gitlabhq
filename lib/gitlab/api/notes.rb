@@ -7,60 +7,10 @@ module Gitlab
       NOTEABLE_TYPES = [Issue, MergeRequest, Snippet]
 
       resource :projects do
-        # Get a list of project wall notes
-        #
-        # Parameters:
-        #   id (required) - The ID of a project
-        # Example Request:
-        #   GET /projects/:id/notes
-        get ":id/notes" do
-          @notes = user_project.notes.common
-
-          # Get recent notes if recent = true
-          @notes = @notes.order('id DESC') if params[:recent]
-
-          present paginate(@notes), with: Entities::Note
-        end
-
-        # Get a single project wall note
-        #
-        # Parameters:
-        #   id (required) - The ID of a project
-        #   note_id (required) - The ID of a note
-        # Example Request:
-        #   GET /projects/:id/notes/:note_id
-        get ":id/notes/:note_id" do
-          @note = user_project.notes.common.find(params[:note_id])
-          present @note, with: Entities::Note
-        end
-
-        # Create a new project wall note
-        #
-        # Parameters:
-        #   id (required) - The ID of a project
-        #   body (required) - The content of a note
-        # Example Request:
-        #   POST /projects/:id/notes
-        post ":id/notes" do
-          set_current_user_for_thread do
-            required_attributes! [:body]
-
-            @note = user_project.notes.new(note: params[:body])
-            @note.author = current_user
-
-            if @note.save
-              present @note, with: Entities::Note
-            else
-              # :note is exposed as :body, but :note is set on error
-              bad_request!(:note) if @note.errors[:note].any?
-              not_found!
-            end
-          end
-        end
-
         NOTEABLE_TYPES.each do |noteable_type|
-          noteables_str = noteable_type.to_s.underscore.gsub(/gitlab\//, '').pluralize
-          noteable_id_str = "#{noteable_type.to_s.underscore.gsub(/gitlab\//, '')}_id"
+          class_no_ns = noteable_type.to_s.underscore.sub(/^gitlab\//, '')
+          noteables_str = class_no_ns.pluralize
+          noteable_id_str = "#{class_no_ns}_id"
 
           # Get a list of project +noteable+ notes
           #
@@ -100,19 +50,20 @@ module Gitlab
           #   POST /projects/:id/issues/:noteable_id/notes
           #   POST /projects/:id/snippets/:noteable_id/notes
           post ":id/#{noteables_str}/:#{noteable_id_str}/notes" do
-            set_current_user_for_thread do
-              required_attributes! [:body]
+            required_attributes! [:body]
 
-              @noteable = user_project.send(:"#{noteables_str}").find(params[:"#{noteable_id_str}"])
-              @note = @noteable.notes.new(note: params[:body])
-              @note.author = current_user
-              @note.project = user_project
+            opts = {
+             note: params[:body],
+             noteable_type: noteable_type.to_s.classify,
+             noteable_id: params[noteable_id_str]
+            }
 
-              if @note.save
-                present @note, with: Entities::Note
-              else
-                not_found!
-              end
+            @note = Gitlab::Notes::CreateService.new(user_project, current_user, opts).execute
+
+            if @note.valid?
+              present @note, with: Entities::Note
+            else
+              not_found!
             end
           end
         end

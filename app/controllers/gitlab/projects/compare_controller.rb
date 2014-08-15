@@ -16,11 +16,7 @@ module Gitlab
       @diffs         = compare.diffs
       @refs_are_same = compare.same
       @line_notes    = []
-      @timeout       = compare.timeout
-
-      diff_line_count = Commit::diff_line_count(@diffs)
-      @suppress_diff = Commit::diff_suppress?(@diffs, diff_line_count) && !params[:force_show_diff]
-      @force_suppress_diff = Commit::diff_force_suppress?(@diffs, diff_line_count)
+      @diff_timeout  = compare.timeout
     end
 
     def create

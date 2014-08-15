@@ -23,7 +23,7 @@ module Gitlab
     end
 
     def create
-      @key = DeployKey.new(params[:deploy_key])
+      @key = DeployKey.new(deploy_key_params)
 
       if @key.valid? && @project.deploy_keys << @key
         redirect_to project_deploy_keys_path(@project)
@@ -58,6 +58,10 @@ module Gitlab
 
     def available_keys
       @available_keys ||= current_user.accessible_deploy_keys
+    end
+
+    def deploy_key_params
+      params.require(:deploy_key).permit(:key, :title)
     end
   end
 end

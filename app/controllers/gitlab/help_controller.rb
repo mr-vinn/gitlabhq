@@ -3,12 +3,12 @@ module Gitlab
     def index
     end
 
-    def api
+    def show
       @category = params[:category]
-      @category = "README" if @category.blank?
+      @file = params[:file]
 
-      if File.exists?(Gitlab::Engine.root.join('doc', 'api', @category + '.md'))
-        render 'api'
+      if File.exists?(Gitlab::Engine.root.join('doc', @category, @file + '.md'))
+        render 'show'
       else
         not_found!
       end

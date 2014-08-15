@@ -249,7 +249,7 @@ module Gitlab
           find('.edit-issue.inline-update').select(milestone.title, from: 'issue_milestone_id')
           click_button 'Update Issue'
 
-          page.should have_content "Milestone"
+        page.should have_content "Milestone changed to #{milestone.title}"
           page.has_select?('issue_assignee_id', :selected => milestone.title)
         end
       end

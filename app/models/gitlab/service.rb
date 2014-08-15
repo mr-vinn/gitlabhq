@@ -23,8 +23,6 @@ module Gitlab
   class Service < ActiveRecord::Base
     default_value_for :active, false
 
-    attr_accessible :title, :token, :type, :active, :api_key
-
     belongs_to :project, class_name: Gitlab::Project
     has_one :service_hook, class_name: Gitlab::ServiceHook
 
@@ -34,11 +32,19 @@ module Gitlab
       active
     end
 
+    def category
+      :common
+    end
+
     def title
       # implement inside child
     end
 
     def description
+      # implement inside child
+    end
+
+    def help
       # implement inside child
     end
 

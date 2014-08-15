@@ -31,9 +31,13 @@ module Gitlab
     def blob
       @blob ||= @repository.blob_at(@commit.id, @path)
 
-      return not_found! unless @blob
-
-      @blob
+      if @blob
+        @blob
+      elsif tree.entries.any?
+        redirect_to project_tree_path(@project, File.join(@ref, @path)) and return
+      else
+        return not_found!
+      end
     end
   end
 end

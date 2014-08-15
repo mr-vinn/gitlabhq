@@ -3,9 +3,6 @@ require 'spec_helper'
 module Gitlab
   describe API::API, api: true  do
     include ApiHelpers
-    before(:each) { ActiveRecord::Base.observers.enable(:'gitlab/user_observer') }
-    after(:each) { ActiveRecord::Base.observers.disable(:'gitlab/user_observer') }
-
     let(:user) { create(:user) }
     let!(:project) { create(:project, namespace: user.namespace ) }
     let!(:issue) { create(:issue, author: user, assignee: user, project: project) }

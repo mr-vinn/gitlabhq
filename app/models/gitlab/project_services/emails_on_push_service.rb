@@ -19,9 +19,7 @@
 
 module Gitlab
   module ProjectServices
-    class ProjectServices::EmailsOnPushService < Service
-      attr_accessible :recipients
-
+    class EmailsOnPushService < Service
       validates :recipients, presence: true, if: :activated?
 
       def title

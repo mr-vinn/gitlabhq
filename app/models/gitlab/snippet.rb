@@ -19,8 +19,6 @@ module Gitlab
   class Snippet < ActiveRecord::Base
     include Linguist::BlobHelper
 
-    attr_accessible :title, :content, :file_name, :expires_at, :private
-
     default_value_for :private, true
 
     belongs_to :author, class_name: "Gitlab::User"
@@ -35,8 +33,8 @@ module Gitlab
     validates :content, presence: true
 
     # Scopes
-    scope :public,  -> { where(private: false) }
-    scope :private, -> { where(private: true) }
+    scope :are_public,  -> { where(private: false) }
+    scope :are_private, -> { where(private: true) }
     scope :fresh,   -> { order("created_at DESC") }
     scope :expired, -> { where(["expires_at IS NOT NULL AND expires_at < ?", Time.current]) }
     scope :non_expired, -> { where(["expires_at IS NULL OR expires_at > ?", Time.current]) }

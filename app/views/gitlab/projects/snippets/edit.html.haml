@@ -1,1 +1,4 @@
-= render "gitlab/projects/snippets/form", url: project_snippet_path(@project, @snippet)
+%h3.page-title
+  Edit snippet
+%hr
+= render "gitlab/shared/snippets/form", url: project_snippet_path(@project, @snippet), snippet_type: :project_snippet

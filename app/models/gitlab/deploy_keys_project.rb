@@ -11,14 +11,11 @@
 
 module Gitlab
   class DeployKeysProject < ActiveRecord::Base
-    attr_accessible :key_id, :project_id
-
     belongs_to :project, class_name: Gitlab::Project
     belongs_to :deploy_key, class_name: Gitlab::DeployKey
 
     validates :deploy_key_id, presence: true
     validates :deploy_key_id, uniqueness: { scope: [:project_id], message: "already exists in project" }
-
     validates :project_id, presence: true
   end
 end

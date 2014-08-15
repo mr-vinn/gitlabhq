@@ -72,7 +72,6 @@ module Gitlab
         #   name (required) - name for new project
         #   description (optional) - short project description
         #   issues_enabled (optional)
-        #   wall_enabled (optional)
         #   merge_requests_enabled (optional)
         #   wiki_enabled (optional)
         #   snippets_enabled (optional)
@@ -87,7 +86,6 @@ module Gitlab
                                        :path,
                                        :description,
                                        :issues_enabled,
-                                       :wall_enabled,
                                        :merge_requests_enabled,
                                        :wiki_enabled,
                                        :snippets_enabled,
@@ -103,7 +101,6 @@ module Gitlab
             if @project.errors[:limit_reached].present?
               error!(@project.errors[:limit_reached], 403)
             end
-            not_found!
           end
         end
 
@@ -115,7 +112,6 @@ module Gitlab
         #   description (optional) - short project description
         #   default_branch (optional) - 'master' by default
         #   issues_enabled (optional)
-        #   wall_enabled (optional)
         #   merge_requests_enabled (optional)
         #   wiki_enabled (optional)
         #   snippets_enabled (optional)
@@ -130,7 +126,6 @@ module Gitlab
                                        :description,
                                        :default_branch,
                                        :issues_enabled,
-                                       :wall_enabled,
                                        :merge_requests_enabled,
                                        :wiki_enabled,
                                        :snippets_enabled,
@@ -214,7 +209,7 @@ module Gitlab
           @users = User.where(id: user_project.team.users.map(&:id))
           @users = @users.search(params[:search]) if params[:search].present?
           @users = paginate @users
-          present @users, with: Entities::User
+          present @users, with: Entities::UserBasic
         end
 
         # Get a project labels

@@ -21,18 +21,10 @@ module Gitlab
     has_many :users_groups, dependent: :destroy, class_name: Gitlab::UsersGroup
     has_many :users, through: :users_groups, class_name: Gitlab::User
 
-    attr_accessible :avatar
-
     validate :avatar_type, if: ->(user) { user.avatar_changed? }
     validates :avatar, :'gitlab/file_size' => { maximum: 100.kilobytes.to_i }
 
     mount_uploader :avatar, AttachmentUploader
-    
-    def self.accessible_to(user)
-      accessible_ids = Project.accessible_to(user).pluck(:namespace_id)
-      accessible_ids += user.groups.pluck(:id) if user
-      where(id: accessible_ids)
-    end
 
     def human_name
       name
@@ -61,6 +53,10 @@ module Gitlab
       owners.include?(user)
     end
 
+    def has_master?(user)
+      members.masters.where(user_id: user).any?
+    end
+
     def last_owner?(user)
       has_owner?(user) && owners.size == 1
     end
@@ -74,5 +70,9 @@ module Gitlab
         self.errors.add :avatar, "only images allowed"
       end
     end
+
+    def public_profile?
+      projects.public_only.any?
+    end
   end
-  end
+end

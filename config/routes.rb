@@ -32,19 +32,10 @@ module Gitlab
     #
     # Help
     #
-    get 'help'                => 'help#index'
-    get 'help/api'            => 'help#api'
-    get 'help/api/:category'  => 'help#api', as: 'help_api_file'
-    get 'help/markdown'       => 'help#markdown'
-    get 'help/permissions'    => 'help#permissions'
-    get 'help/public_access'  => 'help#public_access'
-    get 'help/raketasks'      => 'help#raketasks'
-    get 'help/ssh'            => 'help#ssh'
-    get 'help/system_hooks'   => 'help#system_hooks'
-    get 'help/web_hooks'      => 'help#web_hooks'
-    get 'help/workflow'       => 'help#workflow'
+
+    get 'help'                  => 'help#index'
+    get 'help/:category/:file'  => 'help#show', as: :help_page
     get 'help/shortcuts'
-    get 'help/security'
 
     #
     # Global snippets
@@ -78,6 +69,7 @@ module Gitlab
           put :team_update
           put :block
           put :unblock
+          delete 'remove/:email_id', action: 'remove_email', as: 'remove_email'
         end
       end
 
@@ -137,8 +129,6 @@ module Gitlab
 
     match "/u/:username" => "users#show", as: :user, constraints: { username: /.*/ }, via: :get
 
-
-
     #
     # Dashboard Area
     #
@@ -158,18 +148,23 @@ module Gitlab
         get :issues
         get :merge_requests
         get :members
+        get :projects
       end
 
       resources :users_groups, only: [:create, :update, :destroy]
       scope module: :groups do
         resource :avatar, only: [:destroy]
+        resources :milestones
       end
     end
 
     resources :projects, constraints: { id: /[^\/]+/ }, only: [:new, :create]
 
-    devise_for :users, module: :devise, class_name: 'Gitlab::User', controllers: { omniauth_callbacks: :'gitlab/omniauth_callbacks', registrations: :'gitlab/registrations' , passwords: :'gitlab/passwords'}
+    devise_for :users, module: :devise, class_name: 'Gitlab::User', controllers: { omniauth_callbacks: :'gitlab/omniauth_callbacks', registrations: :'gitlab/registrations' , passwords: :'gitlab/passwords', sessions: :'gitlab/sessions' }
 
+    devise_scope :user do
+      get "/users/auth/:provider/omniauth_error" => "omniauth_callbacks#omniauth_error", as: :omniauth_error
+    end
     #
     # Project Area
     #
@@ -179,6 +174,7 @@ module Gitlab
         post :fork
         post :archive
         post :unarchive
+        post :upload_image
         get :autocomplete_sources
         get :import
         put :retry_import
@@ -219,12 +215,6 @@ module Gitlab
           end
         end
 
-        resource :wall, only: [:show], constraints: {id: /\d+/} do
-          member do
-            get 'notes'
-          end
-        end
-
         resource :repository, only: [:show] do
           member do
             get "stats"
@@ -245,12 +235,7 @@ module Gitlab
           end
         end
 
-        resources :branches, only: [:index, :new, :create, :destroy], constraints: { id: Gitlab::Regex.git_reference_regex } do
-          collection do
-            get :recent, constraints: { id: Gitlab::Regex.git_reference_regex }
-          end
-        end
-
+        resources :branches, only: [:index, :new, :create, :destroy], constraints: { id: Gitlab::Regex.git_reference_regex }
         resources :tags, only: [:index, :new, :create, :destroy], constraints: { id: Gitlab::Regex.git_reference_regex }
         resources :protected_branches, only: [:index, :create, :destroy], constraints: { id: Gitlab::Regex.git_reference_regex }
 
@@ -293,7 +278,12 @@ module Gitlab
         end
 
         resources :team, controller: 'team_members', only: [:index]
-        resources :milestones, except: [:destroy], constraints: {id: /\d+/}
+        resources :milestones, except: [:destroy], constraints: {id: /\d+/} do
+          member do
+            put :sort_issues
+            put :sort_merge_requests
+          end
+        end
 
         resources :labels, only: [:index] do
           collection do
@@ -330,7 +320,7 @@ module Gitlab
       end
     end
 
-    get ':id' => "groups#show", constraints: {id: /(?:[^.]|\.(?!atom$))+/, format: /atom/}
+    get ':id' => "namespaces#show", constraints: {id: /(?:[^.]|\.(?!atom$))+/, format: /atom/}
 
     root to: "dashboard#show"
   end

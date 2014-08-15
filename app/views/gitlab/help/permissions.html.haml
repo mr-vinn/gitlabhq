@@ -1,6 +1,0 @@
-= render layout: 'gitlab/help/layout' do
-  %h3.page-title Permissions 
-
-  .help_body
-    = preserve do
-      = markdown File.read(Gitlab::Engine.root.join("doc", "permissions", "permissions.md"))

@@ -1,10 +1,10 @@
 module Gitlab
   class Projects::ProtectedBranchesController < Projects::ApplicationController
     # Authorize
-    before_filter :authorize_read_project!
     before_filter :require_non_empty_project
+    before_filter :authorize_admin_project!
 
-    before_filter :authorize_admin_project!, only: [:destroy, :create]
+    layout "gitlab/project_settings"
 
     def index
       @branches = @project.protected_branches.to_a
@@ -12,7 +12,7 @@ module Gitlab
     end
 
     def create
-      @project.protected_branches.create(params[:protected_branch])
+      @project.protected_branches.create(protected_branch_params)
       redirect_to project_protected_branches_path(@project)
     end
 
@@ -23,6 +23,12 @@ module Gitlab
         format.html { redirect_to project_protected_branches_path }
         format.js { render nothing: true }
       end
+    end
+
+    private
+
+    def protected_branch_params
+      params.require(:protected_branch).permit(:name)
     end
   end
 end

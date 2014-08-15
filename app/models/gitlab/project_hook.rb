@@ -19,8 +19,6 @@ module Gitlab
   class ProjectHook < WebHook
     belongs_to :project, class_name: Gitlab::Project
 
-    attr_accessible :push_events, :issues_events, :merge_requests_events, :tag_push_events
-
     scope :push_hooks, -> { where(push_events: true) }
     scope :tag_push_hooks, -> { where(tag_push_events: true) }
     scope :issue_hooks, -> { where(issues_events: true) }

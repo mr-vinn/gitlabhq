@@ -9,6 +9,8 @@ module Gitlab
     end
 
     def show
+      @members = @group.members.order("group_access DESC").page(params[:members_page]).per(30)
+      @projects = @group.projects.page(params[:projects_page]).per(30)
     end
 
     def new
@@ -19,7 +21,7 @@ module Gitlab
     end
 
     def create
-      @group = Group.new(params[:group])
+      @group = Group.new(group_params)
       @group.path = @group.name.dup.parameterize if @group.name
 
       if @group.save
@@ -31,8 +33,8 @@ module Gitlab
     end
 
     def update
-      if @group.update_attributes(params[:group])
-        redirect_to admin_group_path(@group), notice: 'Group was successfully updated.'
+      if @group.update_attributes(group_params)
+        redirect_to [:admin, @group], notice: 'Group was successfully updated.'
       else
         render "edit"
       end
@@ -54,6 +56,10 @@ module Gitlab
 
     def group
       @group = Group.find_by(path: params[:id])
+    end
+
+    def group_params
+      params.require(:group).permit(:name, :description, :path, :avatar)
     end
   end
 end

@@ -20,8 +20,6 @@ module Gitlab
       Gitlab::Access.options_with_owner
     end
 
-    attr_accessible :group_access, :user_id
-
     belongs_to :user, class_name: Gitlab::User
     belongs_to :group, class_name: Gitlab::Group
 
@@ -34,6 +32,9 @@ module Gitlab
     scope :with_group, ->(group) { where(group_id: group.id) }
     scope :with_user, ->(user) { where(user_id: user.id) }
 
+    after_create :notify_create
+    after_update :notify_update
+
     validates :group_access, inclusion: { in: UsersGroup.group_access_roles.values }, presence: true
     validates :user_id, presence: true
     validates :group_id, presence: true
@@ -43,6 +44,20 @@ module Gitlab
 
     def access_field
       group_access
+    end
+
+    def notify_create
+      notification_service.new_group_member(self)
+    end
+
+    def notify_update
+      if group_access_changed?
+        notification_service.update_group_member(self)
+      end
+    end
+
+    def notification_service
+      NotificationService.new
     end
   end
 end

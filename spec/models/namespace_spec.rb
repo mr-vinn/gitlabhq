@@ -27,8 +27,6 @@ module Gitlab
     it { should validate_presence_of :owner }
 
     describe "Mass assignment" do
-      it { should allow_mass_assignment_of(:name) }
-      it { should allow_mass_assignment_of(:path) }
     end
 
     describe "Respond to" do

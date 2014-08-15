@@ -133,9 +133,10 @@ ActiveRecord::Schema.define(version: 20140524184438) do
     t.integer  "milestone_id"
     t.string   "state"
     t.string   "merge_status"
-    t.integer  "target_project_id", null: false
+    t.integer  "target_project_id",             null: false
     t.integer  "iid"
     t.text     "description"
+    t.integer  "position",          default: 0
   end
 
   add_index "gitlab_merge_requests", ["assignee_id"], name: "index_gitlab_merge_requests_on_assignee_id", using: :btree

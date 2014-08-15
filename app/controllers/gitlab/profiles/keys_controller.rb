@@ -16,7 +16,7 @@ module Gitlab
     end
 
     def create
-      @key = current_user.keys.new(params[:key])
+      @key = current_user.keys.new(key_params)
 
       if @key.save
         redirect_to profile_key_path(@key)
@@ -54,5 +54,10 @@ module Gitlab
       end
     end
 
+    private
+
+    def key_params
+      params.require(:key).permit(:title, :key)
+    end
   end
 end

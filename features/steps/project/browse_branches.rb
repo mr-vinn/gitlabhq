@@ -4,11 +4,6 @@ module Gitlab
     include SharedProject
     include SharedPaths
 
-    step 'I should see "Shop" recent branches list' do
-      page.should have_content "Branches"
-      page.should have_content "master"
-    end
-
     step 'I click link "All"' do
       click_link "All"
     end
@@ -45,7 +40,7 @@ module Gitlab
     end
 
     step 'I should see new branch created' do
-      within '.all-branches' do
+    within '.tree-ref-holder' do
         page.should have_content 'deploy_keys'
       end
     end

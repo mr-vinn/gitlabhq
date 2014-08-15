@@ -21,7 +21,7 @@ module Gitlab
     end
 
     def create
-      @project = Gitlab::Projects::CreateService.new(current_user, params[:project]).execute
+      @project = Gitlab::Projects::CreateService.new(current_user, project_params).execute
       flash[:notice] = 'Project was successfully created.' if @project.saved?
 
       respond_to do |format|
@@ -30,7 +30,7 @@ module Gitlab
     end
 
     def update
-      status = Gitlab::Projects::UpdateService.new(@project, current_user, params).execute
+      status = Gitlab::Projects::UpdateService.new(@project, current_user, project_params).execute
 
       respond_to do |format|
         if status
@@ -45,7 +45,7 @@ module Gitlab
     end
 
     def transfer
-      Gitlab::Projects::TransferService.new(project, current_user, params).execute
+      Gitlab::Projects::TransferService.new(project, current_user, project_params).execute
     end
 
     def show
@@ -86,7 +86,7 @@ module Gitlab
         redirect_to import_project_path(@project)
       end
 
-      @project.import_url = params[:project][:import_url]
+      @project.import_url = project_params[:import_url]
 
       if @project.save
         @project.reload
@@ -99,8 +99,7 @@ module Gitlab
     def destroy
       return access_denied! unless can?(current_user, :remove_project, project)
 
-      project.team.truncate
-      project.destroy
+      Gitlab::Projects::DestroyService.new(@project, current_user, {}).execute
 
       respond_to do |format|
         format.html { redirect_to root_path }
@@ -126,18 +125,12 @@ module Gitlab
     def autocomplete_sources
       note_type = params['type']
       note_id = params['type_id']
-      participating = if note_type && note_id
-                        participants_in(note_type, note_id)
-                      else
-                        []
-                      end
-      team_members = sorted(@project.team.members)
-      participants = team_members + participating
+      participants = Gitlab::Projects::ParticipantsService.new(@project).execute(note_type, note_id)
       @suggestions = {
         emojis: Emoji.names.map { |e| { name: e, path: view_context.image_url("emoji/#{e}.png") } },
         issues: @project.issues.select([:iid, :title, :description]),
         mergerequests: @project.merge_requests.select([:iid, :title, :description]),
-        members: participants.uniq
+        members: participants
       }
 
       respond_to do |format|
@@ -163,7 +156,28 @@ module Gitlab
       end
     end
 
+    def upload_image
+      link_to_image = Gitlab::Projects::ImageService.new(repository, params, root_url).execute
+
+      respond_to do |format|
+        if link_to_image
+          format.json { render json: { link: link_to_image } }
+        else
+          format.json { render json: "Invalid file.", status: :unprocessable_entity }
+        end
+      end
+    end
+
     private
+
+    def upload_path
+      base_dir = FileUploader.generate_dir
+      File.join(repository.path_with_namespace, base_dir)
+    end
+
+    def accepted_images
+      %w(png jpg jpeg gif)
+    end
 
     def set_title
       @title = 'New Project'
@@ -173,25 +187,12 @@ module Gitlab
       current_user ? "gitlab/projects" : "gitlab/public_projects"
     end
 
-    def participants_in(type, id)
-      users = case type.sub(/^Gitlab::/, '')
-              when "Issue"
-                issue = @project.issues.find_by_iid(id)
-                issue ? issue.participants : []
-              when "MergeRequest"
-                merge_request = @project.merge_requests.find_by_iid(id)
-                merge_request ? merge_request.participants : []
-              when "Commit"
-                author_ids = Note.for_commit_id(id).pluck(:author_id).uniq
-                User.where(id: author_ids)
-              else
-                []
-              end
-      sorted(users)
-    end
-
-    def sorted(users)
-      users.uniq.sort_by(&:username).map { |user| { username: user.username, name: user.name } }
+    def project_params
+      params.require(:project).permit(
+        :name, :path, :description, :issues_tracker, :label_list,
+        :issues_enabled, :merge_requests_enabled, :snippets_enabled, :issues_tracker_id, :default_branch,
+        :wiki_enabled, :visibility_level, :import_url, :last_activity_at, :namespace_id
+      )
     end
   end
 end
