@@ -419,7 +419,7 @@ module Gitlab
           subject { Notify.note_commit_email(recipient.id, note.id) }
 
           it_behaves_like 'a note email'
-        it_behaves_like 'an answer to an existing thread', 'commits'
+        it_behaves_like 'an answer to an existing thread', 'commit'
 
           it 'has the correct subject' do
             should have_subject /#{commit.title} \(#{commit.short_id}\)/
